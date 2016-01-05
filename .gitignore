@@ -1,12 +1,41 @@
-*.class
+#General
+*~
+*.log
+tmp
+dump
+.DS_Store
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+#Intellij
+.cache
+.idea
+.idea_modules
+.classpath
+.project
+.settings
+.scala_dependencies
+generated.keystore
+generated.truststore
+*.iml
+/out
 
-# Package Files #
-*.jar
-*.war
-*.ear
+#SBT
+dist
+project/boot
+project/target
+project/project
+target
+.target
+.history
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+
+
+#Play
+logs
+RUNNING_PID
+/db
+
+#activator
+activator*
+build.sbt
+
+
