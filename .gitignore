@@ -34,8 +34,4 @@ logs
 RUNNING_PID
 /db
 
-#activator
-activator*
-build.sbt
-
 
