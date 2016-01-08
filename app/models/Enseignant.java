@@ -14,5 +14,7 @@ public class Enseignant extends Model{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int id;
     public String statut;
+    @OneToOne
+    public int utilisateur_id;
 
 }

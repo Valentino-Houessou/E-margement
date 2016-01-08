@@ -11,4 +11,6 @@ public class Etudiant extends Model{
     public int id;
     public String numeroEtudiant;
     public String status;
+    @OneToOne
+    public int utilisateur_id;
 }
