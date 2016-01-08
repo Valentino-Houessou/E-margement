@@ -13,7 +13,9 @@ public class Cours extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String type;
+    @Column(columnDefinition = "datetime")
     public Timestamp heureDebut;
+    @Column(columnDefinition = "datetime")
     public Timestamp heureFin;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Enseignant sonEnseignant;

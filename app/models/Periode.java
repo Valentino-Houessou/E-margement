@@ -10,6 +10,8 @@ public class Periode extends Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String libelle;
+    @Column(columnDefinition = "datetime")
     public Timestamp dateDeDeut;
+    @Column(columnDefinition = "datetime")
     public Timestamp dateFin;
 }

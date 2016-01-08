@@ -16,6 +16,7 @@ public class Utilisateur extends Model  {
     public String prenom;
     public String adresseMail;
     public String motDePasse;
+    @Column(columnDefinition = "datetime")
     public Timestamp dateDeNaissance;
     public String lienPhoto;
 

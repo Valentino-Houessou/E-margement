@@ -33,9 +33,8 @@ target
 logs
 RUNNING_PID
 /db
+application.conf
 
 #activator
 activator*
 build.sbt
-
-
