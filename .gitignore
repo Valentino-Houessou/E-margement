@@ -34,6 +34,7 @@ logs
 RUNNING_PID
 /db
 application.conf
+1.sql
 
 #activator
 activator*

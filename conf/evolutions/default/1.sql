@@ -13,8 +13,8 @@ create table batiment (
 create table cours (
   id                        integer auto_increment not null,
   type                      varchar(255),
-  heure_debut               datetime(6),
-  heure_fin                 datetime(6),
+  heure_debut               datetime,
+  heure_fin                 datetime,
   son_enseignant_id         integer,
   sa_matiere_id             integer,
   sa_salle_id               integer,
@@ -55,8 +55,8 @@ create table module (
 create table periode (
   id                        integer auto_increment not null,
   libelle                   varchar(255),
-  date_de_deut              datetime(6),
-  date_fin                  datetime(6),
+  date_de_deut              datetime,
+  date_fin                  datetime,
   constraint pk_periode primary key (id))
 ;
 
@@ -98,7 +98,7 @@ create table utilisateur (
   prenom                    varchar(255),
   adresse_mail              varchar(255),
   mot_de_passe              varchar(255),
-  date_de_naissance         datetime(6),
+  date_de_naissance         datetime,
   lien_photo                varchar(255),
   constraint pk_utilisateur primary key (id))
 ;
