@@ -1,14 +1,11 @@
 package models;
 
 import javax.persistence.*;
-
-/*
-import play.db.ebean.*;
 import com.avaje.ebean.*;
-*/
+
 
 @Entity
-public class Module{
+public class Module extends Model{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -1,13 +1,10 @@
 package models;
 
 import javax.persistence.*;
-
-/**
- * Created by Bigval-Mac on 08/01/16.
- */
+import com.avaje.ebean.*;
 
 @Entity
-public class Batiment {
+public class Batiment extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
