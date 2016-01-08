@@ -11,7 +11,7 @@ public class Admin  extends Model {
     public int id;
     public String statut;
     @OneToOne
-    public int utilisateur_id;
+    public Utilisateur sonUtilisateur;
 
 }
 

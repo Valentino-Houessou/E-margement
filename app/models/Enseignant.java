@@ -4,7 +4,7 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Enseignant extends Model{
@@ -14,8 +14,8 @@ public class Enseignant extends Model{
     public int id;
     public String statut;
     @OneToOne
-    public int utilisateur_id;
+    public Utilisateur sonUtilisateur;
     @ManyToMany(cascade=CascadeType.PERSIST)
-    public Collection<Matiere> sesMatieres;
+    public List<Matiere> sesMatieres;
 
 }

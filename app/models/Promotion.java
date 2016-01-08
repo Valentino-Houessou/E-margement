@@ -2,7 +2,7 @@ package models;
 
 import javax.persistence.*;
 import com.avaje.ebean.*;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Promotion extends Model{
@@ -14,10 +14,10 @@ public class Promotion extends Model{
     public String type;
 
     @ManyToMany(cascade=CascadeType.PERSIST)
-    public Collection<Etudiant> sesEtudiants;
+    public List<Etudiant> sesEtudiants;
 
     public String filiere;
     @ManyToMany(cascade=CascadeType.PERSIST)
-    public Collection<Matiere> sesMatieres;
+    public List<Matiere> sesMatieres;
 
 }

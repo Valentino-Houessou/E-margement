@@ -2,7 +2,7 @@ package models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 
 import com.avaje.ebean.*;
 
@@ -26,5 +26,5 @@ public class Cours extends Model{
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Periode saPeriode;
     @OneToMany(mappedBy = "sonCours")
-    public Collection<Presence> sesPresences;
+    public List<Presence> sesPresences;
 }

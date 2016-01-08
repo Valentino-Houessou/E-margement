@@ -25,7 +25,8 @@ create table cours (
 create table enseignant (
   id                        integer auto_increment not null,
   statut                    varchar(255),
-  utilisateur_id            integer,
+  son_utilisateur_id        integer,
+  constraint uq_enseignant_son_utilisateur_id unique (son_utilisateur_id),
   constraint pk_enseignant primary key (id))
 ;
 
@@ -33,7 +34,8 @@ create table etudiant (
   id                        integer auto_increment not null,
   numero_etudiant           varchar(255),
   status                    varchar(255),
-  utilisateur_id            integer,
+  son_utilisateur_id        integer,
+  constraint uq_etudiant_son_utilisateur_id unique (son_utilisateur_id),
   constraint pk_etudiant primary key (id))
 ;
 
@@ -103,6 +105,30 @@ create table utilisateur (
   constraint pk_utilisateur primary key (id))
 ;
 
+
+create table enseignant_matiere (
+  enseignant_id                  integer not null,
+  matiere_id                     integer not null,
+  constraint pk_enseignant_matiere primary key (enseignant_id, matiere_id))
+;
+
+create table promotion_etudiant (
+  promotion_id                   integer not null,
+  etudiant_id                    integer not null,
+  constraint pk_promotion_etudiant primary key (promotion_id, etudiant_id))
+;
+
+create table promotion_matiere (
+  promotion_id                   integer not null,
+  matiere_id                     integer not null,
+  constraint pk_promotion_matiere primary key (promotion_id, matiere_id))
+;
+
+create table utilisateur_module (
+  utilisateur_id                 integer not null,
+  module_id                      bigint not null,
+  constraint pk_utilisateur_module primary key (utilisateur_id, module_id))
+;
 alter table batiment add constraint fk_batiment_sonUniversite_1 foreign key (son_universite_id) references universite (id) on delete restrict on update restrict;
 create index ix_batiment_sonUniversite_1 on batiment (son_universite_id);
 alter table cours add constraint fk_cours_sonEnseignant_2 foreign key (son_enseignant_id) references enseignant (id) on delete restrict on update restrict;
@@ -113,14 +139,34 @@ alter table cours add constraint fk_cours_saSalle_4 foreign key (sa_salle_id) re
 create index ix_cours_saSalle_4 on cours (sa_salle_id);
 alter table cours add constraint fk_cours_saPeriode_5 foreign key (sa_periode_id) references periode (id) on delete restrict on update restrict;
 create index ix_cours_saPeriode_5 on cours (sa_periode_id);
-alter table presence add constraint fk_presence_sonCours_6 foreign key (son_cours_id) references cours (id) on delete restrict on update restrict;
-create index ix_presence_sonCours_6 on presence (son_cours_id);
-alter table presence add constraint fk_presence_sonEtudiant_7 foreign key (son_etudiant_id) references etudiant (id) on delete restrict on update restrict;
-create index ix_presence_sonEtudiant_7 on presence (son_etudiant_id);
-alter table salle add constraint fk_salle_sonBatiment_8 foreign key (son_batiment_id) references batiment (id) on delete restrict on update restrict;
-create index ix_salle_sonBatiment_8 on salle (son_batiment_id);
+alter table enseignant add constraint fk_enseignant_sonUtilisateur_6 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
+create index ix_enseignant_sonUtilisateur_6 on enseignant (son_utilisateur_id);
+alter table etudiant add constraint fk_etudiant_sonUtilisateur_7 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
+create index ix_etudiant_sonUtilisateur_7 on etudiant (son_utilisateur_id);
+alter table presence add constraint fk_presence_sonCours_8 foreign key (son_cours_id) references cours (id) on delete restrict on update restrict;
+create index ix_presence_sonCours_8 on presence (son_cours_id);
+alter table presence add constraint fk_presence_sonEtudiant_9 foreign key (son_etudiant_id) references etudiant (id) on delete restrict on update restrict;
+create index ix_presence_sonEtudiant_9 on presence (son_etudiant_id);
+alter table salle add constraint fk_salle_sonBatiment_10 foreign key (son_batiment_id) references batiment (id) on delete restrict on update restrict;
+create index ix_salle_sonBatiment_10 on salle (son_batiment_id);
 
 
+
+alter table enseignant_matiere add constraint fk_enseignant_matiere_enseignant_01 foreign key (enseignant_id) references enseignant (id) on delete restrict on update restrict;
+
+alter table enseignant_matiere add constraint fk_enseignant_matiere_matiere_02 foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
+
+alter table promotion_etudiant add constraint fk_promotion_etudiant_promotion_01 foreign key (promotion_id) references promotion (id) on delete restrict on update restrict;
+
+alter table promotion_etudiant add constraint fk_promotion_etudiant_etudiant_02 foreign key (etudiant_id) references etudiant (id) on delete restrict on update restrict;
+
+alter table promotion_matiere add constraint fk_promotion_matiere_promotion_01 foreign key (promotion_id) references promotion (id) on delete restrict on update restrict;
+
+alter table promotion_matiere add constraint fk_promotion_matiere_matiere_02 foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
+
+alter table utilisateur_module add constraint fk_utilisateur_module_utilisateur_01 foreign key (utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
+
+alter table utilisateur_module add constraint fk_utilisateur_module_module_02 foreign key (module_id) references module (id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -131,6 +177,8 @@ drop table batiment;
 drop table cours;
 
 drop table enseignant;
+
+drop table enseignant_matiere;
 
 drop table etudiant;
 
@@ -144,11 +192,17 @@ drop table presence;
 
 drop table promotion;
 
+drop table promotion_etudiant;
+
+drop table promotion_matiere;
+
 drop table salle;
 
 drop table universite;
 
 drop table utilisateur;
+
+drop table utilisateur_module;
 
 SET FOREIGN_KEY_CHECKS=1;
 

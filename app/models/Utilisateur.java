@@ -2,7 +2,7 @@ package models;
 //TODO
 
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
@@ -21,6 +21,6 @@ public class Utilisateur extends Model  {
     public String lienPhoto;
 
     @ManyToMany(cascade=CascadeType.PERSIST)
-    public Collection<Module> sesModules;
+    public List<Module> sesModules;
 
 }
