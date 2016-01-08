@@ -2,14 +2,13 @@ package models;
 //TODO
 
 import javax.persistence.*;
+
 /*
 import play.db.ebean.*;
 import com.avaje.ebean.*;
 */
 
-/**
- * Created by Bigval-Mac on 05/01/16.
- */
+@Entity
 public class Module{
 
     @Id
