@@ -14,4 +14,6 @@ public class Salle extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String libelle;
+    @ManyToOne
+    public Batiment sonBatiment;
 }

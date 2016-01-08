@@ -3,6 +3,8 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.Collection;
+
 /**
  * Created by Bigval-Mac on 08/01/16.
  */

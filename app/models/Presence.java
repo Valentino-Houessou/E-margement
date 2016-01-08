@@ -16,4 +16,9 @@ public class Presence extends Model {
     public boolean emergement;
     public String motif;
     public String justificatif;
+    @ManyToOne
+    public Cours sonCours;
+    @ManyToOne
+    public Etudiant sonEtudiant;
+
 }
