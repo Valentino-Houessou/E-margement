@@ -15,7 +15,7 @@ public class Enseignant extends Model{
     public String statut;
     @OneToOne
     public int utilisateur_id;
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.PERSIST)
     public Collection<Matiere> sesMatieres;
 
 }

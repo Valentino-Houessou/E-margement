@@ -12,9 +12,9 @@ public class Presence extends Model {
     public boolean emergement;
     public String motif;
     public String justificatif;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Cours sonCours;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Etudiant sonEtudiant;
 
 }

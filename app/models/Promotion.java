@@ -13,11 +13,11 @@ public class Promotion extends Model{
     public String groupe;
     public String type;
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.PERSIST)
     public Collection<Etudiant> sesEtudiants;
 
     public String filiere;
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.PERSIST)
     public Collection<Matiere> sesMatieres;
 
 }

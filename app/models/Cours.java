@@ -15,13 +15,13 @@ public class Cours extends Model{
     public String type;
     public Timestamp heureDebut;
     public Timestamp heureFin;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Enseignant sonEnseignant;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Matiere saMatiere;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Salle saSalle;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Periode saPeriode;
     @OneToMany(mappedBy = "sonCours")
     public Collection<Presence> sesPresences;

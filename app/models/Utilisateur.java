@@ -19,7 +19,7 @@ public class Utilisateur extends Model  {
     public Timestamp dateDeNaissance;
     public String lienPhoto;
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.PERSIST)
     public Collection<Module> sesModules;
 
 }

@@ -10,6 +10,6 @@ public class Batiment extends Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String libelle;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     public Universite sonUniversite;
 }
