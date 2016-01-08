@@ -3,10 +3,6 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-/**
- * Created by Bigval-Mac on 08/01/16.
- */
-
 @Entity
 public class Salle extends Model{
 

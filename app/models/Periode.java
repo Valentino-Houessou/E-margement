@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import com.avaje.ebean.*;
 
-/**
- * Created by Bigval-Mac on 08/01/16.
- */
 @Entity
 public class Periode extends Model {
     @Id
