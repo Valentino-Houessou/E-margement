@@ -10,5 +10,6 @@ public class Batiment extends Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String libelle;
-
+    @ManyToOne
+    public Universite sonUniversite;
 }
