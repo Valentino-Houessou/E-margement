@@ -1,6 +1,6 @@
 package models;
 
-//TODO
+
 import javax.persistence.*;
 
 public class Admin {
