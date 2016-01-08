@@ -2,13 +2,10 @@ package models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-
-/**
- * Created by Bigval-Mac on 08/01/16.
- */
+import com.avaje.ebean.*;
 
 @Entity
-public class Cours {
+public class Cours extends Model{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

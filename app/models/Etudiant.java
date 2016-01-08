@@ -1,9 +1,10 @@
 package models;
 //TODO
 import javax.persistence.*;
+import com.avaje.ebean.*;
 
 @Entity
-public class Etudiant {
+public class Etudiant extends Model{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

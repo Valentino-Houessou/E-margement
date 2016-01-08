@@ -3,9 +3,10 @@ package models;
 
 import java.sql.Timestamp;
 import javax.persistence.*;
+import com.avaje.ebean.*;
 
 @Entity
-public class Utilisateur  {
+public class Utilisateur extends Model  {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

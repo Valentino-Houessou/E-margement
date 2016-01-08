@@ -2,8 +2,9 @@ package models;
 
 //TODO
 import javax.persistence.*;
+import com.avaje.ebean.*;
 
-public class Admin {
+public class Admin  extends Model {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
