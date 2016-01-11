@@ -5,6 +5,15 @@
 # Home page
 GET     /                    controllers.Application.index()
 
+# utilisateur
+GET    /utilisateur          controllers.utilisateur.UtilisateurController.getUtilisateur()
+GET    /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
+POST   /utilisateur-update   controllers.utilisateur.UtilisateurController.updateUtilisateur()
+PUT    /utilisateur-add      controllers.utilisateur.UtilisateurController.addUtilisateur()
+DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.deleteUtilisateur()
+
+
+
 # enseignant
 PUT     /enseignant/listEnseignant    controllers.enseignant.EnseignantController.getListEnseignant()
 
@@ -20,6 +29,13 @@ PUT     /enseignant/listePresence    controllers.enseignant.EnseignantController
 
 
 # admin
+GET    /administrateur/index                 controllers.administrateur.administrateurController.adminIndex()
+PUT    /administrateur/utilisateurs/setAdmin controllers.administrateur.administrateurController.setAdmin()
+POST   /administrateur/update-admin          controllers.administrateur.administrateurController.updateAdmin()
+DELETE /administrateur/delete-admin          controllers.administrateur.administrateurController.deleteAdmin()
+
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path
