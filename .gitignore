@@ -33,7 +33,7 @@ target
 logs
 RUNNING_PID
 /db
-application.conf
+/conf/application.conf
 1.sql
 
 #activator
