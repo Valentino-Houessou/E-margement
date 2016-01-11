@@ -5,8 +5,13 @@
 # Home page
 GET     /                    controllers.Application.index()
 
-# Professor
-GET /                        controllers.enseignant.EnseignantController.index()
+# enseignant
+
+
+# etudiant
+
+
+# admin
 
 
 # Map static resources from the /public folder to the /assets URL path
