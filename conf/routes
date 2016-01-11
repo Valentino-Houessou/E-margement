@@ -13,6 +13,7 @@ PUT    /utilisateur-add      controllers.utilisateur.UtilisateurController.addUt
 DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.deleteUtilisateur()
 
 
+
 # enseignant
 PUT     /enseignant/listEnseignant    controllers.enseignant.EnseignantController.getListEnseignant()
 

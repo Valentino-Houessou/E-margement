@@ -9,23 +9,23 @@ import views.html.*;
 public class UtilisateurController extends Controller {
 
 
-    public static Result getUtilisateur() {
+    public  Result getUtilisateur() {
         return Results.TODO;
     }
 
-    public static Result updateUtilisateur() {
+    public  Result getUtilisateurByMail() {
         return Results.TODO;
     }
 
-    public static Result addUtilisateur() {
+    public  Result updateUtilisateur() {
         return Results.TODO;
     }
 
-    public static Result deleteUtilisateur() {
+    public  Result addUtilisateur() {
         return Results.TODO;
     }
 
-    public static Result getUtilisateurByMail() {
+    public  Result deleteUtilisateur() {
         return Results.TODO;
     }
 }
