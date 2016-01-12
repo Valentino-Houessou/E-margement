@@ -3,7 +3,7 @@ package controllers.enseignant;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Enseignant;
 import models.Utilisateur;
-import play.api.mvc.*;
+import play.mvc.*;
 import play.api.mvc.Results;
 import play.libs.Json;
 
@@ -100,7 +100,8 @@ public class EnseignantController extends Controller{
     public  Result getListEnseignant() {
         List<Enseignant> enseignantList;
         enseignantList = Enseignant.findAll();
-        return ok();
+        System.out.println(enseignantList.get(0).sonUtilisateur.nom);
+        return ok(Json.toJson(enseignantList));
     }
 
     public  Result supProf() {
@@ -110,13 +111,13 @@ public class EnseignantController extends Controller{
         else {
             int id = supprimerProf.findPath("id").intValue();
 
-            Enseignant enseignant = Enseignant.delete(id);
-            return ok(Json.toJson(enseignant));
+            Enseignant.delete(id);
+            return ok();
         }
     }
 
     public  Result listPresent() {
-        return Results.TODO;
+        return ok();
     }
 
 }

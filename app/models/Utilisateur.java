@@ -23,4 +23,12 @@ public class Utilisateur extends Model  {
     @ManyToMany(cascade=CascadeType.PERSIST)
     public List<Module> sesModules;
 
+    public Utilisateur(String nom, String prenom, String adresseMail, String motDePasse, String dateDeNaissance, String lienPhoto) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.adresseMail = adresseMail;
+        this.motDePasse = motDePasse;
+        this.dateDeNaissance = Timestamp.valueOf(dateDeNaissance);
+        this.lienPhoto = lienPhoto;
+    }
 }
