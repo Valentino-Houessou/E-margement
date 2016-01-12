@@ -1,16 +1,23 @@
 package controllers.utilisateur;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import models.Utilisateur;
 import play.*;
 import play.mvc.*;
-
-import views.html.*;
+import com.google.gson.Gson;
+import play.libs.Json;
+import java.util.List;
 
 
 public class UtilisateurController extends Controller {
 
+    @BodyParser.Of(BodyParser.Json.class)
+    public  Result addUtilisateur() {
 
-    public  Result getUtilisateur() {
         return Results.TODO;
+    }
+    public  Result getUtilisateur() {
+        return ok(Json.toJson(Utilisateur.findAll()));
     }
 
     public  Result getUtilisateurByMail() {
@@ -18,10 +25,6 @@ public class UtilisateurController extends Controller {
     }
 
     public  Result updateUtilisateur() {
-        return Results.TODO;
-    }
-
-    public  Result addUtilisateur() {
         return Results.TODO;
     }
 

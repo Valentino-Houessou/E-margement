@@ -21,7 +21,7 @@ public class EnseignantController extends Controller{
 
     }
 
-    public Result ajoutProf() {
+   /* public Result ajoutProf() {
         JsonNode prof = request().body().asJson();
         if (prof == null)
             return badRequest("donnée Json attendu");
@@ -119,5 +119,5 @@ public class EnseignantController extends Controller{
     public  Result listPresent() {
         return ok();
     }
-
+*/
 }

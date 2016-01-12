@@ -4,6 +4,7 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+@Entity
 public class Admin  extends Model {
 
     @Id
