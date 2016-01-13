@@ -1,0 +1,9 @@
+.recadrer_mot{
+    padding-left: 46px;
+}
+
+#liens_abscences {
+    height: 0px;
+    margin:0;
+    border: 1px solid white;
+}

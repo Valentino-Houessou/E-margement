@@ -1,27 +1,35 @@
 package controllers.administrateur;
 
+
 import play.*;
 import play.mvc.*;
 
 import views.html.*;
+import models.*;
 
 public class administrateurController extends Controller {
 
-    public static Result adminIndex()
-
+    /**
+     * adminIndex()
+     * Redirection vers la page d'accueil de l'administrateur
+     * @return
+     */
+    public  Result adminIndex()
     {
-        return play.mvc.Results.TODO;
+
+
+        return ok(views.html.administrateur.indexAdministrateur.render("Administration"));
     }
 
-    public static Result setAdmin() {
+    public  Result setAdmin() {
         return Results.TODO;
     }
 
-    public static Result updateAdmin() {
+    public  Result updateAdmin() {
         return Results.TODO;
     }
 
-    public static Result deleteAdmin() {
+    public  Result deleteAdmin() {
         return Results.TODO;
     }
 }

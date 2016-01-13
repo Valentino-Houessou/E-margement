@@ -16,10 +16,10 @@ DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.delet
 GET     /enseignant/                        controllers.enseignant.EnseignantController.index()
 GET     /enseignant/profil                  controllers.enseignant.EnseignantController.getEnseignant()
 GET     /enseignant/listEnseignant          controllers.enseignant.EnseignantController.getListEnseignant()
-#PUT     /enseignant/ajout                   controllers.enseignant.EnseignantController.ajoutProf()
-#PUT     /enseignant/modification            controllers.enseignant.EnseignantController.modifProf()
-#PUT     /enseignant/supprimer               controllers.enseignant.EnseignantController.supProf()
-#PUT     /enseignant/listePresence           controllers.enseignant.EnseignantController.listPresent()
+PUT     /enseignant/ajout                   controllers.enseignant.EnseignantController.ajoutProf()
+POST     /enseignant/modification            controllers.enseignant.EnseignantController.modifProf()
+DELETE     /enseignant/supprimer               controllers.enseignant.EnseignantController.supProf()
+GET     /enseignant/listePresence           controllers.enseignant.EnseignantController.listPresent()
 
 # etudiant
 
