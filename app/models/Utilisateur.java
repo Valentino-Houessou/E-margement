@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.*;
 import com.avaje.ebean.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 @Entity
 public class Utilisateur extends Model  {
@@ -66,10 +67,30 @@ public class Utilisateur extends Model  {
         return user;
     }
 
-    public static Utilisateur deleteUtilisateur(long id){
+    public static void deleteUtilisateur(long id){
         Utilisateur user = find.ref(id);
+        if (Etudiant.utilisateurEtudiant(user) ||
+                Enseignant.utilisateurEnseignant(user) ||
+                Admin.utilisateurAdmin(user))
+            user.delete();
+    }
 
-        return user;
+    public static void droitEnseignant (long id){
+        Utilisateur user = find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
+        user.update();
+    }
+
+    public static void droitEtudiant (long id){
+        Utilisateur user = find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ETUDIANTS"));
+        user.update();
+    }
+
+    public static void droitAdmin (long id){
+        Utilisateur user = find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ADMINISTRATEURS"));
+        user.update();
     }
 
 

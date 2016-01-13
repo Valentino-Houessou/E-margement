@@ -33,13 +33,12 @@ create table cours (
 create table enseignant (
   id                        integer auto_increment not null,
   statut                    varchar(255),
-  son_utilisateur_id        bigint,
-  constraint uq_enseignant_son_utilisateur_id unique (son_utilisateur_id),
+  constraint uq_enseignant_id unique (id),
   constraint pk_enseignant primary key (id))
 ;
 
 create table etudiant (
-  id                        integer auto_increment not null,
+  id                        bigint auto_increment not null,
   numero_etudiant           varchar(255),
   status                    varchar(255),
   son_utilisateur_id        bigint,
@@ -76,7 +75,7 @@ create table presence (
   motif                     varchar(255),
   justificatif              varchar(255),
   son_cours_id              integer,
-  son_etudiant_id           integer,
+  son_etudiant_id           bigint,
   constraint pk_presence primary key (id))
 ;
 
@@ -114,15 +113,9 @@ create table utilisateur (
 ;
 
 
-create table enseignant_matiere (
-  enseignant_id                  integer not null,
-  matiere_id                     integer not null,
-  constraint pk_enseignant_matiere primary key (enseignant_id, matiere_id))
-;
-
 create table promotion_etudiant (
   promotion_id                   integer not null,
-  etudiant_id                    integer not null,
+  etudiant_id                    bigint not null,
   constraint pk_promotion_etudiant primary key (promotion_id, etudiant_id))
 ;
 
@@ -149,8 +142,8 @@ alter table cours add constraint fk_cours_saSalle_5 foreign key (sa_salle_id) re
 create index ix_cours_saSalle_5 on cours (sa_salle_id);
 alter table cours add constraint fk_cours_saPeriode_6 foreign key (sa_periode_id) references periode (id) on delete restrict on update restrict;
 create index ix_cours_saPeriode_6 on cours (sa_periode_id);
-alter table enseignant add constraint fk_enseignant_sonUtilisateur_7 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
-create index ix_enseignant_sonUtilisateur_7 on enseignant (son_utilisateur_id);
+alter table enseignant add constraint fk_enseignant_sonUtilisateur_7 foreign key (id) references utilisateur (id) on delete restrict on update restrict;
+create index ix_enseignant_sonUtilisateur_7 on enseignant (id);
 alter table etudiant add constraint fk_etudiant_sonUtilisateur_8 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
 create index ix_etudiant_sonUtilisateur_8 on etudiant (son_utilisateur_id);
 alter table presence add constraint fk_presence_sonCours_9 foreign key (son_cours_id) references cours (id) on delete restrict on update restrict;
@@ -161,10 +154,6 @@ alter table salle add constraint fk_salle_sonBatiment_11 foreign key (son_batime
 create index ix_salle_sonBatiment_11 on salle (son_batiment_id);
 
 
-
-alter table enseignant_matiere add constraint fk_enseignant_matiere_enseignant_01 foreign key (enseignant_id) references enseignant (id) on delete restrict on update restrict;
-
-alter table enseignant_matiere add constraint fk_enseignant_matiere_matiere_02 foreign key (matiere_id) references matiere (id) on delete restrict on update restrict;
 
 alter table promotion_etudiant add constraint fk_promotion_etudiant_promotion_01 foreign key (promotion_id) references promotion (id) on delete restrict on update restrict;
 
@@ -189,8 +178,6 @@ drop table batiment;
 drop table cours;
 
 drop table enseignant;
-
-drop table enseignant_matiere;
 
 drop table etudiant;
 
