@@ -50,11 +50,11 @@ public class EnseignantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Utilisateur utilisateur = new Utilisateur(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
+                //Utilisateur utilisateur = new Utilisateur(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
-                Enseignant enseignant = new Enseignant(statut, utilisateur);
+                //Enseignant enseignant = new Enseignant(statut, utilisateur);
 
-                return ok(Json.toJson(enseignant));
+                return ok(/*Json.toJson(enseignant)*/);
             }
         }
     }
@@ -88,11 +88,11 @@ public class EnseignantController extends Controller{
             else if (lienPhoto == null)
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
-                Utilisateur utilisateur = new Utilisateur(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
+                //Utilisateur utilisateur = new Utilisateur(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
-                Enseignant enseignant = Enseignant.update(id, statut, utilisateur);
+                //Enseignant enseignant = Enseignant.update(id, statut, utilisateur);
 
-                return ok(Json.toJson(enseignant));
+                return ok(/*Json.toJson(enseignant)*/);
             }
         }
     }
