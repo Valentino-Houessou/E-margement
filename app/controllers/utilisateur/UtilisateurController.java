@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Utilisateur;
 import play.*;
 import play.mvc.*;
-import com.google.gson.Gson;
 import play.libs.Json;
 
 import java.text.*;
@@ -22,20 +21,10 @@ public class UtilisateurController extends Controller {
         String mail = json.findPath("mail").textValue();
         String mdp = json.findPath("mdp").textValue();
         String ddns = json.findPath("ddn").textValue();
-        Timestamp ddn = null;
-        //convertir ddn en Timestamp
-        if(ddns != null)
-            try {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Date ddnd = formatter.parse(ddns);
-                 ddn = new Timestamp(ddnd.getTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         String lPhoto = json.findPath("lPhoto").textValue();
 
         if((nom != null) && (prenom != null) && (mail != null) && (mdp != null)){
-            return ok(Json.toJson(Utilisateur.create(nom, prenom, mail, mdp, ddn,lPhoto, null)));
+            return ok(Json.toJson(Utilisateur.create(nom, prenom, mail, mdp, ddns,lPhoto)));
         }
         else
             return badRequest("Missing parameter");

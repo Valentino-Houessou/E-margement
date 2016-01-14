@@ -18,23 +18,24 @@ public class Enseignant extends Model{
     @JoinColumn(name = "id")
     public Utilisateur sonUtilisateur;
     @ManyToMany(cascade=CascadeType.PERSIST)
-    //public List<Matiere> sesMatieres;
+    public List<Matiere> sesMatieres;
 
     public static Finder<Long, Enseignant> find = new Finder<Long, Enseignant>(Enseignant.class);
 
    //TODO : Quand on cré un enseignant il faut ajouter le module Enseignant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEnseignant() de utilisateur*/
-    public Enseignant(String statut, Utilisateur utilisateur) {
+    public Enseignant(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         this.statut = statut;
-        this.sonUtilisateur = utilisateur;
-        //this.sesMatieres = new ArrayList<Matiere>();
+        this.sonUtilisateur = Utilisateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
+        this.sonUtilisateur.droitEnseignant();
+        this.sesMatieres = new ArrayList<Matiere>();
         this.save();
     }
 
-    public static Enseignant update(int id, String statut, Utilisateur utilisateur) {
+    public static Enseignant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         Enseignant enseignant = find.where().eq("id", id).findUnique();
 
         enseignant.statut = statut;
-        enseignant.sonUtilisateur = utilisateur;
+        Utilisateur.updateUtilisateur(enseignant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, enseignant.sonUtilisateur.sesModules);
 
         enseignant.save();
 
