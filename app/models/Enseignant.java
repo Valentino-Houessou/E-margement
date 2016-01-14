@@ -15,7 +15,6 @@ public class Enseignant extends Model{
     public int id;
     public String statut;
     @OneToOne
-    @JoinColumn(name = "id")
     public Utilisateur sonUtilisateur;
     @ManyToMany(cascade=CascadeType.PERSIST)
     public List<Matiere> sesMatieres;
@@ -48,7 +47,8 @@ public class Enseignant extends Model{
         Enseignant enseignant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = enseignant.sonUtilisateur;
         Ebean.delete(enseignant);
-        Ebean.delete(utilisateur);
+        if (!Admin.utilisateurAdmin(utilisateur))
+            Ebean.delete(utilisateur);
     }
 
     public static boolean utilisateurEnseignant(Utilisateur user){
