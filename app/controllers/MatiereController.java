@@ -29,7 +29,7 @@ public  class MatiereController extends Controller {
     }
 
     public Result createMatiere(){
-        return ok();
+        return ok("OT");
     }
 
 }
