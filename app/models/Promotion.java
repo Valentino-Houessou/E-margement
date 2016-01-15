@@ -73,5 +73,4 @@ public class Promotion extends Model{
         promotion.sesEtudiants.add(Etudiant.findById(idMatiere));
         promotion.update();
     }
-
 }

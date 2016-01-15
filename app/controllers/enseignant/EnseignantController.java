@@ -7,7 +7,7 @@ import play.mvc.*;
 import play.api.mvc.Results;
 import play.libs.Json;
 
-import views.html.index;
+import views.html.enseignant.indexEnseignant;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class EnseignantController extends Controller{
     private Enseignant user;
 
     public Result index() {
-        return ok(index.render("Your new application is ready."));
+        return ok(indexEnseignant.render("Your new application is ready.",user));
 
     }
 
@@ -32,11 +32,7 @@ public class EnseignantController extends Controller{
             String motDePasse = prof.findPath("motDePasse").textValue();
             String dateDeNaissance = prof.findPath("dateDeNaissance").textValue();
             String lienPhoto = prof.findPath("lienPhoto").textValue();
-            String statut = "Professeur";
-    public Result getListEnseignant(){
-        System.out.println(Enseignant.showall());
-        return ok();
-    }
+            String statut = prof.findPath("statut").textValue();
 
             if (statut == null)
                 return badRequest("paramètre [statut] attendu");
@@ -54,9 +50,9 @@ public class EnseignantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Enseignant enseignant = new Enseignant(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                Enseignant enseignant = Enseignant.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
-                return ok(/*Json.toJson(enseignant)*/);
+                return ok(Json.toJson(enseignant));
             }
         }
     }
@@ -92,7 +88,7 @@ public class EnseignantController extends Controller{
             else {
                 Enseignant enseignant = Enseignant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
-                return ok(/*Json.toJson(enseignant)*/);
+                return ok(Json.toJson(enseignant));
             }
         }
     }
@@ -116,10 +112,6 @@ public class EnseignantController extends Controller{
     }
 
     public  Result listPresent() {
-        return ok();
-    }
-    public Result getEnseignant(){
-        System.out.println(Enseignant.show(2));
         return ok();
     }
 
