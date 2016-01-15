@@ -25,10 +25,16 @@ GET     /enseignant/listePresence    controllers.enseignant.EnseignantController
 
 
 # admin
-GET    /administrateur/index                 controllers.administrateur.administrateurController.adminIndex()
-PUT    /administrateur/utilisateurs/setAdmin controllers.administrateur.administrateurController.setAdmin()
-POST   /administrateur/update-admin          controllers.administrateur.administrateurController.updateAdmin()
-DELETE /administrateur/delete-admin          controllers.administrateur.administrateurController.deleteAdmin()
+GET    /administrateur/index                    controllers.administrateur.administrateurController.adminIndex()
+GET    /administrateur/gerer-utilisateur        controllers.administrateur.administrateurController.gererUtilisateur()
+GET    /administrateur/charger-liste-etudiant   controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET    /administrateur/charger-edt              controllers.administrateur.administrateurController.chargerEdt()
+GET    /administrateur/charger-liste-enseignant controllers.administrateur.administrateurController.chargerListeEnseignant()
+GET    /administrateur/exporter-feuille         controllers.administrateur.administrateurController.exporterFeuille()
+
+PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.setAdmin()
+POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
+DELETE /administrateur/delete-admin             controllers.administrateur.administrateurController.deleteAdmin()
 
 
 
