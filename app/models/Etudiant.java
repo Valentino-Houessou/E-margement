@@ -63,6 +63,8 @@ public class Etudiant extends Model{
         return (Etudiant.find.where().eq("sonUtilisateur", user).findUnique()) != null ? true : false;
     }
 
+
+
     public static void delete(int id) {
         Etudiant etudiant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = etudiant.sonUtilisateur;

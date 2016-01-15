@@ -28,6 +28,9 @@ public class Promotion extends Model{
 
 
 
+
+    
+
     public Promotion(String anneeScolaire, String groupe, String type,String filiere) {
         this.anneeScolaire=anneeScolaire;
         this.groupe=groupe;
