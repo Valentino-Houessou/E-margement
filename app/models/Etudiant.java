@@ -84,4 +84,5 @@ public class Etudiant extends Model{
     public static List<Etudiant> findAll() {
             return find.all();
     }
+
 }

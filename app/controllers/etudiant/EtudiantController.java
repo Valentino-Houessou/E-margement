@@ -95,6 +95,7 @@ public class EtudiantController extends Controller{
         }
     }
 
+
     public  Result getListEtudiant() {
         List<Etudiant> etudiantList;
         etudiantList = Etudiant.findAll();
@@ -112,4 +113,5 @@ public class EtudiantController extends Controller{
             return ok();
         }
     }
+
 }
