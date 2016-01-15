@@ -6,8 +6,8 @@
 GET     /                    controllers.Application.index()
 
 # utilisateur
-GET    /utilisateur          controllers.utilisateur.UtilisateurController.getUtilisateur()
-GET    /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
+GET    /utilisateurs          controllers.utilisateur.UtilisateurController.getUtilisateurs()
+POST   /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
 POST   /utilisateur-update   controllers.utilisateur.UtilisateurController.updateUtilisateur()
 PUT    /utilisateur-add      controllers.utilisateur.UtilisateurController.addUtilisateur()
 DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.deleteUtilisateur()
@@ -25,10 +25,16 @@ GET     /enseignant/listePresence           controllers.enseignant.EnseignantCon
 
 
 # admin
-GET    /administrateur/index                 controllers.administrateur.administrateurController.adminIndex()
-PUT    /administrateur/utilisateurs/setAdmin controllers.administrateur.administrateurController.setAdmin()
-POST   /administrateur/update-admin          controllers.administrateur.administrateurController.updateAdmin()
-DELETE /administrateur/delete-admin          controllers.administrateur.administrateurController.deleteAdmin()
+GET    /administrateur/index                    controllers.administrateur.administrateurController.adminIndex()
+GET    /administrateur/gerer-utilisateur        controllers.administrateur.administrateurController.gererUtilisateur()
+GET    /administrateur/charger-liste-etudiant   controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET    /administrateur/charger-edt              controllers.administrateur.administrateurController.chargerEdt()
+GET    /administrateur/charger-liste-enseignant controllers.administrateur.administrateurController.chargerListeEnseignant()
+GET    /administrateur/exporter-feuille         controllers.administrateur.administrateurController.exporterFeuille()
+
+PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.setAdmin()
+POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
+DELETE /administrateur/delete-admin             controllers.administrateur.administrateurController.deleteAdmin()
 
 
 

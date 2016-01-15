@@ -2,6 +2,10 @@ package models;
 //TODO
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import com.avaje.ebean.*;
@@ -24,27 +28,35 @@ public class Utilisateur extends Model  {
     public List<Module> sesModules;
 
     public Utilisateur(String nom, String prenom, String adresseMail, String motDePasse,
-                       Timestamp dateDeNaissance, String lienPhoto, List<Module> sesModules) {
+                       Timestamp dateDeNaissance, String lienPhoto) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresseMail = adresseMail;
         this.motDePasse = motDePasse;
         this.dateDeNaissance = dateDeNaissance;
         this.lienPhoto = lienPhoto;
-        this.sesModules = sesModules;
+        this.sesModules = new ArrayList<Module>();
     }
 
     //Use to create an user
     public static Utilisateur create(String nom, String prenom, String adresseMail, String motDePasse,
-                                     Timestamp dateDeNaissance, String lienPhoto, List<Module> sesModules){
+                                     String dateDeNaissance, String lienPhoto){
+        Timestamp ddn = null;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date ddnd = formatter.parse(dateDeNaissance);
+            ddn = new Timestamp(ddnd.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Utilisateur user = new Utilisateur(nom, prenom, adresseMail,
-                                        motDePasse, dateDeNaissance, lienPhoto, sesModules);
+                                        motDePasse, ddn, lienPhoto);
         user.save();
         return user;
     }
 
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
-                                     Timestamp dateDeNaissance, String lienPhoto, List<Module> sesModules){
+                                     String dateDeNaissance, String lienPhoto){
         Utilisateur user = find.ref(id);
         if (nom != null)
             user.nom = nom;
@@ -54,12 +66,19 @@ public class Utilisateur extends Model  {
             user.adresseMail = adresseMail;
         if (motDePasse != null)
             user.motDePasse = motDePasse;
-        if (dateDeNaissance != null)
-            user.dateDeNaissance = dateDeNaissance;
+        if (dateDeNaissance != null) {
+            Timestamp ddn = null;
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date ddnd = formatter.parse(dateDeNaissance);
+                ddn = new Timestamp(ddnd.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            user.dateDeNaissance = ddn;
+        }
         if (lienPhoto != null)
             user.lienPhoto = lienPhoto;
-        if (sesModules != null)
-            user.sesModules = sesModules;
 
         user.update();
 
@@ -68,26 +87,26 @@ public class Utilisateur extends Model  {
 
     public static void deleteUtilisateur(long id){
         Utilisateur user = find.ref(id);
-        if (Etudiant.utilisateurEtudiant(user) ||
-                Enseignant.utilisateurEnseignant(user) ||
-                Admin.utilisateurAdmin(user))
+        if (!Etudiant.utilisateurEtudiant(user) &&
+                !Enseignant.utilisateurEnseignant(user) &&
+                !Admin.utilisateurAdmin(user))
             user.delete();
     }
 
     public static void droitEnseignant (long id){
-        Utilisateur user = find.ref(id);
+        Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
         user.update();
     }
 
     public static void droitEtudiant (long id){
-        Utilisateur user = find.ref(id);
+        Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ETUDIANTS"));
         user.update();
     }
 
     public static void droitAdmin (long id){
-        Utilisateur user = find.ref(id);
+        Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ADMINISTRATEURS"));
         user.update();
     }
@@ -98,6 +117,10 @@ public class Utilisateur extends Model  {
 
     public static List<Utilisateur> findAll(){
         return Utilisateur.find.all();
+    }
+
+    public static Utilisateur findByMail(String mail){
+        return  find.where().eq("adresseMail", mail).findUnique();
     }
 
     @Override

@@ -14,4 +14,15 @@ public class Matiere extends Model {
     public String libelleAbregee;
     public String semestre;
     public int nombreHeures;
+
+
+    public static Finder<Long,Matiere> find = new Finder<Long, Matiere>(Matiere.class);
+
+    public static Matiere findById(long id) {
+
+        return find.ref(id);
+    }
+
+
+
 }
