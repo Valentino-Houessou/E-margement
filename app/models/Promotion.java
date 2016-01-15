@@ -40,7 +40,7 @@ public class Promotion extends Model{
     public static Finder<Long,Promotion> find = new Finder<Long, Promotion>(Promotion.class);
 
 
-    public static Promotion updatePromotion(int id, String anneeScolaire, String groupe, String type,String filiere){
+    public static Promotion updatePromotion(long id, String anneeScolaire, String groupe, String type,String filiere){
         Promotion promotion = find.ref(id);
         if (anneeScolaire != null)
             promotion.anneeScolaire = anneeScolaire;
