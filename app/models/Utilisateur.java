@@ -89,7 +89,7 @@ public class Utilisateur extends Model  {
         Utilisateur user = find.ref(id);
         if (!Etudiant.utilisateurEtudiant(user) &&
                 !Enseignant.utilisateurEnseignant(user) &&
-                !Admin.utilisateurAdmin(user))
+                !Administrateur.utilisateurAdmin(user))
             user.delete();
     }
 

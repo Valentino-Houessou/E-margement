@@ -54,7 +54,7 @@ public class Enseignant extends Model{
         Enseignant enseignant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = enseignant.sonUtilisateur;
         Ebean.delete(enseignant);
-        if (!Admin.utilisateurAdmin(utilisateur))
+        if (!Administrateur.utilisateurAdmin(utilisateur))
             Ebean.delete(utilisateur);
     }
 

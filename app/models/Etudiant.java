@@ -2,13 +2,7 @@ package models;
 //TODO
 import javax.persistence.*;
 import com.avaje.ebean.*;
-import com.avaje.ebean.text.StringFormatter;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -61,7 +55,7 @@ public class Etudiant extends Model{
         Etudiant etudiant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = etudiant.sonUtilisateur;
         Ebean.delete(etudiant);
-        if (!Admin.utilisateurAdmin(utilisateur))
+        if (!Administrateur.utilisateurAdmin(utilisateur))
             Ebean.delete(utilisateur);
     }
 
