@@ -32,7 +32,7 @@ public class EnseignantController extends Controller{
             String motDePasse = prof.findPath("motDePasse").textValue();
             String dateDeNaissance = prof.findPath("dateDeNaissance").textValue();
             String lienPhoto = prof.findPath("lienPhoto").textValue();
-            String statut = "Professeur";
+            String statut = prof.findPath("statut").textValue();
 
             if (statut == null)
                 return badRequest("paramètre [statut] attendu");
@@ -50,9 +50,9 @@ public class EnseignantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Enseignant enseignant = new Enseignant(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                Enseignant enseignant = Enseignant.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
-                return ok(/*Json.toJson(enseignant)*/);
+                return ok(Json.toJson(enseignant));
             }
         }
     }
@@ -88,7 +88,7 @@ public class EnseignantController extends Controller{
             else {
                 Enseignant enseignant = Enseignant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
-                return ok(/*Json.toJson(enseignant)*/);
+                return ok(Json.toJson(enseignant));
             }
         }
     }

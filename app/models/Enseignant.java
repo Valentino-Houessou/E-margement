@@ -22,12 +22,19 @@ public class Enseignant extends Model{
     public static Finder<Long, Enseignant> find = new Finder<Long, Enseignant>(Enseignant.class);
 
    //TODO : Quand on cré un enseignant il faut ajouter le module Enseignant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEnseignant() de utilisateur*/
-    public Enseignant(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
+    public Enseignant(String statut, Utilisateur sonUtilisateur) {
         this.statut = statut;
-        this.sonUtilisateur = Utilisateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
-        Utilisateur.droitEnseignant(this.id);
+        this.sonUtilisateur = sonUtilisateur;
         this.sesMatieres = new ArrayList<Matiere>();
-        this.save();
+    }
+
+    public static Enseignant create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
+        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
+        Utilisateur.droitEnseignant(user.id);
+        Enseignant enseignant = new Enseignant(statut, user);
+
+        enseignant.save();
+        return enseignant;
     }
 
     public static Enseignant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
@@ -36,7 +43,7 @@ public class Enseignant extends Model{
         enseignant.statut = statut;
         Utilisateur.updateUtilisateur(enseignant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
-        enseignant.save();
+        enseignant.update();
 
         return enseignant;
 
