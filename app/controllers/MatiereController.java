@@ -28,4 +28,8 @@ public  class MatiereController extends Controller {
         return ok(index.render("Your new application is ready."));
     }
 
+    public Result createMatiere(){
+        return ok();
+    }
+
 }
