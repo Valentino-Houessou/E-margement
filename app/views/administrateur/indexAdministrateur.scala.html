@@ -20,11 +20,20 @@
             </div>
 
             <ul class="nav">
-                <li class="active">
-                    <a href="/administrateur/gerer-utilisateur" class="ext">
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav0" class="collapsed">
                         <i class="pe-7s-id"></i>
                         <p>Gerer les utilisateurs</p>
                     </a>
+                    <div class="collapse" id="toggleDemo"> <!-- C'est en rouge c'est normal ! -->
+                        <div id="liens_abscences">
+                            <ul class="nav nav-list">
+                                <li><a href="#">Administrateur</a></li>
+                                <li><a href="#">Enseignant</a></li>
+                                <li><a href="#">Etudiant</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <a href="/administrateur/charger-liste-etudiant" class="ext">
@@ -116,7 +125,9 @@
         <div class="content">
             <div class="container-fluid">
 
-                    <div id="charger_fonctionnalite"></div>
+                    <div id="charger_fonctionnalite">
+
+                    </div>
 
             </div>
         </div>

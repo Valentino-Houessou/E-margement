@@ -4,8 +4,12 @@ package controllers.administrateur;
 import play.*;
 import play.mvc.*;
 
-import views.*;
-import views.html.*;
+import views.html.administrateur.indexAdministrateur;
+import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.chargerListeEtudiant;
+import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.chargerListeEnseignant;
+import views.html.administrateur.exportFeuillePresence;
 import models.*;
 
 public class administrateurController extends Controller {
@@ -17,7 +21,7 @@ public class administrateurController extends Controller {
      */
     public Result adminIndex()
     {
-        return ok(views.html.administrateur.indexAdministrateur.render("Administration"));
+        return ok(indexAdministrateur.render("Administration"));
     }
 
     /**
@@ -27,7 +31,7 @@ public class administrateurController extends Controller {
      */
     public Result gererUtilisateur()
     {
-        return ok(views.html.administrateur.gererUtilisateur.render("Gerer les utilisateurs"));
+        return ok(gererUtilisateur.render("Gerer les utilisateurs"));
     }
 
     /**
@@ -37,7 +41,7 @@ public class administrateurController extends Controller {
      */
     public Result chargerListeEtudiant()
     {
-        return ok(views.html.administrateur.chargerListeEtudiant.render("Charger la liste des étudiants"));
+        return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
     }
 
     /**
@@ -57,7 +61,7 @@ public class administrateurController extends Controller {
      */
     public  Result chargerListeEnseignant()
     {
-        return ok(views.html.administrateur.chargerListeEnseignant.render("Charger la liste des enseignants"));
+        return ok(chargerListeEnseignant.render("Charger la liste des enseignants"));
     }
 
     /**
@@ -67,7 +71,7 @@ public class administrateurController extends Controller {
      */
     public  Result exporterFeuille()
     {
-        return ok(views.html.administrateur.exportFeuillePresence.render("Exporter des feuilles de présences"));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
     }
 
     public  Result setAdmin() {
