@@ -34,7 +34,7 @@ public class Enseignant extends Model{
         Enseignant enseignant = find.where().eq("id", id).findUnique();
 
         enseignant.statut = statut;
-        Utilisateur.updateUtilisateur(enseignant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, enseignant.sonUtilisateur.sesModules);
+        Utilisateur.updateUtilisateur(enseignant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
         enseignant.save();
 

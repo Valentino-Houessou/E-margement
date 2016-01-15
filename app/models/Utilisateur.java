@@ -57,7 +57,7 @@ public class Utilisateur extends Model  {
     }
 
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
-                                     String dateDeNaissance, String lienPhoto, List<Module> sesModules){
+                                     String dateDeNaissance, String lienPhoto){
         Utilisateur user = find.ref(id);
         if (nom != null)
             user.nom = nom;
@@ -80,8 +80,6 @@ public class Utilisateur extends Model  {
         }
         if (lienPhoto != null)
             user.lienPhoto = lienPhoto;
-        if (sesModules != null)
-            user.sesModules = sesModules;
 
         user.update();
 
@@ -90,9 +88,9 @@ public class Utilisateur extends Model  {
 
     public static void deleteUtilisateur(long id){
         Utilisateur user = find.ref(id);
-        if (Etudiant.utilisateurEtudiant(user) ||
-                Enseignant.utilisateurEnseignant(user) ||
-                Admin.utilisateurAdmin(user))
+        if (!Etudiant.utilisateurEtudiant(user) &&
+                !Enseignant.utilisateurEnseignant(user) &&
+                !Admin.utilisateurAdmin(user))
             user.delete();
     }
 
@@ -117,6 +115,10 @@ public class Utilisateur extends Model  {
 
     public static List<Utilisateur> findAll(){
         return Utilisateur.find.all();
+    }
+
+    public static Utilisateur findByMail(String mail){
+        return  find.where().eq("adresseMail", mail).findUnique();
     }
 
     @Override

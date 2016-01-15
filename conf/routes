@@ -6,8 +6,8 @@
 GET     /                    controllers.Application.index()
 
 # utilisateur
-GET    /utilisateur          controllers.utilisateur.UtilisateurController.getUtilisateur()
-GET    /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
+GET    /utilisateurs          controllers.utilisateur.UtilisateurController.getUtilisateurs()
+POST   /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
 POST   /utilisateur-update   controllers.utilisateur.UtilisateurController.updateUtilisateur()
 PUT    /utilisateur-add      controllers.utilisateur.UtilisateurController.addUtilisateur()
 DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.deleteUtilisateur()
