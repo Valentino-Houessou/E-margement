@@ -49,7 +49,6 @@ public class Enseignant extends Model{
 
     }
 
-    //TODO : Il faudrait vérifier si il n'a pas un compte admin avant de le supprimer. Vous pouvez utiliser les fonction utilisateurAdmin et utilisateurEnseignant
     public static void delete(int id) {
         Enseignant enseignant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = enseignant.sonUtilisateur;

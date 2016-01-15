@@ -150,14 +150,4 @@ public class Utilisateur extends Model  {
         return result;
     }
 
-    /*
-    public void update(String nom, String prenom, String adresse_mail, String mot_de_passe, String date_de_naissance, String lien_photo) {
-            this.nom = nom;
-            this.prenom = prenom;
-            this.adresseMail = adresse_mail;
-            this.motDePasse = mot_de_passe;
-            this.dateDeNaissance = Timestamp.valueOf(date_de_naissance);
-            this.lienPhoto = lien_photo;
-            Ebean.save(this);
-    }*/
 }
