@@ -25,7 +25,7 @@ public class Enseignant extends Model{
     public Enseignant(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         this.statut = statut;
         this.sonUtilisateur = Utilisateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
-        this.sonUtilisateur.droitEnseignant();
+        Utilisateur.droitEnseignant(this.id);
         this.sesMatieres = new ArrayList<Matiere>();
         this.save();
     }

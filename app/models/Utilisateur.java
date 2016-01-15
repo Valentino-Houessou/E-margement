@@ -94,19 +94,22 @@ public class Utilisateur extends Model  {
             user.delete();
     }
 
-    public void droitEnseignant (){
-        this.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
-        this.update();
+    public static void droitEnseignant (long id){
+        Utilisateur user =  find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
+        user.update();
     }
 
-    public void droitEtudiant (){
-        this.sesModules.add(Module.findByLibelle("ETUDIANTS"));
-        this.update();
+    public static void droitEtudiant (long id){
+        Utilisateur user =  find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ETUDIANTS"));
+        user.update();
     }
 
-    public void droitAdmin (){
-        this.sesModules.add(Module.findByLibelle("ADMINISTRATEURS"));
-        this.update();
+    public static void droitAdmin (long id){
+        Utilisateur user =  find.ref(id);
+        user.sesModules.add(Module.findByLibelle("ADMINISTRATEURS"));
+        user.update();
     }
 
 
