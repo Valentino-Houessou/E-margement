@@ -36,6 +36,8 @@ PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.admin
 POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
 DELETE /administrateur/delete-admin             controllers.administrateur.administrateurController.deleteAdmin()
 
+#matière
+GET /matiere    controllers.MatiereController.index()
 
 
 
