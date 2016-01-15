@@ -111,6 +111,10 @@ public class EnseignantController extends Controller{
         }
     }
 
+    public  Result getEnseignant(long id) {
+            return ok(Json.toJson(Enseignant.findById(id)));
+    }
+
     public  Result listPresent() {
         return ok();
     }

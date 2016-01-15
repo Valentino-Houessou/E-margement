@@ -62,6 +62,10 @@ public class Enseignant extends Model{
         return (Enseignant.find.where().eq("sonUtilisateur", user).findUnique()) != null ? true : false;
     }
 
+    public static Enseignant findById (long id){
+        return find.ref(id);
+    }
+
     public static List<Enseignant> findAll() {
         return find.all();
     }
