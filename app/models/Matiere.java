@@ -14,4 +14,7 @@ public class Matiere extends Model {
     public String libelleAbregee;
     public String semestre;
     public int nombreHeures;
+
+    public static Matiere findById(String id) {
+    }
 }
