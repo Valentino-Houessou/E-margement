@@ -4,6 +4,8 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.List;
+
 @Entity
 public class Administrateur extends Model {
 
@@ -43,8 +45,24 @@ public class Administrateur extends Model {
 
     }
 
+    public static void delete(int id) {
+        Administrateur admin = find.where().eq("id", id).findUnique();
+        Utilisateur utilisateur = admin.sonUtilisateur;
+        Ebean.delete(admin);
+        if (!Enseignant.utilisateurEnseignant(utilisateur))
+            Ebean.delete(utilisateur);
+    }
+
     public static boolean utilisateurAdmin(Utilisateur user){
         return (Administrateur.find.where().eq("sonUtilisateur", user).findUnique()) != null ? true : false;
+    }
+
+    public static Administrateur findById (long id){
+        return find.ref(id);
+    }
+
+    public static List<Administrateur> findAll() {
+        return find.all();
     }
 
 }
