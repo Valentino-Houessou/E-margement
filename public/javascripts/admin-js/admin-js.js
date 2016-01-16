@@ -1,11 +1,74 @@
 /**
  * Created by Yoan D on 14/01/2016.
  */
-/* $(document).ready(function() {
-    $(".ext").on('click',function(event) {
-        $("#charger_fonctionnalite div").empty();
-        var url = $(this).prop('href');
-        $("#charger_fonctionnalite").load(url);
-        event.preventDefault();
-    });
-}); */
+
+var chargerListeEtudiant = function() {
+
+    $.ajax({
+        url: "/administrateur/charger-liste-etudiant",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+var chargerEdt = function() {
+
+    $.ajax({
+        url: "/administrateur/charger-edt",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+var chargerListeEnseignant = function() {
+
+    $.ajax({
+        url: "/administrateur/charger-liste-enseignant",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+var exportFeuillePresence = function() {
+
+    $.ajax({
+        url: "/administrateur/exporter-feuille",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+$('#ft1').click(chargerListeEtudiant);
+$('#ft2').click(chargerEdt);
+$('#ft3').click(chargerListeEnseignant);
+$('#ft4').click(exportFeuillePresence);

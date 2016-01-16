@@ -1,13 +1,14 @@
 package controllers.administrateur;
 
 
+import controllers.*;
 import play.*;
 import play.mvc.*;
 
 import views.html.administrateur.indexAdministrateur;
 import views.html.administrateur.gererUtilisateur;
 import views.html.administrateur.chargerListeEtudiant;
-import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import models.*;
@@ -39,7 +40,7 @@ public class administrateurController extends Controller {
      * Affichage du bloc dynamique JQuery pour charger la liste des étudiants
      * @return chargerListeEtudiant.scala.html
      */
-    public Result chargerListeEtudiant()
+    public  Result chargerListeEtudiant()
     {
         return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
     }
@@ -51,7 +52,7 @@ public class administrateurController extends Controller {
      */
     public Result chargerEdt()
     {
-        return ok(views.html.administrateur.chargerEdt.render("Charger les emplois du temps"));
+        return ok(chargerEdt.render("Charger les emplois du temps"));
     }
 
     /**
@@ -69,7 +70,7 @@ public class administrateurController extends Controller {
      * Affichage du bloc dynamique JQuery pour exporter les feuilles de présences
      * @return block exportFeuillePresence.scala.html
      */
-    public  Result exporterFeuille()
+    public Result exporterFeuille()
     {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
     }
