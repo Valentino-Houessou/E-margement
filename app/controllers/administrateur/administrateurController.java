@@ -6,7 +6,9 @@ import play.*;
 import play.mvc.*;
 
 import views.html.administrateur.indexAdministrateur;
-import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.gererUtilisateurAdministrateur;
+import views.html.administrateur.gererUtilisateurEnseignant;
+import views.html.administrateur.gererUtilisateurEtudiant;
 import views.html.administrateur.chargerListeEtudiant;
 import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
@@ -18,7 +20,7 @@ public class administrateurController extends Controller {
     /**
      * adminIndex()
      * Redirection vers la page d'accueil de l'administrateur
-     * @return
+     * @return indexAdministrateur.scala.html
      */
     public Result adminIndex()
     {
@@ -26,13 +28,31 @@ public class administrateurController extends Controller {
     }
 
     /**
-     * gererUtilisateur()
-     * Affichage du bloc dynamique JQuery pour gerer les utilisateurs
-     * @return block gererUtilisateur.scala.html
+     * gererUtilisateurAdministrateur()
+     * Affichage du bloc dynamique JQuery pour gérer un profil administrateur
+     * @return gererUtilisateurAdministrateur.scala.html
      */
-    public Result gererUtilisateur()
+    public Result gererUtilisateurAdministrateur()
     {
-        return ok(gererUtilisateur.render("Gerer les utilisateurs"));
+        return ok(gererUtilisateurAdministrateur.render("Gérer un profil administrateur"));
+    }
+
+    /**
+     * gererUtilisateurEnseignant()
+     * Affichage du bloc dynamique JQuery pour gérer un profil enseignant
+     * @return gererUtilisateurEnseignant.scala.html
+     */
+    public Result gererUtilisateurEnseignant() {
+        return ok(gererUtilisateurEnseignant.render("Gérer un profil enseignant"));
+    }
+
+    /**
+     * gererUtilisateurEtudiant()
+     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
+     * @return
+     */
+    public Result gererUtilisateurEtudiant() {
+        return ok(gererUtilisateurEtudiant.render("Gérer un profil etudiant"));
     }
 
     /**
