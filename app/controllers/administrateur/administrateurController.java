@@ -13,6 +13,8 @@ import views.html.administrateur.chargerListeEtudiant;
 import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
+import views.html.administrateur.validerJustificatifsAbscences;
+import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
 public class administrateurController extends Controller {
@@ -49,7 +51,7 @@ public class administrateurController extends Controller {
     /**
      * gererUtilisateurEtudiant()
      * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
-     * @return
+     * @return gererUtilisateurEtudiant.scala.html
      */
     public Result gererUtilisateurEtudiant() {
         return ok(gererUtilisateurEtudiant.render("Gérer un profil etudiant"));
@@ -94,6 +96,22 @@ public class administrateurController extends Controller {
     {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
     }
+
+    /**
+     * validerJustificatifsAbscences()
+     * @return
+     */
+    public Result validerJustificatifsAbscences() {
+        return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
+    }
+
+    public Result exporterJustificatifsAbscences() {
+        return ok(exporterJustificatifsAbscences.render("Exporter les justificatifs d'abscences"));
+    }
+
+
+
+
 
     public  Result setAdmin() {
         return Results.TODO;
