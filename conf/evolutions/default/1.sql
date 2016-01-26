@@ -3,12 +3,12 @@
 
 # --- !Ups
 
-create table admin (
+create table administrateur (
   id                        integer auto_increment not null,
   statut                    varchar(255),
   son_utilisateur_id        bigint,
-  constraint uq_admin_son_utilisateur_id unique (son_utilisateur_id),
-  constraint pk_admin primary key (id))
+  constraint uq_administrateur_son_utilisateur_id unique (son_utilisateur_id),
+  constraint pk_administrateur primary key (id))
 ;
 
 create table batiment (
@@ -137,8 +137,8 @@ create table utilisateur_module (
   module_id                      bigint not null,
   constraint pk_utilisateur_module primary key (utilisateur_id, module_id))
 ;
-alter table admin add constraint fk_admin_sonUtilisateur_1 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
-create index ix_admin_sonUtilisateur_1 on admin (son_utilisateur_id);
+alter table administrateur add constraint fk_administrateur_sonUtilisateur_1 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
+create index ix_administrateur_sonUtilisateur_1 on administrateur (son_utilisateur_id);
 alter table batiment add constraint fk_batiment_sonUniversite_2 foreign key (son_universite_id) references universite (id) on delete restrict on update restrict;
 create index ix_batiment_sonUniversite_2 on batiment (son_universite_id);
 alter table cours add constraint fk_cours_sonEnseignant_3 foreign key (son_enseignant_id) references enseignant (id) on delete restrict on update restrict;
@@ -182,7 +182,7 @@ alter table utilisateur_module add constraint fk_utilisateur_module_module_02 fo
 
 SET FOREIGN_KEY_CHECKS=0;
 
-drop table admin;
+drop table administrateur;
 
 drop table batiment;
 
