@@ -32,9 +32,11 @@ GET    /administrateur/charger-edt              controllers.administrateur.admin
 GET    /administrateur/charger-liste-enseignant controllers.administrateur.administrateurController.chargerListeEnseignant()
 GET    /administrateur/exporter-feuille         controllers.administrateur.administrateurController.exporterFeuille()
 
-PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.setAdmin()
+PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.addAdmin()
 POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
 DELETE /administrateur/delete-admin             controllers.administrateur.administrateurController.deleteAdmin()
+GET    /administrateur/listAdministrateur       controllers.administrateur.administrateurController.getListAdmin()
+GET    /administrateur/profil/:id               controllers.administrateur.administrateurController.getAdmin(id : Long)
 
 #matière
 GET /matiere    controllers.MatiereController.index()

@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import com.avaje.ebean.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Entity
 public class Utilisateur extends Model  {
@@ -50,7 +52,7 @@ public class Utilisateur extends Model  {
             e.printStackTrace();
         }
         Utilisateur user = new Utilisateur(nom, prenom, adresseMail,
-                                        motDePasse, ddn, lienPhoto);
+                Utilisateur.getEncodedPassword(motDePasse), ddn, lienPhoto);
         user.save();
         return user;
     }
@@ -64,8 +66,9 @@ public class Utilisateur extends Model  {
             user.prenom = prenom;
         if (adresseMail != null)
             user.adresseMail = adresseMail;
-        if (motDePasse != null)
-            user.motDePasse = motDePasse;
+        if (motDePasse != null){
+            user.motDePasse = Utilisateur.getEncodedPassword(motDePasse);
+        }
         if (dateDeNaissance != null) {
             Timestamp ddn = null;
             try {
@@ -121,6 +124,38 @@ public class Utilisateur extends Model  {
 
     public static Utilisateur findByMail(String mail){
         return  find.where().eq("adresseMail", mail).findUnique();
+    }
+
+    public static String getEncodedPassword(String key) {
+        key = "_" + key + "_";
+        byte[] uniqueKey = key.getBytes();
+        byte[] hash = null;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(uniqueKey);
+        } catch (NoSuchAlgorithmException e) {
+            throw new Error("no MD5 support in this VM");
+        }
+        StringBuffer hashString = new StringBuffer();
+        for ( int i = 0; i < hash.length; ++i ) {
+            String hex = Integer.toHexString(hash[i]);
+            if ( hex.length() == 1 ) {
+                hashString.append('0');
+                hashString.append(hex.charAt(hex.length()-1));
+            } else {
+                hashString.append(hex.substring(hex.length()-2));
+            }
+        }
+        return hashString.toString();
+    }
+
+    public static boolean testPassword(String clearTextTestPassword,
+                                       String encodedActualPassword)
+            throws NoSuchAlgorithmException
+    {
+        String encodedTestPassword = Utilisateur.getEncodedPassword(
+                clearTextTestPassword);
+
+        return (encodedTestPassword.equals(encodedActualPassword));
     }
 
     @Override

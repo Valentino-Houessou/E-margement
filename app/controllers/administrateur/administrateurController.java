@@ -1,7 +1,9 @@
 package controllers.administrateur;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import play.*;
+import play.libs.Json;
 import play.mvc.*;
 
 import views.html.administrateur.indexAdministrateur;
@@ -11,6 +13,8 @@ import views.html.administrateur.gererUtilisateur;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import models.*;
+
+import java.util.List;
 
 public class administrateurController extends Controller {
 
@@ -74,15 +78,98 @@ public class administrateurController extends Controller {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
     }
 
-    public  Result setAdmin() {
-        return Results.TODO;
+    public Result addAdmin() {
+        JsonNode admin = request().body().asJson();
+        if (admin == null)
+            return badRequest("donnée Json attendu");
+        else {
+            String nom = admin.findPath("nom").textValue();
+            String prenom = admin.findPath("prenom").textValue();
+            String adresseMail = admin.findPath("adresseMail").textValue();
+            String motDePasse = admin.findPath("motDePasse").textValue();
+            String dateDeNaissance = admin.findPath("dateDeNaissance").textValue();
+            String lienPhoto = admin.findPath("lienPhoto").textValue();
+            String statut = admin.findPath("statut").textValue();
+
+            if (statut == null)
+                return badRequest("paramètre [statut] attendu");
+            else if (nom == null)
+                return badRequest("paramètre [nom] attendu");
+            else if (prenom == null)
+                return badRequest("paramètre [prenom] attendu");
+            else if (adresseMail == null)
+                return badRequest("paramètre [adresseMail] attendu");
+            else if (motDePasse == null)
+                return badRequest("paramètre [motDePasse] attendu");
+            else if (dateDeNaissance == null)
+                return badRequest("paramètre [dateDeNaissance] attendu");
+            else if (lienPhoto == null)
+                return badRequest("paramètre [lienPhoto] attendu");
+            else {
+
+                Administrateur administrateur = Administrateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+
+                return ok(Json.toJson(administrateur));
+            }
+        }
     }
 
     public  Result updateAdmin() {
-        return Results.TODO;
+        JsonNode admin = request().body().asJson();
+        if (admin == null)
+            return badRequest("donnée Json attendu");
+        else {
+            int id = admin.findPath("id").intValue();
+            String statut = admin.findPath("statut").textValue();
+            String nom = admin.findPath("nom").textValue();
+            String prenom = admin.findPath("prenom").textValue();
+            String adresseMail = admin.findPath("adresseMail").textValue();
+            String motDePasse = admin.findPath("motDePasse").textValue();
+            String dateDeNaissance = admin.findPath("dateDeNaissance").textValue();
+            String lienPhoto = admin.findPath("lienPhoto").textValue();
+
+            if (statut == null)
+                return badRequest("paramètre [statut] attendu");
+            else if (nom == null)
+                return badRequest("paramètre [nom] attendu");
+            else if (prenom == null)
+                return badRequest("paramètre [prenom] attendu");
+            else if (adresseMail == null)
+                return badRequest("paramètre [adresseMail] attendu");
+            else if (motDePasse == null)
+                return badRequest("paramètre [motDePasse] attendu");
+            else if (dateDeNaissance == null)
+                return badRequest("paramètre [dateDeNaissance] attendu");
+            else if (lienPhoto == null)
+                return badRequest("paramètre [lienPhoto] attendu");
+            else {
+                Administrateur administrateur = Administrateur.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+
+                return ok(Json.toJson(administrateur));
+            }
+        }
+
+    }
+
+    public  Result getListAdmin() {
+        List<Administrateur> adminList;
+        adminList = Administrateur.findAll();
+        return ok(Json.toJson(adminList));
     }
 
     public  Result deleteAdmin() {
-        return Results.TODO;
+        JsonNode admin = request().body().asJson();
+        if (admin == null)
+            return badRequest("donnée Json attendu");
+        else {
+            int id = admin.findPath("id").intValue();
+            Administrateur.delete(id);
+            return ok();
+        }
     }
+
+    public  Result getAdmin(long id) {
+        return ok(Json.toJson(Administrateur.findById(id)));
+    }
+
 }
