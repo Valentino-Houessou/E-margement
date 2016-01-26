@@ -2,16 +2,21 @@ package controllers.administrateur;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.*;
 import play.*;
 import play.libs.Json;
 import play.mvc.*;
 
 import views.html.administrateur.indexAdministrateur;
-import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.gererUtilisateurAdministrateur;
+import views.html.administrateur.gererUtilisateurEnseignant;
+import views.html.administrateur.gererUtilisateurEtudiant;
 import views.html.administrateur.chargerListeEtudiant;
-import views.html.administrateur.gererUtilisateur;
+import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
+import views.html.administrateur.validerJustificatifsAbscences;
+import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
 import java.util.List;
@@ -21,7 +26,7 @@ public class administrateurController extends Controller {
     /**
      * adminIndex()
      * Redirection vers la page d'accueil de l'administrateur
-     * @return
+     * @return indexAdministrateur.scala.html
      */
     public Result adminIndex()
     {
@@ -29,13 +34,31 @@ public class administrateurController extends Controller {
     }
 
     /**
-     * gererUtilisateur()
-     * Affichage du bloc dynamique JQuery pour gerer les utilisateurs
-     * @return block gererUtilisateur.scala.html
+     * gererUtilisateurAdministrateur()
+     * Affichage du bloc dynamique JQuery pour gérer un profil administrateur
+     * @return gererUtilisateurAdministrateur.scala.html
      */
-    public Result gererUtilisateur()
+    public Result gererUtilisateurAdministrateur()
     {
-        return ok(gererUtilisateur.render("Gerer les utilisateurs"));
+        return ok(gererUtilisateurAdministrateur.render("Gérer un profil administrateur"));
+    }
+
+    /**
+     * gererUtilisateurEnseignant()
+     * Affichage du bloc dynamique JQuery pour gérer un profil enseignant
+     * @return gererUtilisateurEnseignant.scala.html
+     */
+    public Result gererUtilisateurEnseignant() {
+        return ok(gererUtilisateurEnseignant.render("Gérer un profil enseignant"));
+    }
+
+    /**
+     * gererUtilisateurEtudiant()
+     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
+     * @return gererUtilisateurEtudiant.scala.html
+     */
+    public Result gererUtilisateurEtudiant() {
+        return ok(gererUtilisateurEtudiant.render("Gérer un profil etudiant"));
     }
 
     /**
@@ -43,7 +66,7 @@ public class administrateurController extends Controller {
      * Affichage du bloc dynamique JQuery pour charger la liste des étudiants
      * @return chargerListeEtudiant.scala.html
      */
-    public Result chargerListeEtudiant()
+    public  Result chargerListeEtudiant()
     {
         return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
     }
@@ -55,7 +78,7 @@ public class administrateurController extends Controller {
      */
     public Result chargerEdt()
     {
-        return ok(views.html.administrateur.chargerEdt.render("Charger les emplois du temps"));
+        return ok(chargerEdt.render("Charger les emplois du temps"));
     }
 
     /**
@@ -73,10 +96,26 @@ public class administrateurController extends Controller {
      * Affichage du bloc dynamique JQuery pour exporter les feuilles de présences
      * @return block exportFeuillePresence.scala.html
      */
-    public  Result exporterFeuille()
+    public Result exporterFeuille()
     {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
     }
+
+    /**
+     * validerJustificatifsAbscences()
+     * @return
+     */
+    public Result validerJustificatifsAbscences() {
+        return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
+    }
+
+    public Result exporterJustificatifsAbscences() {
+        return ok(exporterJustificatifsAbscences.render("Exporter les justificatifs d'abscences"));
+    }
+
+
+
+
 
     public Result addAdmin() {
         JsonNode admin = request().body().asJson();
