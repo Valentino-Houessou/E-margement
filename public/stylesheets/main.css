@@ -11,3 +11,32 @@
 .texte_gris {
     color: #9A9A9A;
 }
+
+#effet_bloc1 {
+    height: 60px;
+}
+
+#effet_bloc2 {
+    height: 60px;
+}
+ #effet_bloc1:hover {
+    box-shadow: 1px 1px 12px #555;
+}
+
+#effet_bloc2:hover {
+    box-shadow: 1px 1px 12px #555;
+}
+
+.centrer_texte {
+    text-align: center;
+}
+
+#mode_extraction {
+    margin-top: 40px;
+    margin-left: 100px;
+    visibility: hidden;
+}
+
+.marge_select {
+    margin-top: 10px;
+}

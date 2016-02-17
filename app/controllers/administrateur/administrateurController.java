@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import controllers.*;
 import play.*;
 import play.libs.Json;
+import play.data.DynamicForm;
+import static play.data.Form.form;
 import play.mvc.*;
 
 import views.html.administrateur.indexAdministrateur;
@@ -20,6 +22,7 @@ import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
 import java.util.List;
+
 
 public class administrateurController extends Controller {
 
@@ -93,22 +96,51 @@ public class administrateurController extends Controller {
 
     /**
      * exporterFeuille()
+     * Methode : GET
      * Affichage du bloc dynamique JQuery pour exporter les feuilles de présences
      * @return block exportFeuillePresence.scala.html
      */
     public Result exporterFeuille()
     {
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences"));
+        String etape = "Accueil";
+        String filiere ="";
+        List<Promotion> promotion = null;
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", etape, filiere, promotion));
     }
 
     /**
+     * exporterFeuilleselectionfiliere()
+     * Méthode : POST
+     * Affichage de la liste déroulante des promotions lorsque la filière a été sélectionné
+     * @return exportFeuillePresence.scala.html
+     */
+    public Result exporterFeuilleselectionPromotion()
+    {
+        String etape = "selectionPromotion";
+
+        // 1- Récupération des promotions selon la filière selectionnée
+        DynamicForm selectionfiliere = form().bindFromRequest();
+        String filiere = selectionfiliere.get("selectionfiliere");
+        List<Promotion> promotion = Promotion.getPromotionByFiliere(filiere);
+
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", etape, filiere, promotion));
+    }
+
+
+    /**
      * validerJustificatifsAbscences()
+     * Affichage du bloc dynamique JQuery pour valider les justificatifs d'abscences
      * @return
      */
     public Result validerJustificatifsAbscences() {
         return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
     }
 
+    /**
+     * exporterJustificatifsAbscences()
+     * Affichage du bloc dynamique JQuery pour exporter les justificatifs d'abscences
+     * @return
+     */
     public Result exporterJustificatifsAbscences() {
         return ok(exporterJustificatifsAbscences.render("Exporter les justificatifs d'abscences"));
     }

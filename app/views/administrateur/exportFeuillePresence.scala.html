@@ -1,9 +1,261 @@
-@(titrepage: String)
+@import java.util
+@(titrepage: String)(etape: String)(filiere: String)(promotion: List[Promotion])
 
 <!-- Début du block dynamique-->
     <div>
         <h1> @titrepage </h1>
 
-        <p> Ici les futures exports des feuilles de présence </p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3 col-md-offset-4">
+                        <select id="selectionfiliere" name="selectionfiliere" class="form-control">
+                            <option value="-">Sélectionner une filière</option>
+                            @if( (etape == "selectionPromotion") && (filiere == "ISIFAR")){
+                                <option value="ISIFAR" selected>ISIFAR</option>
+                            }else{
+                                <option value="ISIFAR">ISIFAR</option>
+                            }
+
+                            @if( (etape == "selectionPromotion") && (filiere == "MIAGE")){
+                                <option value="MIAGE" selected>MIAGE</option>
+                            }else{
+                                <option value="MIAGE">MIAGE</option>
+                            }
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            @if(etape == "selectionPromotion") {
+                <!-- Liste déroulante permettant de selectionner une promotion lorsqu'une filière à été sélectionné -->
+                <div id="promotionselect" class="marge_select">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-3 col-md-offset-4">
+                                <select id="selectionpromotion" name="selectionpromotion" class="form-control">
+
+                                    <option value="-">Sélectionner une promotion</option>
+
+                                    @for(promo <- promotion){
+                                        <option value="@promo.groupe">@promo.groupe - @promo.getType() </option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin liste déroulante promotion -->
+
+                <!-- Permet d'extraire une feuille de présence en selectionnant une journée ou une semaine -->
+                <div id="mode_extraction">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form id="selectiondate" method="POST" action="#">
+                                <a href="#" data-toggle="modal" data-target="#maDate" data-backdrop="false">
+                                    <div class="col-md-5">
+                                        <div class="card " id="effet_bloc1">
+                                            <div class="header">
+                                                <h4 class="title">Extraire en sélectionnant un jour</h4>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </form>
+
+                            <form id="selectionsemaine" method="POST" action="#">
+                                <a href="#" data-toggle="modal" data-target="#maSemaine" data-backdrop="false">
+                                    <div class="col-md-5">
+                                        <div class="card " id="effet_bloc2">
+                                            <div class="header">
+                                                <h4 class="title">Extraire en sélectionnant une semaine </h4>
+                                            </div>
+                                            <div class="content">
+                                                <div class="table-full-width">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin selection dates -->
+
+                <!-- Modal pour l'affichage du calendrier de saisie d'une date -->
+                <div class="modal fade" id="maDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Sélectionner une date</h4>
+                            </div>
+                            <div class="modal-body" style="height: 100px;">
+
+                                <div class="form-group" style="padding-top: 20px;padding-left: 50px;">
+                                    <label class="col-xs-3 control-label">Date : </label>
+                                    <div class="col-xs-5 date">
+                                        <div class="input-group input-append date">
+                                            <input type="text" class="form-control" placeholder="cliquer ici" name="date" id="datepicker1" />
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn">Choisir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                    <!-- Modal pour l'affichage du calendrier de saisie d'une semaine -->
+                <div class="modal fade" id="maSemaine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Sélectionner une semaine</h4>
+                            </div>
+                            <div class="modal-body" style="height: 100px;padding-left: 100px;">
+
+                                    <div class='col-xs-5 date'>
+                                        <div class="form-group" style="padding-top: 20px;">
+                                            <div class='input-group date'>
+                                                <input type='text' class="form-control" id='datepicker6' />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-xs-5 date'>
+                                        <div class="form-group" style="padding-top: 20px;">
+                                            <div class='input-group date' >
+                                                <input type='text' class="form-control" id='datepicker7' disabled />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn">Choisir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        <!-- Scripts JavaScript, Ajax et Jquery pour l'affichage dynamique de block -->
+            <!-- Permet d'afficher un calendrier en français pour sélectionner une date -->
+            <script type="text/javascript">
+                    $(document).ready(function(){
+                        $('#datepicker1').datepicker($.datepicker.regional['fr']);
+                    });
+            </script>
+
+            <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#datepicker6').datepicker($.datepicker.regional['fr']);
+
+                        $("#datepicker6").on("change", function (date) {
+
+                            var jourlettre = $("#datepicker6").datepicker('getDate').getDay();
+                            var jourchiffre = $("#datepicker6").datepicker('getDate').getDate();
+                            var month1 = $("#datepicker6").datepicker('getDate').getMonth() + 1;
+                            var year1 = $("#datepicker6").datepicker('getDate').getFullYear();
+
+                            var fin="";
+                            // Si la selection est Lundi
+                            if(jourlettre == 1)
+                            {
+                                fin = jourchiffre +4 + "/" + month1 + "/" + year1;
+                            }else if(jourlettre == 2){
+                                fin = jourchiffre +3 + "/" + month1 + "/" + year1;
+                            }else if(jourlettre == 3){
+                                fin = jourchiffre +2 + "/" + month1 + "/" + year1;
+                            }else if(jourlettre == 4){
+                                fin = jourchiffre +1 + "/" + month1 + "/" + year1;
+                            }else if(jourlettre == 5) {
+                                fin = jourchiffre + "/" + month1 + "/" + year1;
+                            }else if(jourlettre == 6) {
+                                fin = jourchiffre -1 + "/" + month1 + "/" + year1;
+
+                            }else if(jourlettre == 0) {
+                                fin = jourchiffre -2 + "/" + month1 + "/" + year1;
+
+                            }
+
+                            $('#datepicker7').datepicker('setDate', fin);
+
+                            if(jourlettre == 6) {
+                                $('#datepicker6').datepicker('setDate', fin);
+
+                            }else if(jourlettre == 0) {
+                                $('#datepicker6').datepicker('setDate', fin);
+                            }
+
+                        });
+
+                        $("#datepicker7").datepicker({
+                            dateFormat: "dd/mm/yy"
+                        });
+                    });
+            </script>
+
+            <!-- Permet de gérer les fonctionnalitées du bloc -->
+            <script>
+                $(document).ready(function(){
+                    $('select[name="selectionfiliere"]').change(function(){
+
+                        if($(this).val() == "-")
+                        {
+                            document.getElementById("promotionselect").style.visibility = "hidden";
+                            document.getElementById("mode_extraction").style.visibility = "hidden";
+                        }else{
+                            $.ajax({
+                                url: '/administrateur/exporter-feuille/promotion',
+                                type: "POST",
+                                data: "selectionfiliere="+$(this).val(),
+                                dataType : 'html',
+                                success: function(data) {
+
+                                    $("#charger_fonctionnalite").html(data);
+
+                                },
+                                error: function() {
+                                    alert("Erreur de chargement de la page !")
+                                }
+                            });
+                        }
+                    });
+                });
+
+                $(document).ready(function(){
+                    $('select[name="selectionpromotion"]').change(function(){
+
+                        if($(this).val() == "-")
+                        {
+                            document.getElementById("mode_extraction").style.visibility = "hidden";
+                        }else{
+                            document.getElementById("mode_extraction").style.visibility = "visible";
+                        }
+                    });
+                });
+
+            </script>
+        <!-- Fin Scripts -->
+
     </div>
 <!-- Fin du block dynamique -->

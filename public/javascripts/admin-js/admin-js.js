@@ -63,7 +63,7 @@ var exportFeuillePresence = function() {
 
         },
         error: function() {
-            alert("Error!")
+            alert("Erreur de chargement de la page !")
         }
     })
 };
@@ -152,6 +152,7 @@ var exporterJustificatifsAbscences = function() {
         }
     })
 };
+
 
 $('#ft1').click(chargerListeEtudiant);
 $('#ft2').click(chargerEdt);

@@ -26,10 +26,10 @@ public class Promotion extends Model{
     @ManyToMany(cascade=CascadeType.PERSIST)
     public List<Matiere> sesMatieres;
 
-
-
-
-    
+    public String getType()
+    {
+        return this.type;
+    }
 
     public Promotion(String anneeScolaire, String groupe, String type,String filiere) {
         this.anneeScolaire=anneeScolaire;
@@ -42,6 +42,17 @@ public class Promotion extends Model{
 
     public static Finder<Long,Promotion> find = new Finder<Long, Promotion>(Promotion.class);
 
+    /**
+     * Obtenir une promotion en passant la "filière" comme paramètre
+     * @param filiere
+     * @return Liste de promotion de la filière
+     */
+    public static  List<Promotion> getPromotionByFiliere(String filiere)
+    {
+        List<Promotion> promotion = find.where().eq("filiere", filiere).findList();
+
+        return promotion;
+    }
 
     public static Promotion updatePromotion(long id, String anneeScolaire, String groupe, String type,String filiere){
         Promotion promotion = find.ref(id);

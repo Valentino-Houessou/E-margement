@@ -25,12 +25,17 @@ GET     /enseignant/listePresence           controllers.enseignant.EnseignantCon
 
 
 # admin
-GET    /administrateur/index                    controllers.administrateur.administrateurController.adminIndex()
-GET    /administrateur/gerer-utilisateur        controllers.administrateur.administrateurController.gererUtilisateur()
-GET    /administrateur/charger-liste-etudiant   controllers.administrateur.administrateurController.chargerListeEtudiant()
-GET    /administrateur/charger-edt              controllers.administrateur.administrateurController.chargerEdt()
-GET    /administrateur/charger-liste-enseignant controllers.administrateur.administrateurController.chargerListeEnseignant()
-GET    /administrateur/exporter-feuille         controllers.administrateur.administrateurController.exporterFeuille()
+GET    /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
+GET    /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
+GET    /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
+GET    /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
+GET    /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET    /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
+GET    /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
+GET    /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
+POST   /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
+GET    /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
+GET    /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
 PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.addAdmin()
 POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
@@ -38,11 +43,9 @@ DELETE /administrateur/delete-admin             controllers.administrateur.admin
 GET    /administrateur/listAdministrateur       controllers.administrateur.administrateurController.getListAdmin()
 GET    /administrateur/profil/:id               controllers.administrateur.administrateurController.getAdmin(id : Long)
 
+
 #matière
 GET /matiere    controllers.MatiereController.index()
-
-
-
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)

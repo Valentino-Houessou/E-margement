@@ -17,6 +17,8 @@ public class Cours extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String type;
+    /*@Column(columnDefinition = "datetime")
+    public Timestamp dateDuCour;*/
     @Column(columnDefinition = "datetime")
     public Timestamp heureDebut;
     @Column(columnDefinition = "datetime")
