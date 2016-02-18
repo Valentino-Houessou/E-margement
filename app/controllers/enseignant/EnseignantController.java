@@ -1,10 +1,8 @@
 package controllers.enseignant;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Enseignant;
-import models.Utilisateur;
+import views.models.Enseignant;
 import play.mvc.*;
-import play.api.mvc.Results;
 import play.libs.Json;
 
 import views.html.enseignant.indexEnseignant;

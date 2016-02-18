@@ -2,8 +2,6 @@ package controllers.administrateur;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.*;
-import play.*;
 import play.libs.Json;
 import play.data.DynamicForm;
 import static play.data.Form.form;
@@ -19,7 +17,8 @@ import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.validerJustificatifsAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
-import models.*;
+import views.models.Administrateur;
+import views.models.Promotion;
 
 import java.util.List;
 

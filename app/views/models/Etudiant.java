@@ -1,8 +1,9 @@
-package models;
+package views.models;
 //TODO
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Etudiant extends Model{
         this.sonUtilisateur = sonUtilisateur;
     }
 
-    //TODO : Quand on cré un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
+    //TODO : Quand on crée un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
     public static Etudiant create(String numeroEtudiant, String  nom, String prenom, String adresseMail, String motDePasse,
                                   String dateDeNaissance, String lienPhoto, String Statut){
 
@@ -78,5 +79,27 @@ public class Etudiant extends Model{
     public static List<Etudiant> findAll() {
             return find.all();
     }
+
+
+    public static List<String> findAbsences(String ref_etudiant)
+    {
+        String sql = "SELECT p.name FROM Voeux v inner join Period p " +
+                "on v.period_id = p.id WHERE v.ref_utilisateurs like :ref GROUP BY p.name, p.id ORDER BY p.name DESC";
+
+        List<SqlRow> requete = Ebean.createSqlQuery(sql)
+                .setParameter("ref",ref_etudiant)
+                .findList();
+
+        List<String> voeux = new ArrayList<String>();
+
+        for(SqlRow periode : requete)
+        {
+            voeux.add(periode.getString("name"));
+        }
+
+        return voeux;
+    }
+
+
 
 }

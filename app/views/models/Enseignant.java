@@ -1,4 +1,4 @@
-package models;
+package views.models;
 //TODO
 
 import javax.persistence.*;

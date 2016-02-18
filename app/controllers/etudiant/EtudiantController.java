@@ -1,15 +1,11 @@
 package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Etudiant;
-import models.Utilisateur;
+import views.models.Etudiant;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.*;
 import views.html.etudiant.indexEtudiant;
-//import views.html.Etudiant.indexEtudiant;
-//import views.html.etudiant.indexEtudiant;
 
 import java.util.List;
 
@@ -19,7 +15,7 @@ public class EtudiantController extends Controller{
     private Etudiant user;
 
     public Result index() {
-        return ok(indexEtudiant.render("Your application is ready",user));
+        return ok(indexEtudiant.render("Partie Etudiant",user));
 
     }
 
@@ -29,7 +25,7 @@ public class EtudiantController extends Controller{
         if (etudiant == null)
             return badRequest("données Json attendu");
         else {
-            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue();
+            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue()
             String nom = etudiant.findPath("nom").textValue();
             String prenom = etudiant.findPath("prenom").textValue();
             String adresseMail = etudiant.findPath("adresseMail").textValue();
@@ -105,15 +101,13 @@ public class EtudiantController extends Controller{
     }
 
     public  Result supEtudiant() {
-        JsonNode supprimerEtudiant = request().body().asJson();
-        if (supprimerEtudiant == null)
+        JsonNode supprimeretudiant = request().body().asJson();
+        if (supprimeretudiant == null)
             return badRequest("données Json attendu");
         else {
-            int id = supprimerEtudiant.findPath("id").intValue();
-
+            int id = supprimeretudiant.findPath("id").intValue();
             Etudiant.delete(id);
             return ok();
         }
     }
-
 }

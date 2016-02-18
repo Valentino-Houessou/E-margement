@@ -1,7 +1,7 @@
 package controllers;
 
 
-import models.Matiere;
+import views.models.Matiere;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;

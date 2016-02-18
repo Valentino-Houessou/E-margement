@@ -1,9 +1,8 @@
-package models;
+package views.models;
 
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity

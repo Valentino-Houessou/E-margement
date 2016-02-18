@@ -1,4 +1,4 @@
-package models;
+package views.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
