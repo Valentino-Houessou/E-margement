@@ -25,7 +25,7 @@ public class EtudiantController extends Controller{
         if (etudiant == null)
             return badRequest("données Json attendu");
         else {
-            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue()
+            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue();
             String nom = etudiant.findPath("nom").textValue();
             String prenom = etudiant.findPath("prenom").textValue();
             String adresseMail = etudiant.findPath("adresseMail").textValue();
