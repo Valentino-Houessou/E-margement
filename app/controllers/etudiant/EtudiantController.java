@@ -2,6 +2,8 @@ package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Etudiant;
+import models.Periode;
+import models.Presence;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -25,7 +27,7 @@ public class EtudiantController extends Controller{
         if (etudiant == null)
             return badRequest("données Json attendu");
         else {
-            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue()
+            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue();
             String nom = etudiant.findPath("nom").textValue();
             String prenom = etudiant.findPath("prenom").textValue();
             String adresseMail = etudiant.findPath("adresseMail").textValue();
@@ -109,5 +111,13 @@ public class EtudiantController extends Controller{
             Etudiant.delete(id);
             return ok();
         }
+    }
+
+    public Result findAbsences() {
+        List<Presence> absences = Presence.findAll();
+        for(Presence p : absences)
+            if(p.sonEtudiant.id!=user.id && p.emergement)
+                absences.remove(p);
+        return ok(Json.toJson(absences));
     }
 }

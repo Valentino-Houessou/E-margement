@@ -23,6 +23,7 @@ GET     /enseignant/listePresence           controllers.enseignant.EnseignantCon
 
 # etudiant
 GET     /etudiant/         controllers.etudiant.EtudiantController.index()
+GET     /etudiant/         controllers.etudiant.EtudiantController.findAbsences()
 PUT     /etudiant/ajout    controllers.etudiant.EtudiantController.ajoutEtudiant()
 POST     /etudiant/modification    controllers.etudiant.EtudiantController.modifEtudiant()
 
