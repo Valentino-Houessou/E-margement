@@ -5,48 +5,71 @@
     <div>
         <h1> @titrepage </h1>
 
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-3 col-md-offset-4">
-                        <select id="selectionfiliere" name="selectionfiliere" class="form-control">
-                            <option value="-">Sélectionner une filière</option>
-                            @if( (etape == "selectionPromotion") && (filiere == "ISIFAR")){
-                                <option value="ISIFAR" selected>ISIFAR</option>
-                            }else{
-                                <option value="ISIFAR">ISIFAR</option>
-                            }
+        <div class="centrer_contenu">
 
-                            @if( (etape == "selectionPromotion") && (filiere == "MIAGE")){
-                                <option value="MIAGE" selected>MIAGE</option>
-                            }else{
-                                <option value="MIAGE">MIAGE</option>
-                            }
-
-                        </select>
-                    </div>
+            <form class="form-inline" role="form">
+                <div class="form-group" style="margin-right: 50px;">
+                    <label>1 - </label>
+                    <select id="selectionUniversite" name="selectionUniversite" class="form-control"  style="width:20">
+                        <option value="-">Sélectionner une université</option>
+                        <option value="UPOND" >UPOND</option>
+                        <option value="Parix5">Paris 5</option>
+                    </select>
                 </div>
-            </div>
 
-            @if(etape == "selectionPromotion") {
-                <!-- Liste déroulante permettant de selectionner une promotion lorsqu'une filière à été sélectionné -->
-                <div id="promotionselect" class="marge_select">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-offset-4">
-                                <select id="selectionpromotion" name="selectionpromotion" class="form-control">
+                <div class="form-group">
+                    <label>2 - </label>
+                    <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px;">
+                        <option value="-">Sélectionner un batiment</option>
+                        <option value="G" >Batiment G - SEGMI</option>
+                        <option value="F">Batiment F - STAPS 5</option>
+                    </select>
+                </div>
+            </form>
 
-                                    <option value="-">Sélectionner une promotion</option>
+        </div>
+
+        <div id="selection_filiere_promo" class="centrer_contenu2">
+            <form class="form-inline" role="form">
+                <div class="form-group" style="margin-right: 50px; padding-left: 92px;">
+                    <label>3 - </label>
+                    <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
+                        <option value="-">Sélectionner une filière</option>
+                        @if( (etape == "selectionPromotion") && (filiere == "ISIFAR")){
+                            <option value="ISIFAR" selected>ISIFAR</option>
+                        }else{
+                            <option value="ISIFAR">ISIFAR</option>
+                        }
+
+                        @if( (etape == "selectionPromotion") && (filiere == "MIAGE")){
+                            <option value="MIAGE" selected>MIAGE</option>
+                        }else{
+                            <option value="MIAGE">MIAGE</option>
+                        }
+
+                    </select>
+                </div>
+
+                <div id="promotionselect" class="form-group">
+                    @if(etape == "selectionPromotion") {
+                            <!-- Liste déroulante permettant de selectionner une promotion lorsqu'une filière à été sélectionné -->
+
+                            <label>4 - </label>
+                            <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px;">
+
+                                <option value="-">Sélectionner une promotion</option>
 
                                     @for(promo <- promotion){
                                         <option value="@promo.groupe">@promo.groupe - @promo.getType() </option>
                                     }
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                            </select>
+                            <!-- Fin liste déroulante promotion -->
                 </div>
-                <!-- Fin liste déroulante promotion -->
+
+            </form>
+        </div>
+
+
 
                 <!-- Permet d'extraire une feuille de présence en selectionnant une journée ou une semaine -->
                 <div id="mode_extraction">
@@ -71,11 +94,6 @@
                                         <div class="card " id="effet_bloc2">
                                             <div class="header">
                                                 <h4 class="title">Extraire en sélectionnant une semaine </h4>
-                                            </div>
-                                            <div class="content">
-                                                <div class="table-full-width">
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -217,6 +235,7 @@
             <!-- Permet de gérer les fonctionnalitées du bloc -->
             <script>
                 $(document).ready(function(){
+
                     $('select[name="selectionfiliere"]').change(function(){
 
                         if($(this).val() == "-")
@@ -232,12 +251,26 @@
                                 success: function(data) {
 
                                     $("#charger_fonctionnalite").html(data);
+                                    $('#selection_filiere_promo').css("visibility", "visible");
 
                                 },
                                 error: function() {
                                     alert("Erreur de chargement de la page !")
                                 }
                             });
+                        }
+                    });
+                });
+
+                $(document).ready(function(){
+                    $('select[name="selectionBatiment"]').change(function(){
+
+                        if($(this).val() == "-")
+                        {
+                            document.getElementById("selection_filiere_promo").style.visibility = "hidden";
+                            document.getElementById("mode_extraction").style.visibility = "hidden";
+                        }else{
+                            document.getElementById("selection_filiere_promo").style.visibility = "visible";
                         }
                     });
                 });
