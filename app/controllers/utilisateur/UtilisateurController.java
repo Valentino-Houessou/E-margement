@@ -1,7 +1,7 @@
 package controllers.utilisateur;
 
 import com.fasterxml.jackson.databind.*;
-import views.models.Utilisateur;
+import models.Utilisateur;
 import play.mvc.*;
 import play.libs.Json;
 

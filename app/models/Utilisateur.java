@@ -1,4 +1,4 @@
-package views.models;
+package models;
 //TODO
 
 import java.sql.Timestamp;

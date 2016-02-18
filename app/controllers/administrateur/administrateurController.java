@@ -17,8 +17,8 @@ import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.validerJustificatifsAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
-import views.models.Administrateur;
-import views.models.Promotion;
+import models.Administrateur;
+import models.Promotion;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package controllers.enseignant;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import views.models.Enseignant;
+import models.Enseignant;
 import play.mvc.*;
 import play.libs.Json;
 
