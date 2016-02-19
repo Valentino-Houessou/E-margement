@@ -27,4 +27,12 @@ public class Presence extends Model {
                .findRowCount();
     }
 
+    /**
+     * Retourne une collection de tous les étudiants
+     *
+     * @return tous les étudiants dans une List
+     */
+    public static List<Presence> findAll() {
+        return find.all();
+    }
 }

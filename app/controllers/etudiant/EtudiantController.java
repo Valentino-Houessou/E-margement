@@ -2,9 +2,12 @@ package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Etudiant;
+import models.Periode;
+import models.Presence;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import models.Presence;
 
@@ -22,7 +25,16 @@ public class EtudiantController extends Controller{
         return ok(indexEtudiant.render("Espace étudiant",nbabsc));
     }
 
+    public Result consulterAbsences() {
+        return ok(consulterAbsences.render("Partie Etudiant"));
 
+    }
+
+    /**
+     * Ajoute un nouvel étudiant
+     *
+     * @returnles informations de l'étudiant créé au format JSON
+     */
     public Result ajoutEtudiant() {
         JsonNode etudiant = request().body().asJson();
         if (etudiant == null)
@@ -60,6 +72,11 @@ public class EtudiantController extends Controller{
         }
     }
 
+    /**
+     * Permet de modifier les informations d'un étudiant
+     *
+     * @return les modifications apportées au format JSON
+     */
     public Result modifEtudiant() {
         JsonNode updateEtudiant = request().body().asJson();
         if (updateEtudiant == null)
@@ -97,13 +114,23 @@ public class EtudiantController extends Controller{
     }
 
 
-    public  Result getListEtudiant() {
+    /**
+     * Récupère la liste de tous les étudiants
+     *
+     * @return une liste d'étudiants au format JSON
+     */
+    public Result getListEtudiant() {
         List<Etudiant> etudiantList;
         etudiantList = Etudiant.findAll();
         return ok(Json.toJson(etudiantList));
     }
 
-    public  Result supEtudiant() {
+    /**
+     * Supprime un étudiant
+     *
+     * @return ok si l'étudiant a bien été supprimé, une erreur sinon
+     */
+    public Result supEtudiant() {
         JsonNode supprimeretudiant = request().body().asJson();
         if (supprimeretudiant == null)
             return badRequest("données Json attendu");
@@ -112,6 +139,19 @@ public class EtudiantController extends Controller{
             Etudiant.delete(id);
             return ok();
         }
+    }
+
+    /**
+     * Retourne les absences d'un étudiant
+     *
+     * @return une liste d'absences au format JSON
+     */
+    public Result findAbsences() {
+        List<Presence> absences = Presence.findAll();
+        for (Presence p : absences)
+            if (p.sonEtudiant.id != user.id && p.emergement)
+                absences.remove(p);
+        return ok(Json.toJson(absences));
     }
 
     public Result nbAbsences(){

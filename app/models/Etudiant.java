@@ -100,5 +100,27 @@ public class Etudiant extends Model{
         return voeux;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Etudiant etudiant = (Etudiant) o;
+
+        if (id != etudiant.id) return false;
+        if (numeroEtudiant != null ? !numeroEtudiant.equals(etudiant.numeroEtudiant) : etudiant.numeroEtudiant != null)
+            return false;
+        if (statut != null ? !statut.equals(etudiant.statut) : etudiant.statut != null) return false;
+        return sonUtilisateur != null ? sonUtilisateur.equals(etudiant.sonUtilisateur) : etudiant.sonUtilisateur == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (numeroEtudiant != null ? numeroEtudiant.hashCode() : 0);
+        result = 31 * result + (statut != null ? statut.hashCode() : 0);
+        result = 31 * result + (sonUtilisateur != null ? sonUtilisateur.hashCode() : 0);
+        return result;
+    }
 }
