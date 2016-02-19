@@ -22,7 +22,7 @@ DELETE     /enseignant/supprimer               controllers.enseignant.Enseignant
 GET     /enseignant/listePresence           controllers.enseignant.EnseignantController.listPresent()
 
 # etudiant
-GET     /etudiant/         controllers.etudiant.EtudiantController.index()
+GET     /etudiant/indexEtudiant         controllers.etudiant.EtudiantController.index()
 PUT     /etudiant/ajout    controllers.etudiant.EtudiantController.ajoutEtudiant()
 POST     /etudiant/modification    controllers.etudiant.EtudiantController.modifEtudiant()
 

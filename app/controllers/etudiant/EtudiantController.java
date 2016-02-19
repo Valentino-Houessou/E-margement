@@ -15,8 +15,7 @@ public class EtudiantController extends Controller{
     private Etudiant user;
 
     public Result index() {
-        return ok(indexEtudiant.render("Partie Etudiant",user));
-
+        return ok(indexEtudiant.render("Espace étudiant"));
     }
 
 

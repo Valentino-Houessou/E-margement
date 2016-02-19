@@ -47,5 +47,8 @@ public class Matiere extends Model {
         Ebean.delete(this);
     }
 
+    public String getLibelle(){
+        return this.libelle;
+    }
 
 }

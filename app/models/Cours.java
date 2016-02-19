@@ -97,4 +97,12 @@ public class Cours extends Model{
         Cours cours = find.where().eq("id", id).findUnique();
         Ebean.delete(cours);
     }
-}
+
+   /* public static String getNomCours(int idcours){
+        return find.where().eq("cours.id",idcours)
+                .findUnique().saMatiere.getLibelle();
+     }*/
+
+    }
+
+
