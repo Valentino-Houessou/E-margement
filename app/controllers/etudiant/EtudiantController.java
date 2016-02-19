@@ -16,7 +16,10 @@ public class EtudiantController extends Controller{
     private Etudiant user;
 
     public Result index() {
-        return ok(indexEtudiant.render("Espace étudiant"));
+
+        int nbabsc=Presence.getNombreAbsence(1);
+
+        return ok(indexEtudiant.render("Espace étudiant",nbabsc));
     }
 
 
