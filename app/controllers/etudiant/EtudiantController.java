@@ -6,6 +6,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.etudiant.indexEtudiant;
+import models.Presence;
 
 import java.util.List;
 
@@ -109,4 +110,12 @@ public class EtudiantController extends Controller{
             return ok();
         }
     }
+
+    public Result nbAbsences(){
+
+        int nbabsc=Presence.getNombreAbsence(31019378);
+
+        return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
+    }
+
 }

@@ -3,6 +3,8 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.List;
+
 @Entity
 public class Presence extends Model {
 
@@ -16,5 +18,13 @@ public class Presence extends Model {
     public Cours sonCours;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Etudiant sonEtudiant;
+
+
+    public static Finder<int,Presence> find = new Finder<int,Presence>(Presence.class);
+
+    public static int getNombreAbsence(int idetudiant){
+        return find.where().eq("sonEtudiant.id",idetudiant)
+               .findRowCount();
+    }
 
 }
