@@ -1,0 +1,149 @@
+@import models.Etudiant
+@(titrepage: String)
+
+
+@main("E-margement - Paris X") {
+    <div class="wrapper">
+        <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text">
+                    @titrepage
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li>
+                        <a href="#" id="ft3">
+                            <i class="pe-7s-news-paper"></i>
+                            <p>Consulter les  <span class="recadrer_mot">absences</span></p>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="#" id="ft3">
+                            <i class="pe-7s-news-paper"></i>
+                            <p>Justifier une absence</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home" style="color:#9A9A9A ;"> <span class="texte_blue">
+                            Accueil </span></i></a>
+                    </div>
+
+                    <div class="texte_blue">
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li>
+                                <a href="#">
+                                    Déconnexion
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="date" style="margin:auto ; text-align:center ;">
+                            Date
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="debut">
+                            Horaires
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="duree">
+                            Durée
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="etat">
+                            Etat
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2 column ui-sortable">
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="date" />
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-2 column ui-sortable">
+                        <form role="form">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="time" class="form-control" id="debut" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="time" class="form-control" id="fin" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-2 column ui-sortable">
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="time" class="form-control" id="duree" />
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-2 column ui-sortable">
+                        <form role="form">
+                            <div class="form-group">
+                                <select class="form-control" id="etat">
+                                    <option selected disabled>--</option>
+                                    <option>Justifiée</option>
+                                    <option>Non justifiée</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-2 column ui-sortable">
+                    </div>
+
+                    <div class="col-md-2 column ui-sortable">
+                    </div>
+                </div>
+            </div>
+
+                <!-- Contenu principal dynamique JQuery -->
+            <div class="content">
+                <div class="container-fluid">
+
+
+                </div>
+            </div>
+                <!-- Fin contenu principal -->
+        </div>
+    </div>
+
+}

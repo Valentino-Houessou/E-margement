@@ -3,55 +3,55 @@
 # ~~~~
 
 # Home page
-GET     /                    controllers.Application.index()
+GET           /                                                       controllers.Application.index()
 
 # utilisateur
-GET    /utilisateurs          controllers.utilisateur.UtilisateurController.getUtilisateurs()
-POST   /utilisateur-byMail   controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
-POST   /utilisateur-update   controllers.utilisateur.UtilisateurController.updateUtilisateur()
-PUT    /utilisateur-add      controllers.utilisateur.UtilisateurController.addUtilisateur()
-DELETE /utilisateur-delete   controllers.utilisateur.UtilisateurController.deleteUtilisateur()
+GET           /utilisateurs                                           controllers.utilisateur.UtilisateurController.getUtilisateurs()
+POST          /utilisateur-byMail                                     controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
+POST          /utilisateur-update                                     controllers.utilisateur.UtilisateurController.updateUtilisateur()
+PUT           /utilisateur-add                                        controllers.utilisateur.UtilisateurController.addUtilisateur()
+DELETE        /utilisateur-delete                                     controllers.utilisateur.UtilisateurController.deleteUtilisateur()
 
 # Enseignant
-GET     /enseignant/                        controllers.enseignant.EnseignantController.index()
-GET     /enseignant/profil/:id                   controllers.enseignant.EnseignantController.getEnseignant(id : Long)
-GET     /enseignant/listEnseignant         controllers.enseignant.EnseignantController.getListEnseignant()
-PUT     /enseignant/ajout                   controllers.enseignant.EnseignantController.ajoutProf()
-POST     /enseignant/modification            controllers.enseignant.EnseignantController.modifProf()
-DELETE     /enseignant/supprimer               controllers.enseignant.EnseignantController.supProf()
-GET     /enseignant/listePresence           controllers.enseignant.EnseignantController.listPresent()
+GET           /enseignant/                                            controllers.enseignant.EnseignantController.index()
+GET           /enseignant/profil/:id                                  controllers.enseignant.EnseignantController.getEnseignant(id : Long)
+GET           /enseignant/listEnseignant                              controllers.enseignant.EnseignantController.getListEnseignant()
+PUT           /enseignant/ajout                                       controllers.enseignant.EnseignantController.ajoutProf()
+POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
+DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
+GET           /enseignant/listePresence                               controllers.enseignant.EnseignantController.listPresent()
 
 # etudiant
-GET     /etudiant/         controllers.etudiant.EtudiantController.index()
-GET     /etudiant/         controllers.etudiant.EtudiantController.findAbsences()
-PUT     /etudiant/ajout    controllers.etudiant.EtudiantController.ajoutEtudiant()
-POST     /etudiant/modification    controllers.etudiant.EtudiantController.modifEtudiant()
+GET           /etudiant/indexEtudiant                                 controllers.etudiant.EtudiantController.index()
+GET           /etudiant/consulterAbsences                             controllers.etudiant.EtudiantController.consulterAbsences()
+PUT           /etudiant/ajout                                         controllers.etudiant.EtudiantController.ajoutEtudiant()
+POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
 
 #Fonction notifier présence
 
 
 # admin
-GET    /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
-GET    /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
-GET    /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
-GET    /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
-GET    /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
-GET    /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
-GET    /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
-GET    /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
-POST   /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
-GET    /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
-GET    /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
+GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
+GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
+GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
+GET           /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
+GET           /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
+GET           /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
+GET           /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
+POST          /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
+GET           /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
+GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
-PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.addAdmin()
-POST   /administrateur/update-admin             controllers.administrateur.administrateurController.updateAdmin()
-DELETE /administrateur/delete-admin             controllers.administrateur.administrateurController.deleteAdmin()
-GET    /administrateur/listAdministrateur       controllers.administrateur.administrateurController.getListAdmin()
-GET    /administrateur/profil/:id               controllers.administrateur.administrateurController.getAdmin(id : Long)
+PUT           /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
+POST          /administrateur/update-admin                            controllers.administrateur.administrateurController.updateAdmin()
+DELETE        /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
+GET           /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
+GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
 
 
 #matière
-GET /matiere    controllers.MatiereController.index()
+GET           /matiere                                                controllers.MatiereController.index()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+GET           /assets/*file                                           controllers.Assets.versioned(path="/public", file: Asset)

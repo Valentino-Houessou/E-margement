@@ -7,27 +7,37 @@ import models.Presence;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 
 import java.util.List;
 
 
-public class EtudiantController extends Controller{
+public class EtudiantController extends Controller {
 
     private Etudiant user;
 
     public Result index() {
-        return ok(indexEtudiant.render("Partie Etudiant",user));
+        return ok(indexEtudiant.render("Partie Etudiant", user));
 
     }
 
+    public Result consulterAbsences() {
+        return ok(consulterAbsences.render("Partie Etudiant"));
 
+    }
+
+    /**
+     * Ajoute un nouvel étudiant
+     *
+     * @returnles informations de l'étudiant créé au format JSON
+     */
     public Result ajoutEtudiant() {
         JsonNode etudiant = request().body().asJson();
         if (etudiant == null)
             return badRequest("données Json attendu");
         else {
-            String numeroEtudiant=etudiant.findPath("numeroEtudiant").textValue();
+            String numeroEtudiant = etudiant.findPath("numeroEtudiant").textValue();
             String nom = etudiant.findPath("nom").textValue();
             String prenom = etudiant.findPath("prenom").textValue();
             String adresseMail = etudiant.findPath("adresseMail").textValue();
@@ -52,13 +62,18 @@ public class EtudiantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-             Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
+                Etudiant eleve = Etudiant.create(numeroEtudiant, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
                 return ok(/*Json.toJson(etudiant)*/);
             }
         }
     }
 
+    /**
+     * Permet de modifier les informations d'un étudiant
+     *
+     * @return les modifications apportées au format JSON
+     */
     public Result modifEtudiant() {
         JsonNode updateEtudiant = request().body().asJson();
         if (updateEtudiant == null)
@@ -96,13 +111,23 @@ public class EtudiantController extends Controller{
     }
 
 
-    public  Result getListEtudiant() {
+    /**
+     * Récupère la liste de tous les étudiants
+     *
+     * @return une liste d'étudiants au format JSON
+     */
+    public Result getListEtudiant() {
         List<Etudiant> etudiantList;
         etudiantList = Etudiant.findAll();
         return ok(Json.toJson(etudiantList));
     }
 
-    public  Result supEtudiant() {
+    /**
+     * Supprime un étudiant
+     *
+     * @return ok si l'étudiant a bien été supprimé, une erreur sinon
+     */
+    public Result supEtudiant() {
         JsonNode supprimeretudiant = request().body().asJson();
         if (supprimeretudiant == null)
             return badRequest("données Json attendu");
@@ -113,10 +138,15 @@ public class EtudiantController extends Controller{
         }
     }
 
+    /**
+     * Retourne les absences d'un étudiant
+     *
+     * @return une liste d'absences au format JSON
+     */
     public Result findAbsences() {
         List<Presence> absences = Presence.findAll();
-        for(Presence p : absences)
-            if(p.sonEtudiant.id!=user.id && p.emergement)
+        for (Presence p : absences)
+            if (p.sonEtudiant.id != user.id && p.emergement)
                 absences.remove(p);
         return ok(Json.toJson(absences));
     }
