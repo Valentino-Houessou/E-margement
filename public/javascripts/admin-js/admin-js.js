@@ -63,7 +63,7 @@ var exportFeuillePresence = function() {
 
         },
         error: function() {
-            alert("Erreur de chargement de la page !")
+            alert("Erreur de chargement de la page !");
         }
     })
 };
