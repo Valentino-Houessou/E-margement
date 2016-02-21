@@ -105,4 +105,5 @@ public class Etudiant extends Model{
         result = 31 * result + (sonUtilisateur != null ? sonUtilisateur.hashCode() : 0);
         return result;
     }
+
 }

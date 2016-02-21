@@ -35,4 +35,6 @@ public class Presence extends Model {
     public static List<Presence> findAll() {
         return find.all();
     }
+
+
 }

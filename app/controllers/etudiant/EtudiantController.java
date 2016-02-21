@@ -141,6 +141,7 @@ public class EtudiantController extends Controller{
         }
     }
 
+
     /**
      * Retourne les absences d'un étudiant
      *
