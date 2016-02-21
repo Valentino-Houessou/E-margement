@@ -81,24 +81,6 @@ public class Etudiant extends Model{
     }
 
 
-    public static List<String> findAbsences(int ref_etudiant)
-    {
-        String sql = "SELECT p.name FROM presences p inner join Period o " +
-                "on v.period_id = p.id WHERE p.son_etudiant_id like :ref_etudiant and p.emargement=True GROUP BY p.name, p.id ORDER BY p.name DESC";
-
-        List<SqlRow> requete = Ebean.createSqlQuery(sql)
-                .setParameter("ref",ref_etudiant)
-                .findList();
-
-        List<String> voeux = new ArrayList<String>();
-
-        for(SqlRow Presence : requete)
-        {
-            voeux.add(Presence.getString("name"));
-        }
-
-        return voeux;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -34,6 +34,7 @@ public class Promotion extends Model{
 
     public static Finder<Long,Promotion> find = new Finder<Long, Promotion>(Promotion.class);
 
+
     /**
      * Obtenir une promotion en passant la "filière" comme paramètre
      * @param filiere
@@ -86,3 +87,4 @@ public class Promotion extends Model{
         promotion.update();
     }
 }
+
