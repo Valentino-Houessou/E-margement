@@ -73,11 +73,11 @@ public class Etudiant extends Model{
 
     public static Etudiant findById(long id) {
 
-    return find.ref(id);
+        return find.ref(id);
     }
 
     public static List<Etudiant> findAll() {
-            return find.all();
+        return find.all();
     }
 
 

@@ -1,9 +1,7 @@
 package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Etudiant;
-import models.Periode;
-import models.Presence;
+import models.*;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -162,4 +160,14 @@ public class EtudiantController extends Controller{
         return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
     }
 
+    public Result filtrer(String date, String heure_debut, String heure_fin, String cours, String etat){
+        return null;
+    }
+
+    public Result getCours()
+    {
+        List<Cours> cours = Cours.findAll();
+
+        return ok(consulterAbsences.render("Export de la liste des cours", cours));
+    }
 }

@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import javax.xml.transform.Result;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,6 +104,10 @@ public class Cours extends Model{
                 .findUnique().saMatiere.getLibelle();
      }*/
 
+    public static List<Cours> findAll(){
+        return find.all();
     }
+
+}
 
 

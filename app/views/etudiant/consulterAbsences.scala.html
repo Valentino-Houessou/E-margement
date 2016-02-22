@@ -1,5 +1,7 @@
 @import models.Etudiant
+@import models.Cours
 @(titrepage: String)
+(cours: List(Cours))
 
 
 @main("E-margement - Paris X") {
@@ -59,8 +61,9 @@
                 </div>
             </nav>
             <div class="container-fluid">
+                <center>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="date" style="margin:auto ; text-align:center ;">
                             Date
                         </label>
@@ -71,29 +74,31 @@
                         </label>
                     </div>
                     <div class="col-md-3">
-                        <label for="duree">
-                            Durée
+                        <label for="cours">
+                            Cours
                         </label>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="etat">
                             Etat
                         </label>
                     </div>
+                    <div class="col-md-2">
+                    </div>
                 </div>
+                </center>
             </div>
-            <div class="container-fluid">
+
+            <form method="post" id="filtre-etu" action="">
+                <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-2 column ui-sortable">
-                        <form role="form">
                             <div class="form-group">
                                 <input type="date" class="form-control" id="date" />
                             </div>
-                        </form>
                     </div>
 
-                    <div class="col-md-2 column ui-sortable">
-                        <form role="form">
+                    <div class="col-md-3 column ui-sortable">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -104,36 +109,35 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                    </div>
+
+                    <div class="col-md-3 column ui-sortable">
+                        <div class="form-group">
+                            <select class="form-control" id="cours">
+                                <option selected disabled>--</option>
+                                @for(cours <- cours){
+                                        <option value="@cours.groupe">@promo.groupe - @promo.getType() </option>
+                                }
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-2 column ui-sortable">
-                        <form role="form">
                             <div class="form-group">
-                                <input type="time" class="form-control" id="duree" />
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-md-2 column ui-sortable">
-                        <form role="form">
-                            <div class="form-group">
-                                <select class="form-control" id="etat">
+                                <select class="form-control" id="justifiee">
                                     <option selected disabled>--</option>
                                     <option>Justifiée</option>
-                                    <option>Non justifiée</option>
+                                    <option>Injustifiée</option>
                                 </select>
                             </div>
-                        </form>
                     </div>
 
                     <div class="col-md-2 column ui-sortable">
-                    </div>
-
-                    <div class="col-md-2 column ui-sortable">
+                        <button class="btn btn-default">Filtrer</button>
                     </div>
                 </div>
             </div>
+            </form>
 
                 <!-- Contenu principal dynamique JQuery -->
             <div class="content">
