@@ -39,7 +39,7 @@ GET    /administrateur/charger-edt                             controllers.admin
 GET    /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
 GET    /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
 POST   /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
-GET    /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
+GET    /administrateur/exporter-gestion-abscences              controllers.administrateur.administrateurController.gestionAbscences()
 GET    /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
 PUT    /administrateur/utilisateurs/setAdmin    controllers.administrateur.administrateurController.addAdmin()

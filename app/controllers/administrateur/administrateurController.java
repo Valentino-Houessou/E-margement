@@ -127,11 +127,11 @@ public class administrateurController extends Controller {
 
 
     /**
-     * validerJustificatifsAbscences()
+     * gestionAbscencesView()
      * Affichage du bloc dynamique JQuery pour valider les justificatifs d'abscences
      * @return
      */
-    public Result validerJustificatifsAbscences() {
+    public Result gestionAbscences() {
         return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
     }
 
