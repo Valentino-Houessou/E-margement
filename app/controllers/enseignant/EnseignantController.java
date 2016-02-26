@@ -15,7 +15,7 @@ public class EnseignantController extends Controller{
     private Enseignant user;
 
     public Result index() {
-        return ok(indexEnseignant.render("Esapce Enseignant",user,null));
+        return ok(indexEnseignant.render("Espace Enseignant",user,null));
 
     }
 
