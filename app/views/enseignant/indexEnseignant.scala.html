@@ -1,13 +1,41 @@
-@import models.Enseignant
-@(titre:String)(user:Enseignant)
+@(titre:String)(user:Enseignant)(content: Html)
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>@titre</title>
-    </head>
-    <body>
-        Ici se trouvera un tableau recapitulatif des présences
-    </body>
-</html>
+@main("E-margement - Paris X"){
+    <div class="wrapper">
+        <div class="sidebar" data-color="Brown" data-image="@routes.Assets.versioned("images/sidebar-4.jpg")">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text"> @titre </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="@routes.controllers.enseignant.EnseignantController.index()">
+                        <i class="pe-7s-home" style="color:#9A9A9A;">
+                            <span class="texte_blue"> Accueil </span>
+                        </i>
+                    </a>
+                </div>
+                <div class="texte_blue">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span>Bonjour</span></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    @content
+}
