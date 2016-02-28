@@ -1,7 +1,6 @@
 @import models.Etudiant
 @import models.Cours
 @(titrepage: String)
-(cours: List(Cours))
 
 
 @main("E-margement - Paris X") {
@@ -115,9 +114,7 @@
                         <div class="form-group">
                             <select class="form-control" id="cours">
                                 <option selected disabled>--</option>
-                                @for(cours <- cours){
-                                        <option value="@cours.groupe">@promo.groupe - @promo.getType() </option>
-                                }
+
                             </select>
                         </div>
                     </div>

@@ -24,6 +24,8 @@ public class Etudiant extends Model{
         this.sonUtilisateur = sonUtilisateur;
     }
 
+
+
     //TODO : Quand on crée un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
     public static Etudiant create(String numeroEtudiant, String  nom, String prenom, String adresseMail, String motDePasse,
                                   String dateDeNaissance, String lienPhoto, String Statut){
@@ -69,7 +71,6 @@ public class Etudiant extends Model{
 
     //Finder for retrieve data in database
     public static Finder<Long,Etudiant> find = new Finder<Long,Etudiant>(Etudiant.class);
-
 
     public static Etudiant findById(long id) {
 

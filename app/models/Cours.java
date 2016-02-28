@@ -1,7 +1,6 @@
 package models;
 
 import javax.persistence.*;
-import javax.xml.transform.Result;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,12 +31,14 @@ public class Cours extends Model{
     public Salle saSalle;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Periode saPeriode;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    public Promotion saPromo;
     @OneToMany(mappedBy = "sonCours")
     public List<Presence> sesPresences;
 
     public static Finder<Long, Cours> find = new Finder<Long, Cours>(Cours.class);
 
-    public Cours(Enseignant sonEnseignant, String type, Timestamp heureDebut, Timestamp heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode) {
+    public Cours(Enseignant sonEnseignant, String type, Timestamp heureDebut, Timestamp heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
         this.sonEnseignant = sonEnseignant;
         this.type = type;
         this.heureDebut = heureDebut;
@@ -45,10 +46,11 @@ public class Cours extends Model{
         this.saMatiere = saMatiere;
         this.saSalle = saSalle;
         this.saPeriode = saPeriode;
+        this.saPromo = saPromo;
         this.sesPresences = new ArrayList<Presence>();
     }
 
-    public static Cours create(Enseignant sonEnseignant, String type, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode) {
+    public static Cours create(Enseignant sonEnseignant, String type, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
         Timestamp hd = null;
         Timestamp hf = null;
         try {
@@ -61,12 +63,12 @@ public class Cours extends Model{
             e.printStackTrace();
         }
 
-        Cours cours = new Cours(sonEnseignant, type, hd, hf, saMatiere, saSalle, saPeriode);
+        Cours cours = new Cours(sonEnseignant, type, hd, hf, saMatiere, saSalle, saPeriode, saPromo);
         cours.save();
         return cours;
     }
 
-    public static Cours update(int id, Enseignant sonEnseignant, String type, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode) {
+    public static Cours update(int id, Enseignant sonEnseignant, String type, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
         Cours cours = find.where().eq("id", id).findUnique();
 
         Timestamp hd = null;
@@ -88,6 +90,7 @@ public class Cours extends Model{
         cours.saMatiere = saMatiere;
         cours.saSalle = saSalle;
         cours.saPeriode = saPeriode;
+        cours.saPromo = saPromo;
 
         cours.update();
 
@@ -99,6 +102,7 @@ public class Cours extends Model{
         Ebean.delete(cours);
     }
 
+
    /* public static String getNomCours(int idcours){
         return find.where().eq("cours.id",idcours)
                 .findUnique().saMatiere.getLibelle();
@@ -109,5 +113,3 @@ public class Cours extends Model{
     }
 
 }
-
-

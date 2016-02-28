@@ -168,6 +168,6 @@ public class EtudiantController extends Controller{
     {
         List<Cours> cours = Cours.findAll();
 
-        return ok(consulterAbsences.render("Export de la liste des cours", cours));
+        return ok(consulterAbsences.render("Export de la liste des cours"));
     }
 }

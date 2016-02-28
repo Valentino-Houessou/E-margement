@@ -3,6 +3,8 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.List;
+
 @Entity
 public class Batiment extends Model {
 
@@ -12,4 +14,37 @@ public class Batiment extends Model {
     public String libelle;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Universite sonUniversite;
+
+    public Batiment()
+    {
+
+    }
+
+    /**
+     * Ebean
+     */
+    public static Finder<Long,Batiment> find = new Finder<Long, Batiment>(Batiment.class);
+
+    /**
+     * Obtenir tous les batiments d'une université
+     * @return
+     */
+    public static  List<Batiment> getBatimentByUniversite(int universite)
+    {
+        List<Batiment> batiments = find.where().eq("sonUniversite.id", universite).findList();
+
+        return batiments;
+    }
+
+    /**
+     * Retourne les informations d'un batiment grâce à son id
+     * @param id
+     * @return un batiment
+     */
+    public static Batiment getBatiment(int id)
+    {
+        Batiment bat = find.where().eq("id", id).findUnique();
+
+        return bat;
+    }
 }

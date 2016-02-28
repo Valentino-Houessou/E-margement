@@ -14,6 +14,9 @@ public class Universite extends Model{
     public int id;
     public String libelle;
 
+    /**
+     * Ebean
+     */
     public static Finder<Long,Universite> find = new Finder<Long, Universite>(Universite.class);
 
     /**
@@ -26,6 +29,4 @@ public class Universite extends Model{
 
         return universite;
     }
-
-
 }

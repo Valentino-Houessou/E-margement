@@ -29,6 +29,15 @@ public class Utilisateur extends Model  {
     @ManyToMany(cascade=CascadeType.PERSIST)
     public List<Module> sesModules;
 
+    /**
+     * Constructeur avec paramètres
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     */
     public Utilisateur(String nom, String prenom, String adresseMail, String motDePasse,
                        Timestamp dateDeNaissance, String lienPhoto) {
         this.nom = nom;

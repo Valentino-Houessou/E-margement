@@ -41,7 +41,12 @@ GET           /administrateur/charger-liste-etudiant                  controller
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
 GET           /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
 GET           /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
+POST          /administrateur/exporter-feuille/batiment               controllers.administrateur.administrateurController.exporterFeuilleselectionBatiment()
+POST          /administrateur/exporter-feuille/filiere                controllers.administrateur.administrateurController.exporterFeuilleselectionFiliere()
 POST          /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
+POST          /administrateur/exporter-feuille/date                   controllers.administrateur.administrateurController.exporterFeuilleselectionDate()
+POST          /administrateur/exporter-feuille/resultats              controllers.administrateur.administrateurController.exporterFeuilleResultatsParDate()
+GET           /administrateur/exporter-feuille/export-date            controllers.administrateur.administrateurController.exporterFeuilleDatePDF()
 GET           /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 

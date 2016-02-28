@@ -3,7 +3,10 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Entity
 public class Promotion extends Model{
@@ -22,7 +25,13 @@ public class Promotion extends Model{
     public List<Matiere> sesMatieres;
 
 
-
+    /**
+     * Constructeur avec paramètres
+     * @param anneeScolaire
+     * @param groupe
+     * @param type
+     * @param filiere
+     */
     public Promotion(String anneeScolaire, String groupe, String type,String filiere) {
         this.anneeScolaire=anneeScolaire;
         this.groupe=groupe;
@@ -32,6 +41,9 @@ public class Promotion extends Model{
         this.save();
     }
 
+    /**
+     * Ebean
+     */
     public static Finder<Long,Promotion> find = new Finder<Long, Promotion>(Promotion.class);
 
 
@@ -56,6 +68,7 @@ public class Promotion extends Model{
         return this.type;
     }
 
+
     public static Promotion updatePromotion(long id, String anneeScolaire, String groupe, String type,String filiere){
         Promotion promotion = find.ref(id);
         if (anneeScolaire != null)
@@ -67,7 +80,6 @@ public class Promotion extends Model{
 
         if (filiere != null)
            promotion.filiere = filiere;
-
 
         promotion.update();
 
