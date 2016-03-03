@@ -15,7 +15,7 @@ import views.html.administrateur.chargerListeEtudiant;
 import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
-import views.html.administrateur.validerJustificatifsAbscences;
+import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import models.Administrateur;
 import models.Promotion;
@@ -132,7 +132,7 @@ public class administrateurController extends Controller {
      * @return
      */
     public Result gestionAbscences() {
-        return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
+        return ok(gererAbscences.render("Gérer les justificatifs d'abscences"));
     }
 
     /**
