@@ -26,7 +26,7 @@ public class EtudiantController extends Controller{
     public Result consulterAbsences() {
         List<Cours> cours = Cours.findAll();
 
-        return ok(views.html.etudiant.consulterAbsences.render("Export de la liste des cours", cours));
+        return ok(consulterAbsences.render("Export de la liste des cours", cours));
     }
 
     /**

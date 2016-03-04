@@ -97,7 +97,7 @@
                                 <select class="form-control" id="cours">
                                     <option selected disabled>--</option>
                                     @for(unCours <- cours){
-                                        <option value="@unCours.id" >@unCours.saMatiere</option>
+                                        <option value="@unCours.id" >@unCours.saMatiere.getLibelle()</option>
                                     }
                                 </select>
                             </div>
