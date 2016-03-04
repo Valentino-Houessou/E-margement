@@ -7,272 +7,296 @@
 
 
 
-<!-- Début du block dynamique-->
-    <div>
-        <h1> @titrepage </h1>
+    <!-- Début du block dynamique-->
+<div>
+    <h1> @titrepage </h1>
 
-        <div class="centrer_contenu">
-                <!-- Géré par l'AJAX !!! -->
-            <form class="form-inline" role="form">
-                <div class="form-group" style="margin-right: 50px;">
-                    <label>1 - </label>
-                    <select id="selectionUniversite" name="selectionUniversite" class="form-control"  style="width:225px;">
-                        <option value="-">Sélectionner une université</option>
-                        @for(listeUniversite <- mesParametres.getListeUniversites()){
-                            @if(listeUniversite.id == mesParametres.getSelectionUniversite()){
-                                <option value="@listeUniversite.id" selected>@listeUniversite.libelle</option>
+    <div class="centrer_contenu">
+            <!-- Géré par l'AJAX !!! -->
+        <form class="form-inline" role="form">
+            <div class="form-group" style="margin-right: 50px;">
+                <label>1 - </label>
+                <select id="selectionUniversite" name="selectionUniversite" class="form-control"  style="width:225px;">
+                    <option value="-">Sélectionner une université</option>
+                    @for(listeUniversite <- mesParametres.getListeUniversites()){
+                        @if(listeUniversite.id == mesParametres.getSelectionUniversite()){
+                            <option value="@listeUniversite.id" selected>@listeUniversite.libelle</option>
+                        }else{
+                            <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2 - </label>
+                <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px;">
+                    <option value="-">Sélectionner un batiment</option>
+                    @if(mesParametres.getListeBatiments() != null){
+                        @for(listeBatiments <- mesParametres.getListeBatiments()){
+                            @if(listeBatiments.id == mesParametres.getSelectionBatiment()){
+                                <option value="@listeBatiments.id" selected>@listeBatiments.libelle</option>
                             }else{
-                                <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
+                                <option value="@listeBatiments.id" >@listeBatiments.libelle</option>
+                            }
+
+                        }
+                    }
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div id="selection_filiere_promo" class="centrer_contenu">
+        <form class="form-inline" role="form">
+            <div class="form-group" style="margin-right: 50px;">
+                <label>3 - </label>
+                <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
+                    <option value="-">Sélectionner une filière</option>
+                    @if(mesParametres.getListeFilieres() != null){
+                        @for(listeFilieres <- mesParametres.getListeFilieres()){
+                            @if(listeFilieres.libelle == mesParametres.getSelectionFiliere()){
+                                <option value="@listeFilieres.libelle" selected>@listeFilieres.libelle</option>
+                            }else{
+                                <option value="@listeFilieres.libelle" >@listeFilieres.libelle</option>
                             }
                         }
-                    </select>
-                </div>
+                    }
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label>2 - </label>
-                    <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px;">
-                        <option value="-">Sélectionner un batiment</option>
-                        @if(mesParametres.getListeBatiments() != null){
-                            @for(listeBatiments <- mesParametres.getListeBatiments()){
-                                @if(listeBatiments.id == mesParametres.getSelectionBatiment()){
-                                    <option value="@listeBatiments.id" selected>@listeBatiments.libelle</option>
-                                }else{
-                                    <option value="@listeBatiments.id" >@listeBatiments.libelle</option>
-                                }
-
+            <div class="form-group">
+                <label>3 - </label>
+                <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px;">
+                    <option value="-">Sélectionner une promotion</option>
+                    @if(mesParametres.getListePromotion() != null){
+                        @for(listePromotion <- mesParametres.getListePromotion()){
+                            @if(listePromotion.id == mesParametres.getSelectionPromotion()){
+                                <option value="@listePromotion.id" selected>@listePromotion.groupe - @listePromotion.getType()</option>
+                            }else{
+                                <option value="@listePromotion.id" >@listePromotion.groupe - @listePromotion.getType()</option>
                             }
                         }
-                    </select>
-                </div>
-            </form>
-        </div>
+                    }
+                </select>
+            </div>
+        </form>
+    </div>
 
-        <div id="selection_filiere_promo" class="centrer_contenu">
-            <form class="form-inline" role="form">
-                <div class="form-group" style="margin-right: 50px;">
-                    <label>3 - </label>
-                    <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
-                        <option value="-">Sélectionner une filière</option>
-                        @if(mesParametres.getListeFilieres() != null){
-                            @for(listeFilieres <- mesParametres.getListeFilieres()){
-                                @if(listeFilieres.libelle == mesParametres.getSelectionFiliere()){
-                                    <option value="@listeFilieres.libelle" selected>@listeFilieres.libelle</option>
-                                }else{
-                                    <option value="@listeFilieres.libelle" >@listeFilieres.libelle</option>
-                                }
-                            }
-                        }
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>3 - </label>
-                    <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px;">
-                        <option value="-">Sélectionner une promotion</option>
-                        @if(mesParametres.getListePromotion() != null){
-                            @for(listePromotion <- mesParametres.getListePromotion()){
-                                @if(listePromotion.id == mesParametres.getSelectionPromotion()){
-                                    <option value="@listePromotion.id" selected>@listePromotion.groupe - @listePromotion.getType()</option>
-                                }else{
-                                    <option value="@listePromotion.id" >@listePromotion.groupe - @listePromotion.getType()</option>
-                                }
-                            }
-                        }
-                    </select>
-                </div>
-            </form>
-        </div>
-
-            <!-- Permet d'extraire une feuille de présence en selectionnant une journée ou une semaine -->
-        <div id="mode_extraction">
-            <div class="container-fluid">
-                <div class="row">
-                    <form id="selectiondate" method="POST" action="#">
-                        <a href="#" data-toggle="modal" data-target="#maDate" data-backdrop="false">
-                            <div class="col-md-5">
-                                <div class="card " id="effet_bloc1">
-                                    <div class="header">
-                                        <h4 class="title">Extraire en sélectionnant un jour</h4>
-                                    </div>
+        <!-- Permet d'extraire une feuille de présence en selectionnant une journée ou une semaine -->
+    <div id="mode_extraction">
+        <div class="container-fluid">
+            <div class="row">
+                <form id="selectiondate" method="POST" action="#">
+                    <a href="#" data-toggle="modal" data-target="#maDate" data-backdrop="false">
+                        <div class="col-md-5">
+                            <div class="card " id="effet_bloc1">
+                                <div class="header">
+                                    <h4 class="title">Extraire en sélectionnant un jour</h4>
                                 </div>
                             </div>
-                        </a>
-                    </form>
+                        </div>
+                    </a>
+                </form>
 
-                    <form id="selectionsemaine" method="POST" action="#">
-                        <a href="#" data-toggle="modal" data-target="#maSemaine" data-backdrop="false">
-                            <div class="col-md-5">
-                                <div class="card " id="effet_bloc2">
-                                    <div class="header">
-                                        <h4 class="title">Extraire en sélectionnant une semaine </h4>
-                                    </div>
+                <form id="selectionsemaine" method="POST" action="#">
+                    <a href="#" data-toggle="modal" data-target="#maSemaine" data-backdrop="false">
+                        <div class="col-md-5">
+                            <div class="card " id="effet_bloc2">
+                                <div class="header">
+                                    <h4 class="title">Extraire en sélectionnant une semaine </h4>
                                 </div>
                             </div>
-                        </a>
-                    </form>
-                </div>
+                        </div>
+                    </a>
+                </form>
             </div>
         </div>
-            <!-- Fin selection dates -->
+    </div>
+        <!-- Fin selection dates -->
 
-            <!-- Modal pour l'affichage du calendrier de saisie d'une date -->
-        <div class="modal fade" id="maDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Sélectionner une date</h4>
-                    </div>
-                    <form id="extractionParDate" method="POST">
-                        <div class="modal-body" style="height: 100px;">
-                            <div class="form-group" style="padding-top: 20px;padding-left: 50px;">
-                                <label class="col-xs-3 control-label">Date : </label>
-                                <div class="col-xs-5 date">
-                                    <div class="input-group input-append date">
-                                        <input type="text" class="form-control" placeholder="cliquer ici" name="datepicker1" id="datepicker1" />
-                                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn">Choisir</button>
-                        </div>
-                    </form>
+        <!-- Modal pour l'affichage du calendrier de saisie d'une date -->
+    <div class="modal fade" id="maDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Sélectionner une date</h4>
                 </div>
-            </div>
-        </div>
-
-            <!-- Modal pour l'affichage du calendrier de saisie d'une semaine -->
-        <div class="modal fade" id="maSemaine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Sélectionner une semaine</h4>
-                    </div>
-                    <div class="modal-body" style="height: 100px;padding-left: 100px;">
-
-                        <div class='col-xs-5 date'>
-                            <div class="form-group" style="padding-top: 20px;">
-                                <div class='input-group date'>
-                                    <input type='text' class="form-control" id='datepicker6' />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                <form id="extractionParDate" method="POST">
+                    <div class="modal-body" style="height: 100px;">
+                        <div class="form-group" style="padding-top: 20px;padding-left: 50px;">
+                            <label class="col-xs-3 control-label">Date : </label>
+                            <div class="col-xs-5 date">
+                                <div class="input-group input-append date">
+                                    <input type="text" class="form-control" placeholder="cliquer ici" name="datepicker1" id="datepicker1" />
+                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                             </div>
                         </div>
-                        <div class='col-xs-5 date'>
-                            <div class="form-group" style="padding-top: 20px;">
-                                <div class='input-group date' >
-                                    <input type='text' class="form-control" id='datepicker7' disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn">Choisir</button>
+                        <button type="submit" class="btn">Choisir</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal pour l'affichage du calendrier de saisie d'une semaine -->
+    <div class="modal fade" id="maSemaine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Sélectionner une semaine</h4>
+                </div>
+                <div class="modal-body" style="height: 100px;padding-left: 100px;">
+
+                    <div class='col-xs-5 date'>
+                        <div class="form-group" style="padding-top: 20px;">
+                            <div class='input-group date'>
+                                <input type='text' class="form-control" id='datepicker6' />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-xs-5 date'>
+                        <div class="form-group" style="padding-top: 20px;">
+                            <div class='input-group date' >
+                                <input type='text' class="form-control" id='datepicker7' disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn">Choisir</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        @if(mesParametres.getSelectionDate() != "vide"){
-            <div id="infoFeuilleDePresence">
-                <div class="container" style="width: auto">
-                    <h3>Récapitulatif</h3>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Université</th>
-                                <th>Batiment</th>
-                                <th>Filière</th>
-                                <th>Promotion</th>
-                                <th>Date choisie</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    @for(listeUniversite <- mesParametres.getListeUniversites()){
-                                        @if(listeUniversite.id == mesParametres.getSelectionUniversite()){
-                                            @listeUniversite.libelle
-                                        }
+    @if(mesParametres.getSelectionDate() != "vide"){
+        <div id="infoFeuilleDePresence">
+            <div class="container" style="width: auto">
+                <h3>Récapitulatif</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Université</th>
+                            <th>Batiment</th>
+                            <th>Filière</th>
+                            <th>Promotion</th>
+                            <th>Date choisie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                            @for(listeUniversite <- mesParametres.getListeUniversites()){
+                                @if(listeUniversite.id == mesParametres.getSelectionUniversite()){
+                                    @listeUniversite.libelle
+                                }
+                            }
+                            </td>
+                            <td>
+                            @if(mesParametres.getListeBatiments() != null){
+                                @for(listeBatiments <- mesParametres.getListeBatiments()){
+                                    @if(listeBatiments.id == mesParametres.getSelectionBatiment()){
+                                        @listeBatiments.libelle
                                     }
-                                </td>
-                                <td>
-                                    @if(mesParametres.getListeBatiments() != null){
-                                        @for(listeBatiments <- mesParametres.getListeBatiments()){
-                                            @if(listeBatiments.id == mesParametres.getSelectionBatiment()){
-                                                @listeBatiments.libelle
-                                            }
-                                        }
+                                }
+                            }
+                            </td>
+                            <td>
+                            @if(mesParametres.getListeFilieres() != null){
+                                @for(listeFilieres <- mesParametres.getListeFilieres()){
+                                    @if(listeFilieres.libelle == mesParametres.getSelectionFiliere()){
+                                        @listeFilieres.libelle
                                     }
-                                </td>
-                                <td>
-                                    @if(mesParametres.getListeFilieres() != null){
-                                        @for(listeFilieres <- mesParametres.getListeFilieres()){
-                                            @if(listeFilieres.libelle == mesParametres.getSelectionFiliere()){
-                                                @listeFilieres.libelle
-                                            }
-                                        }
+                                }
+                            }
+                            </td>
+                            <td>
+                            @if(mesParametres.getListePromotion() != null){
+                                @for(listePromotion <- mesParametres.getListePromotion()){
+                                    @if(listePromotion.id == mesParametres.getSelectionPromotion()){
+                                        @listePromotion.groupe - @listePromotion.getType()
                                     }
-                                </td>
-                                <td>
-                                    @if(mesParametres.getListePromotion() != null){
-                                        @for(listePromotion <- mesParametres.getListePromotion()){
-                                            @if(listePromotion.id == mesParametres.getSelectionPromotion()){
-                                                @listePromotion.groupe - @listePromotion.getType()
-                                            }
-                                        }
-                                    }
-                                </td>
-                                <td>
-                                    @mesParametres.getSelectionDate()
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                }
+                            }
+                            </td>
+                            <td>
+                            @mesParametres.getSelectionDate()
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="container" style="width: auto">
-                    <h3>Feuille de présence</h3>
+            <div class="container" style="width: auto">
+                <h3>Feuille de présence</h3>
 
-                    <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
+                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
 
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>N°</th>
-                                <th>Nom</th>
-                                <th>Prénom</th>
-                                <th>Créneau 1</th>
-                                <th>Créneau 2</th>
-                                <th>Créneau 3</th>
-                                <th>Créneau 4</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Créneau 1</th>
+                            <th>Créneau 2</th>
+                            <th>Créneau 3</th>
+                            <th>Créneau 4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                             <!-- Pour chaque étudiants -->
-                            @for(lesEtudiants <- mesParametres.getLesEtudiants()){
-                                <tr>
-                                    <td width=5%> @(i += 1) @i </td>
-                                    <td width=11%> @lesEtudiants.nom </td>
-                                    <td width=11%> @lesEtudiants.prenom </td>
+                        @for(lesEtudiants <- mesParametres.getLesEtudiants()){
+                            <tr>
+                                <td width=5%> @(i += 1) @i </td>
+                                <td width=11%> @lesEtudiants.nom </td>
+                                <td width=11%> @lesEtudiants.prenom </td>
 
                                     <!-- Vérifier si l'étudiant à participé au cours -->
-                                    @for(verificationPresence <- mesParametres.getCoursDuJourDeLaPromotion()){
+                                @for(verificationPresence <- mesParametres.getCoursDuJourDeLaPromotion()){
 
-                                        @{ numeroCreneau +=1 }
+                                    @{ numeroCreneau +=1 }
 
-                                        <td width=18%>
+                                    <td width=18%>
                                             <!-- Si pour le cours la table des présences est vide = Personne n'a participé -->
-                                            @if(verificationPresence.sesPresences.size() == 0){
+                                        @if(verificationPresence.sesPresences.size() == 0){
+                                            <div class="rouge"> Absent </div>
+                                                <!-- Compteurs d'absences -->
+                                            @if(numeroCreneau == 1){
+                                                @{ cptcreneau1 += 1; }
+                                            }
+                                            @if(numeroCreneau == 2){
+                                                @{ cptcreneau2 += 1; }
+                                            }
+                                            @if(numeroCreneau == 3){
+                                                @{ cptcreneau3 += 1; }
+                                            }
+                                            @if(numeroCreneau == 4){
+                                                @{ cptcreneau4 += 1; }
+                                            }
+                                            }else{
+                                            <!-- Pour les personnes qui ont participés, on vérifie si c'est l'étudiant qu'on cherche et que son émargement pour ce cours est égal à 1 -->
+                                            @for(present <- verificationPresence.sesPresences){
+
+                                                @if((present.sonEtudiant.sonUtilisateur.id == lesEtudiants.id) && (present.emergement == true)){
+                                                    @{cpt += 1}
+                                                }
+                                            }
+                                            <!-- Vérifie si l'étudiant a badget, donc a une insertion dans la table présence et que son émargement pour ce cours est égal à 1 -->
+                                            @if(cpt == 0){
                                                 <div class="rouge"> Absent </div>
                                                     <!-- Compteurs d'absences -->
                                                 @if(numeroCreneau == 1){
@@ -288,367 +312,343 @@
                                                     @{ cptcreneau4 += 1; }
                                                 }
                                             }else{
-                                                <!-- Pour les personnes qui ont participés, on vérifie si c'est l'étudiant qu'on cherche et que son émargement pour ce cours est égal à 1 -->
-                                                @for(present <- verificationPresence.sesPresences){
-
-                                                    @if((present.sonEtudiant.sonUtilisateur.id == lesEtudiants.id) && (present.emergement == true)){
-                                                        @{cpt += 1}
-                                                    }
+                                                @if(cpt > 0){
+                                                    <div class="vert"> Présent </div>
                                                 }
-                                                    <!-- Vérifie si l'étudiant a badget, donc a une insertion dans la table présence et que son émargement pour ce cours est égal à 1 -->
-                                                @if(cpt == 0){
-                                                    <div class="rouge"> Absent </div>
-                                                        <!-- Compteurs d'absences -->
-                                                        @if(numeroCreneau == 1){
-                                                            @{ cptcreneau1 += 1; }
-                                                        }
-                                                        @if(numeroCreneau == 2){
-                                                            @{ cptcreneau2 += 1; }
-                                                        }
-                                                        @if(numeroCreneau == 3){
-                                                            @{ cptcreneau3 += 1; }
-                                                        }
-                                                        @if(numeroCreneau == 4){
-                                                            @{ cptcreneau4 += 1; }
-                                                        }
-                                                }else{
-                                                    @if(cpt > 0){
-                                                        <div class="vert"> Présent </div>
-                                                    }
-                                                }
-
-                                                @{cpt = 0;} <!-- Remise du compteur à zéro pour le prochain cours -->
                                             }
-                                        </td>
-                                    }
-                                    @{ numeroCreneau =0; } <!-- Remise à zéro pour un prochain éléve -->
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <table class="table table-bordered">
-                        <tr>
-                            <td width=26%> Nombre d'absents </td>
 
-                            <td width=18%> @cptcreneau1 </td>
-                            <td width=18%> @cptcreneau2 </td>
-                            <td width=18%> @cptcreneau3 </td>
-                            <td width=18%> @cptcreneau4 </td>
+                                            @{cpt = 0;} <!-- Remise du compteur à zéro pour le prochain cours -->
+                                        }
+                                    </td>
+                                }
+                                @{ numeroCreneau =0; } <!-- Remise à zéro pour un prochain éléve -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <td width=26%> Nombre d'absents </td>
+
+                        <td width=18%> @cptcreneau1 </td>
+                        <td width=18%> @cptcreneau2 </td>
+                        <td width=18%> @cptcreneau3 </td>
+                        <td width=18%> @cptcreneau4 </td>
+
+                        @{
+                            numeroCreneau = 0;
+                            cptcreneau1 = 0;
+                            cptcreneau2 = 0;
+                            cptcreneau3 = 0;
+                            cptcreneau4 = 0;
+                        }
+                    </tr>
+                    <tr>
+                        <td width=26%> Matière(s) </td>
+                        @for(infosMatieres <- mesParametres.getCoursDuJourDeLaPromotion()) {
+                            <td width=18%> @infosMatieres.saMatiere.getLibelle() </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td width=26%> Horaires </td>
+
+                        @for(infosHoraires <- mesParametres.getCoursDuJourDeLaPromotion()) {
 
                             @{
-                                numeroCreneau = 0;
-                                cptcreneau1 = 0;
-                                cptcreneau2 = 0;
-                                cptcreneau3 = 0;
-                                cptcreneau4 = 0;
+                                hdebut = new SimpleDateFormat("HH:mm").format(infosHoraires.heureDebut)
+
+                                hfin = new SimpleDateFormat("HH:mm").format(infosHoraires.heureFin)
+
+                                hdebut = hdebut.replace(":","H");
+                                hfin = hfin.replace(":","H");
                             }
-                        </tr>
-                        <tr>
-                            <td width=26%> Matière(s) </td>
-                            @for(infosMatieres <- mesParametres.getCoursDuJourDeLaPromotion()) {
-                                <td width=18%> @infosMatieres.saMatiere.getLibelle() </td>
-                            }
-                        </tr>
-                        <tr>
-                            <td width=26%> Horaires </td>
 
-                            @for(infosHoraires <- mesParametres.getCoursDuJourDeLaPromotion()) {
-
-                                @{
-                                    hdebut = new SimpleDateFormat("HH:mm").format(infosHoraires.heureDebut)
-
-                                    hfin = new SimpleDateFormat("HH:mm").format(infosHoraires.heureFin)
-
-                                    hdebut = hdebut.replace(":","H");
-                                    hfin = hfin.replace(":","H");
-                                }
-
-                                <td width=18%> @hdebut - @hfin </td>
-                            }
-                        </tr>
-                        <tr>
-                            <td width=26%> Nom du professeur </td>
-                            @for(infosProfesseurs <- mesParametres.getCoursDuJourDeLaPromotion()) {
-                                <td width=18%> @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom </td>
-                            }
-                        </tr>
-                        <tr>
-                            <td width=26%> Signature numérique du professeur </td>
-                            <td width=18%> </td>
-                            <td width=18%> </td>
-                            <td width=18%> </td>
-                            <td width=18%> </td>
-                        </tr>
-                    </table>
-                    <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
-                </div>
+                            <td width=18%> @hdebut - @hfin </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td width=26%> Nom du professeur </td>
+                        @for(infosProfesseurs <- mesParametres.getCoursDuJourDeLaPromotion()) {
+                            <td width=18%> @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td width=26%> Signature numérique du professeur </td>
+                        <td width=18%> </td>
+                        <td width=18%> </td>
+                        <td width=18%> </td>
+                        <td width=18%> </td>
+                    </tr>
+                </table>
+                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
             </div>
-        }
+        </div>
+    }
 
 
         <!-- Scripts JavaScript, Ajax et Jquery pour l'affichage dynamique de block -->
-            <!-- Permet d'afficher un calendrier en français pour sélectionner une date -->
-            <script type="text/javascript">
-                    $(document).ready(function(){
-                        $('#datepicker1').datepicker($.datepicker.regional['fr']);
-                    });
-            </script>
+        <!-- Permet d'afficher un calendrier en français pour sélectionner une date -->
+    <script type="text/javascript">
+            $(document).ready(function(){
+                $('#datepicker1').datepicker($.datepicker.regional['fr']);
+            });
+    </script>
 
-            <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('#datepicker6').datepicker($.datepicker.regional['fr']);
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('#datepicker6').datepicker($.datepicker.regional['fr']);
 
-                        $("#datepicker6").on("change", function (date) {
+                $("#datepicker6").on("change", function (date) {
 
-                            var jourlettre = $("#datepicker6").datepicker('getDate').getDay();
-                            var jourchiffre = $("#datepicker6").datepicker('getDate').getDate();
-                            var month1 = $("#datepicker6").datepicker('getDate').getMonth() + 1;
-                            var year1 = $("#datepicker6").datepicker('getDate').getFullYear();
+                    var jourlettre = $("#datepicker6").datepicker('getDate').getDay();
+                    var jourchiffre = $("#datepicker6").datepicker('getDate').getDate();
+                    var month1 = $("#datepicker6").datepicker('getDate').getMonth() + 1;
+                    var year1 = $("#datepicker6").datepicker('getDate').getFullYear();
 
-                            var fin="";
-                            // Si la selection est Lundi
-                            if(jourlettre == 1)
-                            {
-                                fin = jourchiffre +4 + "/" + month1 + "/" + year1;
-                            }else if(jourlettre == 2){
-                                fin = jourchiffre +3 + "/" + month1 + "/" + year1;
-                            }else if(jourlettre == 3){
-                                fin = jourchiffre +2 + "/" + month1 + "/" + year1;
-                            }else if(jourlettre == 4){
-                                fin = jourchiffre +1 + "/" + month1 + "/" + year1;
-                            }else if(jourlettre == 5) {
-                                fin = jourchiffre + "/" + month1 + "/" + year1;
-                            }else if(jourlettre == 6) {
-                                fin = jourchiffre -1 + "/" + month1 + "/" + year1;
+                    var fin="";
+                    // Si la selection est Lundi
+                    if(jourlettre == 1)
+                    {
+                        fin = jourchiffre +4 + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 2){
+                        fin = jourchiffre +3 + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 3){
+                        fin = jourchiffre +2 + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 4){
+                        fin = jourchiffre +1 + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 5) {
+                        fin = jourchiffre + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 6) {
+                        fin = jourchiffre -1 + "/" + month1 + "/" + year1;
 
-                            }else if(jourlettre == 0) {
-                                fin = jourchiffre -2 + "/" + month1 + "/" + year1;
+                    }else if(jourlettre == 0) {
+                        fin = jourchiffre -2 + "/" + month1 + "/" + year1;
 
-                            }
+                    }
 
-                            $('#datepicker7').datepicker('setDate', fin);
+                    $('#datepicker7').datepicker('setDate', fin);
 
-                            if(jourlettre == 6) {
-                                $('#datepicker6').datepicker('setDate', fin);
+                    if(jourlettre == 6) {
+                        $('#datepicker6').datepicker('setDate', fin);
 
-                            }else if(jourlettre == 0) {
-                                $('#datepicker6').datepicker('setDate', fin);
-                            }
+                    }else if(jourlettre == 0) {
+                        $('#datepicker6').datepicker('setDate', fin);
+                    }
 
-                        });
-
-                        $("#datepicker7").datepicker({
-                            dateFormat: "dd/mm/yy"
-                        });
-                    });
-            </script>
-
-            <!-- Gere la liste déroulante : Université-->
-            <script>
-                $(document).ready(function(){
-
-                    $('select[name="selectionUniversite"]').change(function(){
-
-                        if($(this).val() == "-")
-                        {
-                            document.getElementById("selection_filiere_promo").style.visibility = "hidden";
-                            document.getElementById("mode_extraction").style.visibility = "hidden";
-
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/batiment',
-                                type: "POST",
-                                data: "selectionUniversite=0",
-                                dataType : 'html',
-                                success: function(data) {
-
-                                    $("#charger_fonctionnalite").html(data);
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! La liste des Université est non disponible.")
-                                }
-                            });
-                        }else{
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/batiment',
-                                type: "POST",
-                                data: "selectionUniversite="+$(this).val(),
-                                dataType : 'html',
-                                success: function(data) {
-
-                                    $("#charger_fonctionnalite").html(data);
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! La liste des batiments est non disponible.")
-                                }
-                            });
-                        }
-                    });
                 });
-            </script>
 
-            <!-- Gere la liste déroulante : Batiment-->
-            <script>
-                $(document).ready(function(){
-
-                    $('select[name="selectionBatiment"]').change(function(){
-
-                        if($(this).val() == "-")
-                        {
-                            document.getElementById("selection_filiere_promo").style.visibility = "hidden";
-                            document.getElementById("mode_extraction").style.visibility = "hidden";
-
-                        }else{
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/filiere',
-                                type: "POST",
-                                data: "selectionBatiment="+$(this).val()+"&selectionUniversite="+$("#selectionUniversite").val(),
-                                dataType : 'html',
-                                success: function(data) {
-
-                                    $("#charger_fonctionnalite").html(data);
-                                    $('#selection_filiere_promo').css("visibility", "visible");
-
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! La liste des filières est non disponible.")
-                                }
-                            });
-                        }
-                    });
+                $("#datepicker7").datepicker({
+                    dateFormat: "dd/mm/yy"
                 });
-            </script>
+            });
+    </script>
 
+        <!-- Gere la liste déroulante : Université-->
+    <script>
+            $(document).ready(function(){
 
-            <!-- Gere la liste déroulante : Filiere-->
-            <script>
-                    $(document).ready(function(){
+                $('select[name="selectionUniversite"]').change(function(){
 
-                        $('select[name="selectionfiliere"]').change(function(){
+                    if($(this).val() == "-")
+                    {
+                        document.getElementById("selection_filiere_promo").style.visibility = "hidden";
+                        document.getElementById("mode_extraction").style.visibility = "hidden";
 
-                            if($(this).val() == "-")
-                            {
-                                document.getElementById("mode_extraction").style.visibility = "hidden";
-                                $.ajax({
-                                    url: '/administrateur/exporter-feuille/promotion',
-                                    type: "POST",
-                                    data: "selectionfiliere=0"+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
-                                    dataType : 'html',
-                                    success: function(data) {
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/batiment',
+                            type: "POST",
+                            data: "selectionUniversite=0",
+                            dataType : 'html',
+                            success: function(data) {
 
-                                        $("#charger_fonctionnalite").html(data);
-                                        $('#selection_filiere_promo').css("visibility", "visible");
-                                    },
-                                    error: function() {
-                                        alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
-                                    }
-                                });
-
-                            }else{
-                                $.ajax({
-                                    url: '/administrateur/exporter-feuille/promotion',
-                                    type: "POST",
-                                    data: "selectionfiliere="+$(this).val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
-                                    dataType : 'html',
-                                    success: function(data) {
-
-                                        $("#charger_fonctionnalite").html(data);
-                                        $('#selection_filiere_promo').css("visibility", "visible");
-                                    },
-                                    error: function() {
-                                        alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
-                                    }
-                                });
+                                $("#charger_fonctionnalite").html(data);
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des Université est non disponible.")
                             }
                         });
-                    });
-                </script>
+                    }else{
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/batiment',
+                            type: "POST",
+                            data: "selectionUniversite="+$(this).val(),
+                            dataType : 'html',
+                            success: function(data) {
 
-            <!-- Permet d'afficher le mode d'extraction -->
-                <script>
-                $(document).ready(function(){
-                    $('select[name="selectionpromotion"]').change(function(){
-
-                        if($(this).val() == "-")
-                        {
-                            document.getElementById("mode_extraction").style.visibility = "hidden";
-
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/date',
-                                type: "POST",
-                                data: "selectionpromotion=0"+"&selectionfiliere="+$("#selectionfiliere").val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
-                                dataType : 'html',
-                                success: function(data) {
-
-                                    $("#charger_fonctionnalite").html(data);
-                                    $('#selection_filiere_promo').css("visibility", "visible");
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
-                                }
-                            });
-                        }else{
-                            document.getElementById("mode_extraction").style.visibility = "visible";
-
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/date',
-                                type: "POST",
-                                data: "selectionpromotion="+$(this).val()+"&selectionfiliere="+$("#selectionfiliere").val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
-                                dataType : 'html',
-                                success: function(data) {
-
-                                    $("#charger_fonctionnalite").html(data);
-                                    $('#selection_filiere_promo').css("visibility", "visible");
-                                    $('#mode_extraction').css("visibility", "visible");
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
-                                }
-                            });
-                        }
-                    });
+                                $("#charger_fonctionnalite").html(data);
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des batiments est non disponible.")
+                            }
+                        });
+                    }
                 });
+            });
+    </script>
 
-                </script>
+        <!-- Gere la liste déroulante : Batiment-->
+    <script>
+            $(document).ready(function(){
 
-        <script>
-                $(document).ready(function() {
-                    // Lorsque je soumets le formulaire
-                    $('#extractionParDate').on('submit', function(e) {
-                        e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
+                $('select[name="selectionBatiment"]').change(function(){
 
-                        //Je récupère la date choisie
-                        var jourchiffre = $("#datepicker1").datepicker('getDate').getDate();
-                        var month1 = $("#datepicker1").datepicker('getDate').getMonth() + 1;
-                        var year1 = $("#datepicker1").datepicker('getDate').getFullYear();
+                    if($(this).val() == "-")
+                    {
+                        document.getElementById("selection_filiere_promo").style.visibility = "hidden";
+                        document.getElementById("mode_extraction").style.visibility = "hidden";
 
-                        var datechoisie = jourchiffre + "/" + month1 + "/" + year1;
+                    }else{
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/filiere',
+                            type: "POST",
+                            data: "selectionBatiment="+$(this).val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                            dataType : 'html',
+                            success: function(data) {
 
-                        // Je vérifie une première fois pour ne pas lancer la requête HTTP
-                        if(datechoisie === '') {
-                            alert('Le champs date doit être remplis');
-                        } else {
-                            // Envoi de la requête HTTP en mode asynchrone
-                            $.ajax({
-                                url: '/administrateur/exporter-feuille/resultats',
-                                type: "POST", // La méthode indiquée dans le formulaire
-                                data: "datechoisie="+datechoisie+"&selectionpromotion="+$("#selectionpromotion").val(),
-                                dataType : 'html',
-                                success: function(data) {
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
 
-                                    $("#charger_fonctionnalite").html(data);
-                                    $('#selection_filiere_promo').css("visibility", "visible");
-                                    $('#mode_extraction').css("visibility", "visible");
-                                    $('#infoFeuilleDePresence').css("visibility", "visible");
-                                },
-                                error: function() {
-                                    alert("Erreur de chargement de la page ! Erreur chargement de la date ..")
-                                }
-                            });
-                        }
-                    });
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des filières est non disponible.")
+                            }
+                        });
+                    }
                 });
-        </script>
+            });
+    </script>
+
+
+        <!-- Gere la liste déroulante : Filiere-->
+    <script>
+            $(document).ready(function(){
+
+                $('select[name="selectionfiliere"]').change(function(){
+
+                    if($(this).val() == "-")
+                    {
+                        document.getElementById("mode_extraction").style.visibility = "hidden";
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/promotion',
+                            type: "POST",
+                            data: "selectionfiliere=0"+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
+                            }
+                        });
+
+                    }else{
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/promotion',
+                            type: "POST",
+                            data: "selectionfiliere="+$(this).val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
+
+        <!-- Permet d'afficher le mode d'extraction -->
+    <script>
+            $(document).ready(function(){
+                $('select[name="selectionpromotion"]').change(function(){
+
+                    if($(this).val() == "-")
+                    {
+                        document.getElementById("mode_extraction").style.visibility = "hidden";
+
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/date',
+                            type: "POST",
+                            data: "selectionpromotion=0"+"&selectionfiliere="+$("#selectionfiliere").val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
+                            }
+                        });
+                    }else{
+                        document.getElementById("mode_extraction").style.visibility = "visible";
+
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/date',
+                            type: "POST",
+                            data: "selectionpromotion="+$(this).val()+"&selectionfiliere="+$("#selectionfiliere").val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
+                                $('#mode_extraction').css("visibility", "visible");
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
+                            }
+                        });
+                    }
+                });
+            });
+
+    </script>
+
+    <script>
+            $(document).ready(function() {
+                // Lorsque je soumets le formulaire
+                $('#extractionParDate').on('submit', function(e) {
+                    e.preventDefault(); // J'empêche le comportement par défaut du navigateur, c-à-d de soumettre le formulaire
+
+                    //Je récupère la date choisie
+                    var jourchiffre = $("#datepicker1").datepicker('getDate').getDate();
+                    var month1 = $("#datepicker1").datepicker('getDate').getMonth() + 1;
+                    var year1 = $("#datepicker1").datepicker('getDate').getFullYear();
+
+                    var datechoisie = jourchiffre + "/" + month1 + "/" + year1;
+
+                    // Je vérifie une première fois pour ne pas lancer la requête HTTP
+                    if(datechoisie === '') {
+                        alert('Le champs date doit être remplis');
+                    } else {
+                        // Envoi de la requête HTTP en mode asynchrone
+                        $.ajax({
+                            url: '/administrateur/exporter-feuille/resultats',
+                            type: "POST", // La méthode indiquée dans le formulaire
+                            data: "datechoisie="+datechoisie+"&selectionpromotion="+$("#selectionpromotion").val(),
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#selection_filiere_promo').css("visibility", "visible");
+                                $('#mode_extraction').css("visibility", "visible");
+                                $('#infoFeuilleDePresence').css("visibility", "visible");
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page ! Erreur chargement de la date ..")
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
         <!-- Fin Scripts -->
 
-    </div>
-<!-- Fin du block dynamique -->
+</div>
+    <!-- Fin du block dynamique -->

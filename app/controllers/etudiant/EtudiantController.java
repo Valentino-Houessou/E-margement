@@ -24,8 +24,9 @@ public class EtudiantController extends Controller{
     }
 
     public Result consulterAbsences() {
-        return ok(consulterAbsences.render("Partie Etudiant"));
+        List<Cours> cours = Cours.findAll();
 
+        return ok(views.html.etudiant.consulterAbsences.render("Export de la liste des cours", cours));
     }
 
     /**
@@ -153,6 +154,10 @@ public class EtudiantController extends Controller{
         return ok(Json.toJson(absences));
     }
 
+    /**
+     * Récupère le nombre d'absences d'un étudiant
+     * @return
+     */
     public Result nbAbsences(){
 
         int nbabsc=Presence.getNombreAbsence(31019378);
@@ -160,14 +165,16 @@ public class EtudiantController extends Controller{
         return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
     }
 
+    /**
+     * Méthode pouur filtrer la page de consultation des absences, en fonction de critères
+     * @param date
+     * @param heure_debut
+     * @param heure_fin
+     * @param cours
+     * @param etat
+     * @return
+     */
     public Result filtrer(String date, String heure_debut, String heure_fin, String cours, String etat){
         return null;
-    }
-
-    public Result getCours()
-    {
-        List<Cours> cours = Cours.findAll();
-
-        return ok(consulterAbsences.render("Export de la liste des cours"));
     }
 }

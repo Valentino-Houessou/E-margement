@@ -1,6 +1,6 @@
 @import models.Etudiant
 @import models.Cours
-@(titrepage: String)
+@(titrepage: String)(cours: java.util.List[Cours])
 
 
 @main("E-margement - Paris X") {
@@ -43,7 +43,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home" style="color:#9A9A9A ;"> <span class="texte_blue">
+                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home"> <span class="texte_blue">
                             Accueil </span></i></a>
                     </div>
 
@@ -61,65 +61,49 @@
             </nav>
             <div class="container-fluid">
                 <center>
-                <div class="row">
-                    <div class="col-md-2">
-                        <label for="date" style="margin:auto ; text-align:center ;">
-                            Date
-                        </label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="date">
+                                Date
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="cours">
+                                Cours
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="etat">
+                                Etat
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="debut">
-                            Horaires
-                        </label>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="cours">
-                            Cours
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="etat">
-                            Etat
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                    </div>
-                </div>
                 </center>
             </div>
 
             <form method="post" id="filtre-etu" action="">
                 <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-2 column ui-sortable">
+                    <div class="row">
+                        <div class="col-md-3 column ui-sortable">
                             <div class="form-group">
                                 <input type="date" class="form-control" id="date" />
                             </div>
-                    </div>
-
-                    <div class="col-md-3 column ui-sortable">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="time" class="form-control" id="debut" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="time" class="form-control" id="fin" />
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-
-                    <div class="col-md-3 column ui-sortable">
-                        <div class="form-group">
-                            <select class="form-control" id="cours">
-                                <option selected disabled>--</option>
-
-                            </select>
                         </div>
-                    </div>
 
-                    <div class="col-md-2 column ui-sortable">
+                        <div class="col-md-3 column ui-sortable">
+                            <div class="form-group">
+                                <select class="form-control" id="cours">
+                                    <option selected disabled>--</option>
+                                    @for(unCours <- cours){
+                                        <option value="@unCours.id" >@unCours.saMatiere</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 column ui-sortable">
                             <div class="form-group">
                                 <select class="form-control" id="justifiee">
                                     <option selected disabled>--</option>
@@ -127,13 +111,13 @@
                                     <option>Injustifiée</option>
                                 </select>
                             </div>
-                    </div>
+                        </div>
 
-                    <div class="col-md-2 column ui-sortable">
-                        <button class="btn btn-default">Filtrer</button>
+                        <div class="col-md-3 column ui-sortable">
+                            <button class="btn btn-default">Filtrer</button>
+                        </div>
                     </div>
                 </div>
-            </div>
             </form>
 
                 <!-- Contenu principal dynamique JQuery -->
