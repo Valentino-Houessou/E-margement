@@ -98,5 +98,59 @@ public class Promotion extends Model{
         promotion.sesEtudiants.add(Etudiant.findById(idMatiere));
         promotion.update();
     }
+
+    public static List<Matiere> getMatiereParPromotion(int idPromo){
+
+        Promotion lapromo = Promotion.find.where().eq("id",idPromo).findUnique();
+        List<Matiere> LesMatieres= lapromo.sesMatieres;
+
+        return  LesMatieres;
+    }
+
+    public static List<Matiere> getSerina(int idDeSerina)
+    {
+        // 0 - Je trouve l'étudiant
+        Etudiant serina = Etudiant.find.where().eq("numero_etudiant",idDeSerina).findUnique();
+
+        // 1 - Je trouve sa promotion
+        List<Promotion> lesPromotions = Promotion.getAllPromotion();
+
+        long idDeLaPromotion = 0;
+
+        for(Promotion promotions : lesPromotions)
+        {
+            for(Etudiant etudiants : promotions.sesEtudiants)
+            {
+                if(etudiants.id == serina.id)
+                {
+                    idDeLaPromotion = promotions.id;
+                }
+            }
+        }
+
+        System.out.println(idDeLaPromotion);
+
+        // 2 - Je récupére ses cours
+        Promotion lapromo = Promotion.find.where().eq("id",idDeLaPromotion).findUnique();
+        List<Matiere> LesMatieres= lapromo.sesMatieres;
+
+        for(Matiere m : LesMatieres)
+        {
+            System.out.println("Mes matières = " + m.getLibelle());
+        }
+
+
+        return  LesMatieres;
+
+    }
+
+    public static List<Promotion> getAllPromotion()
+    {
+        return find.all();
+    }
+
+
+
+
 }
 

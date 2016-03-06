@@ -1,6 +1,6 @@
 @import models.Etudiant
 @import models.Cours
-@(titrepage: String)(cours: java.util.List[Cours])
+@(titrepage: String)(matieres: java.util.List[Matiere])
 
 
 @main("E-margement - Paris X") {
@@ -96,8 +96,8 @@
                             <div class="form-group">
                                 <select class="form-control" id="cours">
                                     <option selected disabled>--</option>
-                                    @for(unCours <- cours){
-                                        <option value="@unCours.id" >@unCours.saMatiere.getLibelle()</option>
+                                    @for(m <- matieres){
+                                        <option value="@m.id" >@m.getLibelle()</option>
                                     }
                                 </select>
                             </div>

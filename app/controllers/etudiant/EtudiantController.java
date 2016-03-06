@@ -24,9 +24,9 @@ public class EtudiantController extends Controller{
     }
 
     public Result consulterAbsences() {
-        List<Cours> cours = Cours.findAll();
+        List<Matiere> matieres = Promotion.getSerina(3700000);
 
-        return ok(consulterAbsences.render("Export de la liste des cours", cours));
+        return ok(consulterAbsences.render("Export de la liste des matières", matieres));
     }
 
     /**
