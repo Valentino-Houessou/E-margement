@@ -24,9 +24,9 @@ public class EtudiantController extends Controller{
     }
 
     public Result consulterAbsences() {
-        List<Matiere> matieres = Promotion.getSerina(3700000);
+        List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
 
-        return ok(consulterAbsences.render("Export de la liste des matières", matieres));
+        return ok(consulterAbsences.render("Export de la liste des matières", presences));
     }
 
     /**
@@ -160,7 +160,7 @@ public class EtudiantController extends Controller{
      */
     public Result nbAbsences(){
 
-        int nbabsc=Presence.getNombreAbsence(31019378);
+        int nbabsc=Presence.getNombreAbsence(3700000);
 
         return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
     }
