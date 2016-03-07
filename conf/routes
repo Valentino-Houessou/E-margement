@@ -31,8 +31,6 @@ DELETE        /enseignant/supprimer                                   controller
 # etudiant
 GET           /etudiant/indexEtudiant                                 controllers.etudiant.EtudiantController.index()
 GET           /etudiant/consulterAbsences                             controllers.etudiant.EtudiantController.consulterAbsences()
-GET           /etudiant/consulterAbsences2                            controllers.etudiant.EtudiantController.filtrer(date:String, heure_debut:String, heure_fin:String, cours:String, etat:String)
-GET           /etudiant/consulterAbsences                             controllers.etudiant.EtudiantController.consulterAbsences()
 PUT           /etudiant/ajout                                         controllers.etudiant.EtudiantController.ajoutEtudiant()
 POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
 

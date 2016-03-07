@@ -3,7 +3,15 @@ package models;
 import com.avaje.ebean.Model;
 
 import javax.persistence.*;
+import com.avaje.ebean.*;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.*;
+
+
 
 @Entity
 public class Promotion extends Model{
@@ -103,5 +111,24 @@ public class Promotion extends Model{
     public static Promotion findbyId(long id){
         return find.byId(id);
     }
+
+
+
+    public static List<Matiere> getMatiereParPromotion(int idPromo){
+
+        Promotion lapromo = Promotion.find.where().eq("id",idPromo).findUnique();
+        List<Matiere> LesMatieres= lapromo.sesMatieres;
+
+        return  LesMatieres;
+    }
+
+    public static List<Promotion> getAllPromotion()
+    {
+        return find.all();
+    }
+
+
+
+
 }
 

@@ -1,7 +1,8 @@
 @import models.Etudiant
 @import models.Cours
-@(titrepage: String)
-
+@import java.text.SimpleDateFormat
+@(titrepage: String)(presences: java.util.List[Presence])
+@import java.util.Date; var hdebut=""; var hfin=""; var date="";
 
 @main("E-margement - Paris X") {
     <div class="wrapper">
@@ -43,7 +44,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home" style="color:#9A9A9A ;"> <span class="texte_blue">
+                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home"> <span class="texte_blue">
                             Accueil </span></i></a>
                     </div>
 
@@ -59,82 +60,44 @@
                     </div>
                 </div>
             </nav>
-            <div class="container-fluid">
-                <center>
-                <div class="row">
-                    <div class="col-md-2">
-                        <label for="date" style="margin:auto ; text-align:center ;">
-                            Date
-                        </label>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="debut">
-                            Horaires
-                        </label>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="cours">
-                            Cours
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="etat">
-                            Etat
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                    </div>
-                </div>
-                </center>
+
+            <div class="input-group"> <span class="input-group-addon">Filtre</span>
+                <input id="filter" type="text" class="form-control" placeholder="Saisir ici...">
             </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Cours</th>
+                        <th>Créneau</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody class="searchable">
+                @for(p <- presences){
+                    @{
+                        date = new SimpleDateFormat("dd/MM/YYYY").format(p.sonCours.heureDebut)
+                        hdebut = new SimpleDateFormat("HH:mm").format(p.sonCours.heureDebut)
+                        hfin = new SimpleDateFormat("HH:mm").format(p.sonCours.heureFin)
 
-            <form method="post" id="filtre-etu" action="">
-                <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-2 column ui-sortable">
-                            <div class="form-group">
-                                <input type="date" class="form-control" id="date" />
-                            </div>
-                    </div>
+                        hdebut = hdebut.replace(":","H");
+                        hfin = hfin.replace(":","H");
+                    }
+                    <tr>
+                        <td>@date</td>
+                        <td>@p.sonCours.saMatiere.getLibelle()</td>
+                        <td>@hdebut - @hfin</td>
+                        @if(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals("")) {
+                            <td><button id="@p.id" class="btn btn-default" type="submit">A justifier</button></td>
+                        }
+                        @if(!(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals(""))) {
+                            <td>Justifiée</td>
+                        }
 
-                    <div class="col-md-3 column ui-sortable">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="time" class="form-control" id="debut" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="time" class="form-control" id="fin" />
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-
-                    <div class="col-md-3 column ui-sortable">
-                        <div class="form-group">
-                            <select class="form-control" id="cours">
-                                <option selected disabled>--</option>
-
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 column ui-sortable">
-                            <div class="form-group">
-                                <select class="form-control" id="justifiee">
-                                    <option selected disabled>--</option>
-                                    <option>Justifiée</option>
-                                    <option>Injustifiée</option>
-                                </select>
-                            </div>
-                    </div>
-
-                    <div class="col-md-2 column ui-sortable">
-                        <button class="btn btn-default">Filtrer</button>
-                    </div>
-                </div>
-            </div>
-            </form>
+                    </tr>
+                }
+                </tbody>
+            </table>
 
                 <!-- Contenu principal dynamique JQuery -->
             <div class="content">

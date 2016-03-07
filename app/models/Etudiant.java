@@ -62,7 +62,6 @@ public class Etudiant extends Model{
             Ebean.delete(utilisateur);
     }
 
-
     public static boolean utilisateurEtudiant(Utilisateur user){
         return ((Etudiant.find.where().eq("sonUtilisateur",user).findUnique()) != null ? true : false);
     }
