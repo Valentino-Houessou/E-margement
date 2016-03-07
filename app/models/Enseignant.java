@@ -1,9 +1,10 @@
 package models;
 //TODO
 
-import javax.persistence.*;
-import com.avaje.ebean.*;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,10 @@ public class Enseignant extends Model{
 
     public static Enseignant findById (long id){
         return find.ref(id);
+    }
+
+    public static Enseignant findByUser (long id){
+        return find.where().eq("son_utilisateur_id", id).findUnique();
     }
 
     public static List<Enseignant> findAll() {

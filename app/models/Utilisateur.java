@@ -1,16 +1,17 @@
 package models;
 //TODO
 
+import com.avaje.ebean.Model;
+
+import javax.persistence.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
-import com.avaje.ebean.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Entity
 public class Utilisateur extends Model  {
@@ -194,4 +195,15 @@ public class Utilisateur extends Model  {
         return result;
     }
 
+    public static Utilisateur authenticate(String email, String password){
+        return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
+    }
+
+    public String status(){
+        String module = "";
+        for(int i = 0; i < sesModules.size(); i++){
+            module += " " + sesModules.get(i).libelle;
+        }
+        return module;
+    }
 }

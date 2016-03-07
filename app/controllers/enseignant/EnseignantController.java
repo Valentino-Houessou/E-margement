@@ -17,18 +17,17 @@ import java.util.List;
 
 public class EnseignantController extends Controller{
 
-    private Enseignant user;
+    private Enseignant teacher;
 
     public Result index() {
-        /* a remplacer par une session id */
-        user = Enseignant.findById(11);
+        teacher = Enseignant.findByUser(Long.parseLong(session().get("user_id")));
         Form<DateForm> dateform = Form.form(DateForm.class);
-        return ok(indexEnseignant.render("Espace Enseignant", user, dateform));
+        return ok(indexEnseignant.render("Espace Enseignant", teacher, dateform));
     }
 
     public Result listCours(){
         Form<DateForm> dateform = Form.form(DateForm.class).bindFromRequest();
-        return ok(list_cours.render(Cours.findByEnseignant(user.sonUtilisateur.id,dateform.get().date)));
+        return ok(list_cours.render(Cours.findByEnseignant(teacher.sonUtilisateur.id,dateform.get().date)));
     }
 
     public static class DateForm{
@@ -45,7 +44,7 @@ public class EnseignantController extends Controller{
             return ok();
         Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
         if(cours.signatureEnseignant)
-            return ok("<span>La feuille de présence de ce cours a été signé.</span>");
+            return ok("<span class='signature'>La feuille de présence de ce cours a été signé.</span>");
         return ok(list_etudiants.render(Presence.findbyCours(Long.parseLong(coursform.get().cours))));
     }
 
@@ -54,7 +53,7 @@ public class EnseignantController extends Controller{
         Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
         cours.signatureEnseignant = true;
         cours.update();
-        return ok("<span>La feuille de présence de ce cours a été signé.</span>");
+        return ok("<span class='signature'>La feuille de présence de ce cours a été signé.</span>");
     }
 
     public static class CoursForm {

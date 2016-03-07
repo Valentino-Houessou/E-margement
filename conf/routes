@@ -4,6 +4,10 @@
 
 # Home page
 GET           /                                                       controllers.Application.index()
+POST          /login                                                  controllers.Application.login()
+GET           /logout                                                 controllers.Application.logout()
+
+
 
 # utilisateur
 GET           /utilisateurs                                           controllers.utilisateur.UtilisateurController.getUtilisateurs()

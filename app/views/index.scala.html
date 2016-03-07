@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12 col-md-offset-4">
                     <div class="signup-block">
-                        <form class="form" role="form" method="POST">
+                        <form class="form" role="form" method="POST" action="@routes.Application.login()">
 
                             <div class="form-group">
 
@@ -48,7 +48,10 @@
                             </div>
 
                         </form>
-                        <span id="result" class="alertMsg"></span> </div>
+                        @if(message != ""){
+                            <span id="result" class="alertMsg"> @message </span>
+                        }
+                    </div>
 
                 </div>
             </div>
