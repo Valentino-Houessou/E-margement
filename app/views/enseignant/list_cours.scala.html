@@ -1,6 +1,6 @@
 @(cours: java.util.List[Cours])
 
-<select name="cours" id="cours" class="" data-style="btn-primary" style="width: 100%">
+<select name="cours" id="cours" class="selectpicker" data-style="btn-primary" data-width="100%" style="width: 100%">
 @if(cours.isEmpty) {
     <option value="0">Aucun cours à cette date</option>
 } else {
@@ -11,5 +11,12 @@
 }
 </select>
 
-
+<script type="text/javascript" src="@routes.Assets.versioned("selectpicker/bootstrap-select.js")"></script>
+<script type="text/javascript" src="@routes.Assets.versioned("selectpicker/defaults-fr_FR.js")"></script>
+<script type="text/javascript">
+        $('.selectpicker').selectpicker({
+            size : 3
+        });
+</script>
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("selectpicker/bootstrap-select.css")">
 
