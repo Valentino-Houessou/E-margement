@@ -2,23 +2,56 @@ package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
+import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
+import views.html.etudiant.justifierAbsences;
 import models.Presence;
 
+import java.io.File;
 import java.util.List;
+
+import static play.data.Form.form;
 
 
 public class EtudiantController extends Controller{
 
     private Etudiant user;
 
+    public Result justifierAbsences() {
+
+        //Récupérer les champs du formulaire
+       /* DynamicForm profil = form().bindFromRequest();
+       String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart justificatif = body.getFile("justificatif");
+
+        if (justificatif != null) {
+            String fileName = justificatif.getFilename();
+            String contentType = justificatif.getContentType();
+            java.io.File file = justificatif.getFile();
+
+            // Ajout dans le dossier Image : C:\Users\Kadri Saadi\Desktop\emargement\m2a20152016-feuillepresence\public\justificatifs
+            String myUploadPath = "C:\\Users\\Kadri Saadi\\Desktop\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
+            file.renameTo(new File(myUploadPath, fileName));
+            return ok("File uploaded");
+
+        } else {
+            flash("error", "Missing file");
+            return badRequest();
+        }*/
+        return ok(justifierAbsences.render("Justification"));
+    }
+
     public Result index() {
 
-        int nbabsc=Presence.getNombreAbsence(1);
+        int nbabsc=Presence.getNombreAbsence(6);
 
         return ok(indexEtudiant.render("Espace étudiant",nbabsc));
     }
@@ -160,7 +193,7 @@ public class EtudiantController extends Controller{
      */
     public Result nbAbsences(){
 
-        int nbabsc=Presence.getNombreAbsence(3700000);
+        int nbabsc=Presence.getNombreAbsence(1);
 
         return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
     }
