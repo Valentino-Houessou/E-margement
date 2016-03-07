@@ -1,12 +1,9 @@
 package models;
 
-import javax.persistence.*;
-import com.avaje.ebean.*;
+import com.avaje.ebean.Model;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Promotion extends Model{
@@ -97,6 +94,14 @@ public class Promotion extends Model{
         Promotion promotion=find.ref(id);
         promotion.sesEtudiants.add(Etudiant.findById(idMatiere));
         promotion.update();
+    }
+
+    public static List<Promotion> findAll(){
+        return find.all();
+    }
+
+    public static Promotion findbyId(long id){
+        return find.byId(id);
     }
 }
 

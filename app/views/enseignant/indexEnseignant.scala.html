@@ -1,11 +1,76 @@
-@(titre:String)(user:Enseignant)(content: Html)
+@import controllers.enseignant.EnseignantController.DateForm
+@(titre : String)(user : Enseignant)(dateform: Form[DateForm])
 
 @main("E-margement - Paris X"){
+
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/enseignant-css/enseignant.css")">
+    <script type="text/javascript" src="@routes.Assets.versioned("jquery-2.2.1.min.js")"></script>
+    <script type="text/javascript">
+            $(function() {
+                $('.input-group.date #datepicker').datepicker({
+                    dateFormat : "yy-mm-dd"
+                });
+            });
+
+            $(document).ready(function() {
+
+                $('#datepicker').on('change', function(){
+
+                    $('#datepicker').submit();
+                    $('#list_etudiant').html("");
+                    $('#validate_list').html("");
+
+                    var a = document.getElementById("datepicker");
+                    var date = a.value;
+
+                    $.ajax({
+                        method : "POST",
+                        url : "@controllers.enseignant.routes.EnseignantController.listCours()",
+                        data : { date : date },
+                        success : function(data){
+                            $('#list_cours').html(data);
+                        }
+                    });
+
+                });
+
+                $('#list_cours').on('change',function(){
+                    $('#cours').submit();
+                    var a = document.getElementById("cours");
+                    var cours = a.value;
+                    $.ajax({
+                        method : "POST",
+                        url : "@controllers.enseignant.routes.EnseignantController.listPresence()",
+                        data : { cours : cours },
+                        success : function(data){
+                            $('#validate_list').html("");
+                            $('#list_etudiant').html(data);
+                        }
+                    });
+                });
+
+                $('#validate_list').on('click',function(){
+                    alert("ici")
+                    var a = document.getElementById("cours");
+                    var cours = a.value;
+                    $.ajax({
+                        method : "POST",
+                        url : "@controllers.enseignant.routes.EnseignantController.signature()",
+                        data : { cours : cours },
+                        success : function(data){console.log("here");
+                            $('#list_etudiant').html(data);
+                            $('#validate_list').html("");
+                        }
+                    });
+                });
+            });
+    </script>
+
     <div class="wrapper">
         <div class="sidebar" data-color="Brown" data-image="@routes.Assets.versioned("images/sidebar-4.jpg")">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="#" class="simple-text"> @titre </a>
+                    <a href="@controllers.enseignant.routes.EnseignantController.index()" class="simple-text"> @titre </a>
                 </div>
             </div>
         </div>
@@ -28,15 +93,37 @@
                     </div>
                     <div class="texte_blue">
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a><span>Bonjour </span></a></li>
+                            <li><a><span>Bonjour @user.sonUtilisateur.prenom</span></a></li>
                             <li><a href="#">Logout</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
+
+            <div id="frame_tableau_presence">
+                <div class="row">
+                    <div class="panel panel-primary filterable">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Liste des Étudiants</h3>
+                        </div>
+                        <div class="form-group">
+                            <div  id="list_date" class='input-group date'>
+                                <label class="form-control" style="width: 25%">Cours du : </label>
+                                <input type='text' class="form-control" style="width: 75%" id="datepicker"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="list_cours" class="form-group ">
+                        </div>
+                        <div id="list_etudiant" class="form-group">
+                        </div>
+                        <div id="validate_list" class="form-select-button">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        @content
-
     </div>
 }

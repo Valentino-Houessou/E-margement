@@ -1,5 +1,8 @@
 package models;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Model;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -7,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.avaje.ebean.*;
 
 @Entity
 public class Cours extends Model{
@@ -35,6 +36,7 @@ public class Cours extends Model{
     public Promotion saPromo;
     @OneToMany(mappedBy = "sonCours")
     public List<Presence> sesPresences;
+    public boolean signatureEnseignant;
 
     public static Finder<Long, Cours> find = new Finder<Long, Cours>(Cours.class);
 
@@ -103,13 +105,15 @@ public class Cours extends Model{
     }
 
 
-   /* public static String getNomCours(int idcours){
-        return find.where().eq("cours.id",idcours)
-                .findUnique().saMatiere.getLibelle();
-     }*/
+    public static List<Cours> findByEnseignant(long id, String date){
+        return find.where().eq("son_enseignant_id",id).like("heureDebut",date + " %").findList();
+    }
 
     public static List<Cours> findAll(){
         return find.all();
     }
 
+    public static Cours findbyId(long id) {
+        return find.byId(id);
+    }
 }

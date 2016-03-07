@@ -1,8 +1,8 @@
 package models;
 
+import com.avaje.ebean.Model;
+
 import javax.persistence.*;
-import com.avaje.ebean.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,5 +36,11 @@ public class Presence extends Model {
         return find.all();
     }
 
+    public static List<Presence> findbyCours(long id_cours){
+        return find.where().eq("son_cours_id",id_cours).findList();
+    }
 
+    public static Presence findbyEtudiant(long id_etu,long id_cours){
+        return find.where().eq("son_etudiant_id",id_etu).eq("son_cours_id",id_cours).findUnique();
+    }
 }

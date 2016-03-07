@@ -1,0 +1,71 @@
+@(presence : java.util.List[Presence])
+
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/enseignant-js/button-checkbox.js")"></script>
+
+<table class="table table-striped custab">
+    <thead>
+        <tr class="filters">
+            <th><input type="text" class="form-control" placeholder="ID" disabled></th>
+            <th><input type="text" class="form-control" placeholder="Nom" disabled></th>
+            <th><input type="text" class="form-control" placeholder="Prenom" disabled></th>
+            <th><input type="text" class="form-control" placeholder="Status" disabled></th>
+        </tr>
+    </thead>
+    @if(presence.isEmpty) {
+        <tr><td></td><td colspan="2">Pas de feuille de présence</td><td></td></tr>
+    } else {
+        @for(student <- presence) {
+            <tr>
+                <td class="col-md-1">@student.sonEtudiant.numeroEtudiant</td>
+                <td>@student.sonEtudiant.sonUtilisateur.nom</td>
+                <td>@student.sonEtudiant.sonUtilisateur.prenom</td>
+                <td>
+                    <div id="Presence_@student.sonEtudiant.id">
+                        <span class="button-checkbox" id="prs_@student.sonEtudiant.id">
+                            <button type="button" class="btn" data-color="success" data-name="@student.sonEtudiant.id">Présent</button>
+                            <input id="@student.sonEtudiant.id" name="@student.sonEtudiant.id" value="1" type="radio"
+                                @if(student.emergement){
+                                    checked="checked"
+                                } class="hidden" />
+                        </span>
+                        <span class="button-checkbox" id="abs_@student.sonEtudiant.id">
+                            <button type="button" class="btn" data-color="danger" data-name="@student.sonEtudiant.id">Absent</button>
+                            <input id="@student.sonEtudiant.id" name="@student.sonEtudiant.id" value="0" type="radio"
+                                @if(! student.emergement){
+                                    checked="checked"
+                                } class="hidden" />
+                        </span>
+                    </div>
+                </td>
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $('#validate_list').html("<button id='validate_button' type='button'>Signer la feuille de présence</button>");
+                    });
+
+                    $('#Presence_' + @student.sonEtudiant.id).on('click',function(){
+
+                        var a = document.getElementsByName(@student.sonEtudiant.id);
+                        var presence;
+                        for(var i = 0; i < a.length; i++){
+                            if(a[i].checked){
+                                presence = a[i].value;
+                            }
+                        }
+                        presence = presence == "1" ? true : false;
+
+                        var a = document.getElementById("cours");
+                        var cours = a.value;
+                        $.ajax({
+                            method : "POST",
+                            url : "@controllers.enseignant.routes.EnseignantController.majPresence()",
+                            data : { presence : presence, idEtu : '@student.sonEtudiant.id', cours : cours },
+                            success : function(data){
+                                console.log("update @student.sonEtudiant.numeroEtudiant")
+                            }
+                        });
+                    });
+                </script>
+            </tr>
+        }
+    }
+</table>

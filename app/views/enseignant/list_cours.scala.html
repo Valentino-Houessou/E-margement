@@ -1,0 +1,15 @@
+@(cours: java.util.List[Cours])
+
+<select name="cours" id="cours" class="" data-style="btn-primary" style="width: 100%">
+@if(cours.isEmpty) {
+    <option value="0">Aucun cours à cette date</option>
+} else {
+    <option value="-1">Selectionnez un Cours</option>
+    @for(plan <- cours){
+        <option value="@plan.id">@plan.heureDebut : @plan.saMatiere.libelleAbregee - @plan.saPromo.groupe @plan.saPromo.getType</option>
+    }
+}
+</select>
+
+
+

@@ -1,11 +1,16 @@
 package controllers.enseignant;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Cours;
 import models.Enseignant;
-import play.mvc.*;
+import models.Presence;
+import play.data.Form;
 import play.libs.Json;
-
+import play.mvc.Controller;
+import play.mvc.Result;
 import views.html.enseignant.indexEnseignant;
+import views.html.enseignant.list_cours;
+import views.html.enseignant.list_etudiants;
 
 import java.util.List;
 
@@ -15,8 +20,67 @@ public class EnseignantController extends Controller{
     private Enseignant user;
 
     public Result index() {
-        return ok(indexEnseignant.render("Espace Enseignant",user,null));
+        /* a remplacer par une session id */
+        user = Enseignant.findById(11);
+        Form<DateForm> dateform = Form.form(DateForm.class);
+        return ok(indexEnseignant.render("Espace Enseignant", user, dateform));
+    }
 
+    public Result listCours(){
+        Form<DateForm> dateform = Form.form(DateForm.class).bindFromRequest();
+        return ok(list_cours.render(Cours.findByEnseignant(user.sonUtilisateur.id,dateform.get().date)));
+    }
+
+    public static class DateForm{
+        public String date;
+
+        public String validate(){
+            return null;
+        }
+    }
+
+    public Result listPresence() {
+        Form<CoursForm> coursform = Form.form(CoursForm.class).bindFromRequest();
+        if(coursform.get().cours.equals("-1"))
+            return ok();
+        Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
+        if(cours.signatureEnseignant)
+            return ok("<span>La feuille de présence de ce cours a été signé.</span>");
+        return ok(list_etudiants.render(Presence.findbyCours(Long.parseLong(coursform.get().cours))));
+    }
+
+    public Result signature(){
+        Form<CoursForm> coursform = Form.form(CoursForm.class).bindFromRequest();
+        Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
+        cours.signatureEnseignant = true;
+        cours.update();
+        return ok("<span>La feuille de présence de ce cours a été signé.</span>");
+    }
+
+    public static class CoursForm {
+        public String cours;
+
+        public String validate(){
+            return null;
+        }
+    }
+
+    public Result majPresence(){
+        Form<PresenceForm> presenceform = Form.form(PresenceForm.class).bindFromRequest();
+        Presence newPresence = Presence.findbyEtudiant(Long.parseLong(presenceform.get().idEtu),Long.parseLong(presenceform.get().cours));
+        newPresence.emergement = Boolean.parseBoolean(presenceform.get().presence);
+        newPresence.update();
+        return ok();
+    }
+
+    public static class PresenceForm{
+        public String presence;
+        public String cours;
+        public String idEtu;
+
+        public String validate(){
+            return null;
+        }
     }
 
     public Result ajoutProf() {
@@ -111,10 +175,6 @@ public class EnseignantController extends Controller{
 
     public  Result getEnseignant(long id) {
             return ok(Json.toJson(Enseignant.findById(id)));
-    }
-
-    public  Result listPresent() {
-        return ok();
     }
 
 }

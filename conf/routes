@@ -14,12 +14,19 @@ DELETE        /utilisateur-delete                                     controller
 
 # Enseignant
 GET           /enseignant/                                            controllers.enseignant.EnseignantController.index()
+POST          /enseignant/cours                                       controllers.enseignant.EnseignantController.listCours()
+POST          /enseignant/student                                     controllers.enseignant.EnseignantController.listPresence()
+POST          /enseignant/update                                      controllers.enseignant.EnseignantController.majPresence()
+POST          /enseignant/signature                                   controllers.enseignant.EnseignantController.signature()
+
+
+
+
 GET           /enseignant/profil/:id                                  controllers.enseignant.EnseignantController.getEnseignant(id : Long)
 GET           /enseignant/listEnseignant                              controllers.enseignant.EnseignantController.getListEnseignant()
 PUT           /enseignant/ajout                                       controllers.enseignant.EnseignantController.ajoutProf()
 POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
 DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
-GET           /enseignant/listePresence                               controllers.enseignant.EnseignantController.listPresent()
 
 # etudiant
 GET           /etudiant/indexEtudiant                                 controllers.etudiant.EtudiantController.index()

@@ -28,6 +28,7 @@ create table cours (
   sa_salle_id               integer,
   sa_periode_id             integer,
   sa_promo_id               bigint,
+  signature_enseignant      tinyint(1) default 0,
   constraint pk_cours primary key (id))
 ;
 
