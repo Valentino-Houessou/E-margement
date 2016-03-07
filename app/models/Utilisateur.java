@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class Utilisateur extends Model  {
                                      String dateDeNaissance, String lienPhoto){
         Timestamp ddn = null;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date ddnd = formatter.parse(dateDeNaissance);
+            DateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date ddnd = (Date) formatter.parse(dateDeNaissance);
             ddn = new Timestamp(ddnd.getTime());
         } catch (ParseException e) {
             e.printStackTrace();

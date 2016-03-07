@@ -1,12 +1,239 @@
 @*******************************************
-* Bloc pour gérer un profil enseignant     *
+* Bloc pour gérer les enseignants     *
 ********************************************@
-@(titrepage: String)
+@(titrepage: String)(lesEnseignants: java.util.List[Enseignant])(etape: String)
 
 <!-- Début du block dynamique-->
 <div>
-    <h1> @titrepage </h1>
+    <h1 style="margin-top: 0px;"> @titrepage </h1>
 
-    <p> Ici le block pour gérer un profil enseignant </p>
+    @if(etape == "accueil"){
+        <div class="alert alert-info" role="alert">
+            <p>
+                <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
+            </p>
+        </div>
+
+            <!-- Columns are always 50% wide, on mobile and desktop -->
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="list-group">
+                    <li class="list-group-item active">Ajouter des enseignants</li>
+                    <div id="reduire_espace">
+                        <a href="#" id="ajoutProf"><button type="button" class="btn btn-info-outline btn-lg btn-block">Ajouter un professeur</button></a>
+                        <p class="centrer_texte"> Ou </p>
+                        <a href="#"><button type="button" class="btn btn-info-outline btn-lg btn-block">Charger la liste des professeurs</button></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="list-group">
+                    <li class="list-group-item active">Ci-joint la liste des professeurs</li>
+                    <div class="input-group">
+                        <span class="input-group-addon">Filtrer</span>
+                        <input id="filter" type="text" class="form-control" placeholder="Filtrer ici...">
+                    </div>
+                    <div style="height: 350px; overflow: auto;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th><b>Nom</b></th>
+                                    <th><b>Prénom</b></th>
+                                    <th><b>Status</b></th>
+                                    <th><b>Gérer</b></th>
+                                    <th><b>Supprimer</b></th>
+                                </tr>
+                            </thead>
+                            <tbody class="searchable">
+                            @for(enseignant <- lesEnseignants) {
+                                <tr>
+                                    <td> @enseignant.sonUtilisateur.nom </td>
+                                    <td> @enseignant.sonUtilisateur.prenom </td>
+                                    <td> @enseignant.statut </td>
+                                    <td> <button type="button" class="btn btn-default btn-sm">Gérer</button> </td>
+                                    <td class="centrer_texte"> <a href="#"><img src="@routes.Assets.versioned("images/supprimer.png")" alt="Logo Supprimer" height="30" width="30"/></a></td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if(etape == "ajout-simple"){
+        <div>
+            <div class="card card-user">
+                <div class="image">
+                    <img src="@routes.Assets.versioned("images/Image-pro1.jpg")"  alt="Image pro"/>
+                </div>
+                <div class="content">
+                    <div class="author">
+                        <img class="avatar border-gray" src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Recrutement"/>
+                    </div>
+
+
+                    <form id="nouveauProfesseur" method="post" action="/administrateur/gerer-utilisateur/creer-enseignant" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input type="text" id="nom" name="nom" class="form-control"  />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Prenom</label>
+                                    <input type="text" id="prenom" name="prenom" class="form-control"  />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Adresse mail</label>
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email"  />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Mot de passe </label>
+                                    <input type="password" class="form-control" id="mdp" name="mdp"  />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="datepicker10">Date de naissance</label>
+                                    <input type="text" class="form-control" name="datepicker10" placeholder="Cliquer ici" id="datepicker10" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Status de l'enseignant</label>
+                                    <input type="text" class="form-control" id="status" name="status" placeholder="Exemple: SUP, VAC, PRAG ..."  />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>A t'il des droits administrateur ?</label>
+                                    <label class="radio-inline"><input type="radio" name="droits" value="OUI" />Oui</label>
+                                    <label class="radio-inline"><input type="radio" name="droits" value="NON" checked />Non</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Ajouter une photo (Facultatif)</label>
+                                    <input type="file" class="form-control" id="photo" name="photo" />
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-fill">Créer le Profil</button>
+                    </form>
+
+                </div>
+                <hr>
+                <div class="text-center">
+
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
 <!-- Fin du block dynamique-->
+
+
+<!-- Partie script -->
+<script>
+        $(function() {
+            $( "#datepicker10" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange:'-90:+0'
+            });
+        });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+        var rex = new RegExp($(this).val(), 'i');
+        $('.searchable tr').hide();
+        $('.searchable tr').filter(function () {
+        return rex.test($(this).text());
+        }).show();
+
+        })
+
+        }(jQuery));
+
+    });
+</script>
+<script>
+        $(document).ready(function(){
+            $('#ajoutProf').click(function(){
+
+                    $.ajax({
+                        url: '/administrateur/gerer-utilisateur/ajouter-enseignant',
+                        type: "GET",
+                        dataType : 'html',
+                        success: function(data) {
+
+                            $("#charger_fonctionnalite").html(data);
+
+                        },
+                        error: function() {
+                            alert("Erreur de chargement de la page ajouter enseignant !")
+                        }
+                    });
+
+            });
+        });
+</script>
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#nouveauProfesseur').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var formdata = (window.FormData) ? new FormData($form[0]) : null;
+                    var data = (formdata !== null) ? formdata : $form.serialize();
+
+
+                    if(($("#nom").val() != '') && ($("#prenom").val() != '') && ($("#email").val() != '') && ($("#mdp").val() != '') && ($("#status").val() != ''))
+                    {
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            contentType: false, // obligatoire pour de l'upload
+                            processData: false, // obligatoire pour de l'upload
+                            dataType: 'html', // selon le retour attendu
+                            data: data,
+                            success: function (response) {
+                                $("#charger_fonctionnalite").html(data);
+                            },
+                            error: function() {
+                                alert("Erreur de création du profil enseignant !")
+                            }
+                        });
+                    }else{
+                        alert("Les champs doivent être remplis !")
+                    }
+                });
+            });
+        });
+</script>
+<!-- ./ fin partie script -->

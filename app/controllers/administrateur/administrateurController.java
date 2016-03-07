@@ -23,6 +23,7 @@ import views.html.administrateur.validerJustificatifsAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
+import java.io.File;
 import java.text.ParseException;
 import java.util.List;
 import controllers.administrateur.gestionDesParametres.parametresExportationFeuillesPresence;
@@ -37,6 +38,7 @@ public class administrateurController extends Controller {
     public parametresExportationFeuillesPresence paramEFP = parametresExportationFeuillesPresence.getInstance();
     @Inject
     public PdfGenerator pdfGenerator;
+
 
     /**
      * adminIndex()
@@ -60,11 +62,85 @@ public class administrateurController extends Controller {
 
     /**
      * gererUtilisateurEnseignant()
-     * Affichage du bloc dynamique JQuery pour gérer un profil enseignant
+     * Affichage du bloc dynamique JQuery pour gérer les enseignants
      * @return gererUtilisateurEnseignant.scala.html
      */
-    public Result gererUtilisateurEnseignant() {
-        return ok(gererUtilisateurEnseignant.render("Gérer un profil enseignant"));
+    public Result gererUtilisateurEnseignant()
+    {
+        // 0 - Etape : accueil
+        String etape = "accueil";
+
+        // 1 - Récupérer la liste des enseignants
+        List<Enseignant> lesEnseignants = Enseignant.findAll();
+
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
+    }
+
+    /**
+     * gererUtilisateurEnseignantAjouter()
+     * Affiche la page pour ajouter un enseignant dans la base de données
+     * @return gererUtilisateurEnseignant.scala.html
+     */
+    public Result gererUtilisateurEnseignantAjouter()
+    {
+
+        // 0 - Etape : accueil
+        String etape = "ajout-simple";
+
+        // 1 - Récupérer la liste des enseignants
+        List<Enseignant> lesEnseignants = Enseignant.findAll();
+
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
+    }
+
+    /**
+     * gererUtilisateurEnseignantCreer()
+     * Création du profil enseignant. Tables [Utilisateur et Enseignants]
+     * @return
+     */
+    public Result gererUtilisateurEnseignantCreer()
+    {
+        // 0 - Etape : accueil
+        String etape = "profile-creer";
+
+        // 1 - Récupérer la liste des enseignants
+        List<Enseignant> lesEnseignants = Enseignant.findAll();
+
+        // 2 - Récupérer les champs du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datepicker10");
+        String status = profil.get("status");
+        String droits = profil.get("droits");
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
+            //String myUploadPath = Play.application().configuration().getString("myUploadPath");
+            String myUploadPath = "C:\\Users\\Yoan D\\Desktop\\Play_Framework_2.0\\m2a20152016-feuillepresence\\public\\images\\Photos-utilisateurs";
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+
+
+        } else {
+
+            // Insertion dans Utilisateur
+            datenaissance = datenaissance.replace("/", "-");
+            Utilisateur.create(nom,prenom,adresseMail,mdp,datenaissance,"");
+        }
+
+        System.out.println("Information " +" "+ status+ " " + droits);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
     }
 
     /**
@@ -284,7 +360,7 @@ public class administrateurController extends Controller {
     }
 
     public  Result exporterFeuilleDatePDF() {
-        return pdfGenerator.ok(exporterFeuilleDatePDF.render("Hello world", parametresExportationFeuillesPresence.getInstance()), Configuration.root().getString("application.host"));
+        return pdfGenerator.ok(exporterFeuilleDatePDF.render("By Ftgotc", parametresExportationFeuillesPresence.getInstance()), Configuration.root().getString("application.host"));
     }
 
     /**

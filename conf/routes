@@ -45,6 +45,8 @@ POST          /etudiant/modification                                  controller
 GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
 GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
+GET           /administrateur/gerer-utilisateur/ajouter-enseignant    controllers.administrateur.administrateurController.gererUtilisateurEnseignantAjouter()
+POST          /administrateur/gerer-utilisateur/creer-enseignant      controllers.administrateur.administrateurController.gererUtilisateurEnseignantCreer()
 GET           /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
 GET           /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()

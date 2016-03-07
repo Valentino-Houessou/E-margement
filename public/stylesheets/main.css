@@ -80,3 +80,6 @@
 .vert{
     background-color: greenyellow;
 }
+#reduire_espace {
+    margin: 10%;
+}

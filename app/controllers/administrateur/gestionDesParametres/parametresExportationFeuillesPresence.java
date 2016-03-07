@@ -204,7 +204,7 @@ public class parametresExportationFeuillesPresence
     /**
      * Remonte l'identitée des étudiants qui sont dans une promotion donnée
      * @param idpromotionselectionnee
-     * @return
+     * @return Les étudiants de la promotion
      */
     public static List<Utilisateur> getEtudiantsParPromotion(int idpromotionselectionnee)
     {

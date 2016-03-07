@@ -1,11 +1,12 @@
 package models;
 //TODO
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Model;
-
 import javax.persistence.*;
+import com.avaje.ebean.*;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -58,11 +59,13 @@ public class Enseignant extends Model{
             Ebean.delete(utilisateur);
     }
 
-    public static boolean utilisateurEnseignant(Utilisateur user){
+    public static boolean utilisateurEnseignant(Utilisateur user)
+    {
         return (Enseignant.find.where().eq("sonUtilisateur", user).findUnique()) != null ? true : false;
     }
 
-    public static Enseignant findById (long id){
+    public static Enseignant findById (long id)
+    {
         return find.ref(id);
     }
 
@@ -70,7 +73,22 @@ public class Enseignant extends Model{
         return find.where().eq("son_utilisateur_id", id).findUnique();
     }
 
+    /**
+     * Récupérer toute la liste des enseignants
+     * Trié par ordre croissant suivant le nom
+     * @return les enseignants
+     */
     public static List<Enseignant> findAll() {
-        return find.all();
+        List<Enseignant> lesEnseignants = find.all();
+
+        // Trie des utilisateurs par ordre croissant par rapport à leur nom de famille
+        Collections.sort(lesEnseignants, new Comparator<Enseignant>() {
+            @Override
+            public int compare(Enseignant tc1, Enseignant tc2) {
+                return tc1.sonUtilisateur.nom.compareTo(tc2.sonUtilisateur.nom);
+            }
+        });
+
+        return lesEnseignants;
     }
 }
