@@ -2,6 +2,8 @@ package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
+import play.api.Play;
+import play.api.mvc.BodyParsers;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -11,42 +13,36 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
+import views.html.index;
+
 
 import java.io.File;
 import java.util.List;
 
-import static play.data.Form.form;
 
 
 public class EtudiantController extends Controller{
 
     private Etudiant user;
 
-    public Result justifierAbsences() {
+    public  Result uploadFile() {
+        return ok(index.render(""));
+    }
 
-        //Récupérer les champs du formulaire
-       /* DynamicForm profil = form().bindFromRequest();
-       String nom = profil.get("nom");
-        String prenom = profil.get("prenom");
+    public  void upload(File fileTouilleur){
 
-        Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart justificatif = body.getFile("justificatif");
+        File newFile= Play.getFile("/public/justificatifs/" + fileTouilleur.getName());
+        fileTouilleur.renameTo(newFile);
+        fileTouilleur.delete();
 
-        if (justificatif != null) {
-            String fileName = justificatif.getFilename();
-            String contentType = justificatif.getContentType();
-            java.io.File file = justificatif.getFile();
+        //flash.success("Success "+newFile.getAbsolutePath());
 
-            // Ajout dans le dossier Image : C:\Users\Kadri Saadi\Desktop\emargement\m2a20152016-feuillepresence\public\justificatifs
-            String myUploadPath = "C:\\Users\\Kadri Saadi\\Desktop\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
-            file.renameTo(new File(myUploadPath, fileName));
-            return ok("File uploaded");
+        uploadFile();
+    }
 
-        } else {
-            flash("error", "Missing file");
-            return badRequest();
-        }*/
-        return ok(justifierAbsences.render("Justification"));
+
+    public Result justifierAbsences(){
+        return ok(justifierAbsences.render("Justification d'absences"));
     }
 
     public Result index() {
@@ -97,7 +93,7 @@ public class EtudiantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-             Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
+                Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
 
                 return ok(/*Json.toJson(etudiant)*/);
             }

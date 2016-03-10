@@ -1,11 +1,14 @@
 package controllers;
 
 import models.Utilisateur;
+import play.api.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.directionModule;
 import views.html.index;
+
+import java.io.File;
 
 public class Application extends Controller {
 
@@ -14,6 +17,7 @@ public class Application extends Controller {
     public Result index() {
         return ok(index.render(""));
     }
+
 
     public Result login(){
         Form<LoginForm> loginform = Form.form(LoginForm.class).bindFromRequest();

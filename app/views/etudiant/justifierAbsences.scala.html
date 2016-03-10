@@ -1,5 +1,7 @@
 @import models.Etudiant
 @import views.html.helper.form
+@import controllers.etudiant._
+@import controllers.etudiant.EtudiantController._
 @(titrepage:String)
 
 
@@ -7,7 +9,7 @@
 @main("E-margement - Paris X"){
 
     <div class="wrapper">
-        <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
+       <div class="sidebar" data-color="blue" data-image=@routes.Assets.versioned("images/jsenc.png")">-->
 
             <div class="sidebar-wrapper">
                 <div class="logo">
@@ -73,17 +75,14 @@
 
                 <br/> <br/><br/> <br/> <br/> <br/>
 
-                <form id="justifier" name="justifierAbsences" class="form-horizontal" role="form"  action = "etudiant/justifierAbsences" enctype -> "multipart/form-data">
+                <h3>Télécharger une image</h3>
 
-                    <input type="file" name="justificatif">
-
+                @form(action = upload, 'enctype -> "multipart/form-data") {
+                    <input type="file" name="fileUpload">
                     <p>
-                        <input type="submit">
+                        <input type="submit" value="Upload">
                     </p>
-                </form>
-
-
-            </div>
+                }
 
 
                 <!-- Fin contenu principal -->

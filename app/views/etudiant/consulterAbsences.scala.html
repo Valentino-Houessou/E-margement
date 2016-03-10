@@ -2,7 +2,7 @@
 @import models.Cours
 @import java.text.SimpleDateFormat
 @(titrepage: String)(presences: java.util.List[Presence])
-@import java.util.Date; var hdebut=""; var hfin=""; var date="";
+@import java.util.Date; var hdebut=""; var hfin=""; var date=""; var substring="";
 
 @main("E-margement - Paris X") {
     <div class="wrapper">
@@ -88,10 +88,13 @@
                         <td>@p.sonCours.saMatiere.getLibelle()</td>
                         <td>@hdebut - @hfin</td>
                         @if(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals("")) {
-                            <td><button id="@p.id" class="btn btn-default" type="submit">A justifier</button></td>
+                            <td><button id="@p.id" class="btn btn-default" type="button" onclick="self.location.href='/etudiant/justifierAbsences'">A justifier</button></td>
                         }
                         @if(!(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals(""))) {
-                            <td>Justifiée</td>
+                            @{
+                                substring = p.justificatif.substring(p.justificatif.lastIndexOf('/')+1)
+                            }
+                            <td>Justifiée : <a href="@p.justificatif" download="@substring">@p.motif</a></td>
                         }
 
                     </tr>
