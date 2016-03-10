@@ -2,7 +2,7 @@
 @import models.Cours
 @import java.text.SimpleDateFormat
 @(titrepage: String)(presences: java.util.List[Presence])
-@import java.util.Date; var hdebut=""; var hfin=""; var date=""; var substring="";
+@import java.util.Date; var hdebut=""; var hfin=""; var date=""; var nomMotif="";
 
 @main("E-margement - Paris X") {
     <div class="wrapper">
@@ -75,6 +75,7 @@
                 </thead>
                 <tbody class="searchable">
                 @for(p <- presences){
+
                     @{
                         date = new SimpleDateFormat("dd/MM/YYYY").format(p.sonCours.heureDebut)
                         hdebut = new SimpleDateFormat("HH:mm").format(p.sonCours.heureDebut)
@@ -87,17 +88,20 @@
                         <td>@date</td>
                         <td>@p.sonCours.saMatiere.getLibelle()</td>
                         <td>@hdebut - @hfin</td>
-                        @if(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals("")) {
-                            <td><button id="@p.id" class="btn btn-default" type="button" onclick="self.location.href='/etudiant/fileUpload'">A justifier</button></td>
+                        @if(p.justificatif==null || p.motif==null) {
+                            <form method="post" action="/etudiant/justifierAbsences" >
+                                 <td><button type="submit" class="btn btn-default">A justifier</button></td>
+
+                                <input type="hidden" id="idcours" name="idcours" value="@p.sonCours.id" />
+                                <input type="hidden" id="idpresence" name="idpresence" value="@p.id" />
+                            </form>
                         }
-                        @if(!(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals(""))) {
-                            @{
-                                substring = p.justificatif.substring(p.justificatif.lastIndexOf('/')+1)
-                            }
-                            <td>Justifiée : <a href="@p.justificatif" download="@substring">@p.motif</a></td>
+                        @if(p.justificatif != null && p.motif != null) {
+                            <td>Justifiée : <a href="@p.justificatif">@p.motif</a></td>
                         }
 
                     </tr>
+
                 }
                 </tbody>
             </table>

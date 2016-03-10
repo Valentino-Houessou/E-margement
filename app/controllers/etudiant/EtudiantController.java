@@ -1,6 +1,7 @@
 package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.*;
 import models.*;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -22,28 +23,61 @@ public class EtudiantController extends Controller{
 
     private Etudiant user;
 
+    public  Result justifierAbsences() {
+        //sesssion : idEtudiant
+        DynamicForm profil = form().bindFromRequest();
+
+        List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
+
+
+        int idpresence = Integer.parseInt(profil.get("idpresence"));
+
+        return ok(justifierAbsences.render("Justifiez vos absences",idpresence));
+}
+
+
     public Result fileUpload() {
 
         //  Récupérer les champs du formulaire
-       /* DynamicForm fileUpload = form().bindFromRequest();
+
+        DynamicForm profil = form().bindFromRequest();
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart fichier = body.getFile("fileUpload");
+
+        int idpresence = Integer.parseInt(profil.get("idpresence"));
+        //controle sur le motif
+        String motif=profil.get("motif");
+
+
+
 
         if (fichier != null) {
             String fileName = fichier.getFilename();
             String contentType = fichier.getContentType();
             java.io.File file = fichier.getFile();
 
+
             // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
-            String myUploadPath = "C:\\Users\\Kadri Saadi\\Desktop\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
+            String myUploadPath = "D:\\bin\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
             file.renameTo(new File(myUploadPath, fileName));
+
+            Presence p = Presence.find.where().eq("id",idpresence).findUnique();
+            p.motif=motif;
+            p.justificatif= myUploadPath +"\\" + fileName;
+
+            p.save();
 
         } else {
             flash("error", "Missing file");
             return badRequest();
-        }*/
-        return ok(justifierAbsences.render("Justifiez vos absences"));
+        }
+        /*List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
+
+        return ok(consulterAbsences.render("Consulter vos absences", presences));*/
+
+        return redirect(routes.EtudiantController.consulterAbsences());
+
     }
 
     public Result index() {
@@ -94,7 +128,7 @@ public class EtudiantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-             Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
+                Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
 
                 return ok(/*Json.toJson(etudiant)*/);
             }
@@ -208,3 +242,8 @@ public class EtudiantController extends Controller{
         return null;
     }
 }
+
+
+
+
+

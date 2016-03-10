@@ -1,6 +1,5 @@
-
 @import controllers.routes
-@(titrepage:String)
+@(titrepage:String)(idpresence:Int)
 
 
 
@@ -74,7 +73,17 @@
 
                 <br/> <br/><br/> <br/> <br/> <br/>
 
+                <form action="/etudiant/fileUpload" method="post" enctype="multipart/form-data">
 
+                    <input type="file" id="fileUpload" name="fileUpload"/>
+                    <br>
+                    <input type="text" id="motif" name="motif" required/>
+                    <input type="hidden" id="idpresence" name="idpresence" value="@idpresence" />
+
+
+                    <input type="submit" value="Upload"/>
+
+                </form>
 
 
 
