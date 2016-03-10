@@ -31,13 +31,13 @@ PUT           /enseignant/ajout                                       controller
 POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
 DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
 
+
 # etudiant
 GET           /etudiant/indexEtudiant                                 controllers.etudiant.EtudiantController.index()
 GET           /etudiant/consulterAbsences                             controllers.etudiant.EtudiantController.consulterAbsences()
 PUT           /etudiant/ajout                                         controllers.etudiant.EtudiantController.ajoutEtudiant()
 POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
-GET           /etudiant/justifierAbsences                             controllers.etudiant.EtudiantController.justifierAbsences()
-POST          /etudiant/uploadFile                                    controllers.etudiant.EtudiantController.uploadFile()
+GET          /etudiant/fileUpload                                    controllers.etudiant.EtudiantController.fileUpload()
 
 
 #Fonction notifier présence

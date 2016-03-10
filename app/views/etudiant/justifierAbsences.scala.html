@@ -1,7 +1,5 @@
-@import models.Etudiant
-@import views.html.helper.form
-@import controllers.etudiant._
-@import controllers.etudiant.EtudiantController._
+
+@import controllers.routes
 @(titrepage:String)
 
 
@@ -9,9 +7,10 @@
 @main("E-margement - Paris X"){
 
     <div class="wrapper">
-       <div class="sidebar" data-color="blue" data-image=@routes.Assets.versioned("images/jsenc.png")">-->
+        <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
 
-            <div class="sidebar-wrapper">
+
+        <div class="sidebar-wrapper">
                 <div class="logo">
                     <a href="#" class="simple-text">
                     @titrepage
@@ -75,18 +74,12 @@
 
                 <br/> <br/><br/> <br/> <br/> <br/>
 
-                <h3>Télécharger une image</h3>
 
-                @form(action = upload, 'enctype -> "multipart/form-data") {
-                    <input type="file" name="fileUpload">
-                    <p>
-                        <input type="submit" value="Upload">
-                    </p>
-                }
+
+
 
 
                 <!-- Fin contenu principal -->
         </div>
     </div>
-
 }

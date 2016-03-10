@@ -2,8 +2,6 @@ package controllers.etudiant;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
-import play.api.Play;
-import play.api.mvc.BodyParsers;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -13,36 +11,39 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
-import views.html.index;
-
 
 import java.io.File;
 import java.util.List;
 
+import static play.data.Form.form;
 
 
 public class EtudiantController extends Controller{
 
     private Etudiant user;
 
-    public  Result uploadFile() {
-        return ok(index.render(""));
-    }
+    public Result fileUpload() {
 
-    public  void upload(File fileTouilleur){
+        //  Récupérer les champs du formulaire
+       /* DynamicForm fileUpload = form().bindFromRequest();
 
-        File newFile= Play.getFile("/public/justificatifs/" + fileTouilleur.getName());
-        fileTouilleur.renameTo(newFile);
-        fileTouilleur.delete();
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart fichier = body.getFile("fileUpload");
 
-        //flash.success("Success "+newFile.getAbsolutePath());
+        if (fichier != null) {
+            String fileName = fichier.getFilename();
+            String contentType = fichier.getContentType();
+            java.io.File file = fichier.getFile();
 
-        uploadFile();
-    }
+            // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
+            String myUploadPath = "C:\\Users\\Kadri Saadi\\Desktop\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
+            file.renameTo(new File(myUploadPath, fileName));
 
-
-    public Result justifierAbsences(){
-        return ok(justifierAbsences.render("Justification d'absences"));
+        } else {
+            flash("error", "Missing file");
+            return badRequest();
+        }*/
+        return ok(justifierAbsences.render("Justifiez vos absences"));
     }
 
     public Result index() {
@@ -93,7 +94,7 @@ public class EtudiantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
+             Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
 
                 return ok(/*Json.toJson(etudiant)*/);
             }

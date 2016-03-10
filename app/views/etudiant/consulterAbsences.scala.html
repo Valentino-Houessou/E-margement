@@ -17,7 +17,7 @@
 
                 <ul class="nav">
                     <li>
-                        <a href="#" id="ft3">
+                        <a href="/etudiant/consulterAbsences" id="consul">
                             <i class="pe-7s-news-paper"></i>
                             <p>Consulter les  <span class="recadrer_mot">absences</span></p>
                         </a>
@@ -88,7 +88,7 @@
                         <td>@p.sonCours.saMatiere.getLibelle()</td>
                         <td>@hdebut - @hfin</td>
                         @if(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals("")) {
-                            <td><button id="@p.id" class="btn btn-default" type="button" onclick="self.location.href='/etudiant/justifierAbsences'">A justifier</button></td>
+                            <td><button id="@p.id" class="btn btn-default" type="button" onclick="self.location.href='/etudiant/fileUpload'">A justifier</button></td>
                         }
                         @if(!(p.justificatif==null || p.justificatif.equals("") || p.motif==null ||p.motif.equals(""))) {
                             @{
@@ -101,6 +101,7 @@
                 }
                 </tbody>
             </table>
+
 
                 <!-- Contenu principal dynamique JQuery -->
             <div class="content">
