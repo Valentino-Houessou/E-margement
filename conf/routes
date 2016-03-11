@@ -8,7 +8,6 @@ POST          /                                                       controller
 GET           /logout                                                 controllers.Application.logout()
 
 
-
 # utilisateur
 GET           /utilisateurs                                           controllers.utilisateur.UtilisateurController.getUtilisateurs()
 POST          /utilisateur-byMail                                     controllers.utilisateur.UtilisateurController.getUtilisateurByMail()
@@ -32,11 +31,15 @@ PUT           /enseignant/ajout                                       controller
 POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
 DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
 
+
 # etudiant
 GET           /etudiant/indexEtudiant                                 controllers.etudiant.EtudiantController.index()
 GET           /etudiant/consulterAbsences                             controllers.etudiant.EtudiantController.consulterAbsences()
 PUT           /etudiant/ajout                                         controllers.etudiant.EtudiantController.ajoutEtudiant()
 POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
+POST          /etudiant/justifierAbsences                             controllers.etudiant.EtudiantController.justifierAbsences()
+POST          /etudiant/fileUpload                                    controllers.etudiant.EtudiantController.fileUpload()
+
 
 #Fonction notifier présence
 

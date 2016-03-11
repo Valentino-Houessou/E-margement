@@ -1,6 +1,5 @@
-@import models.Etudiant
-@import views.html.helper.form
-@(titrepage:String)
+@import controllers.routes
+@(titrepage:String)(idpresence:Int)
 
 
 
@@ -9,7 +8,8 @@
     <div class="wrapper">
         <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
 
-            <div class="sidebar-wrapper">
+
+        <div class="sidebar-wrapper">
                 <div class="logo">
                     <a href="#" class="simple-text">
                     @titrepage
@@ -73,21 +73,22 @@
 
                 <br/> <br/><br/> <br/> <br/> <br/>
 
-                <form id="justifier" name="justifierAbsences" class="form-horizontal" role="form"  action = "etudiant/justifierAbsences" enctype -> "multipart/form-data">
+                <form action="/etudiant/fileUpload" method="post" enctype="multipart/form-data">
 
-                    <input type="file" name="justificatif">
+                    <input type="file" id="fileUpload" name="fileUpload"/>
+                    <br>
+                    <input type="text" id="motif" name="motif" required/>
+                    <input type="hidden" id="idpresence" name="idpresence" value="@idpresence" />
 
-                    <p>
-                        <input type="submit">
-                    </p>
+
+                    <input type="submit" value="Upload"/>
+
                 </form>
 
 
-            </div>
 
 
                 <!-- Fin contenu principal -->
         </div>
     </div>
-
 }
