@@ -44,7 +44,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/etudiant/index"><i class="pe-7s-home"> <span class="texte_blue">
+                        <a class="navbar-brand" href="/etudiant/indexEtudiant"><i class="pe-7s-home"> <span class="texte_blue">
                             Accueil </span></i></a>
                     </div>
 
@@ -90,14 +90,20 @@
                         <td>@hdebut - @hfin</td>
                         @if(p.justificatif==null || p.motif==null) {
                             <form method="post" action="/etudiant/justifierAbsences" >
-                                 <td><button type="submit" class="btn btn-default">A justifier</button></td>
+                                <td><button type="submit" class="btn btn-default">A justifier</button></td>
 
                                 <input type="hidden" id="idcours" name="idcours" value="@p.sonCours.id" />
                                 <input type="hidden" id="idpresence" name="idpresence" value="@p.id" />
                             </form>
                         }
                         @if(p.justificatif != null && p.motif != null) {
-                            <td>Justifiée : <a href="@p.justificatif">@p.motif</a></td>
+                            @{
+                                nomMotif = p.justificatif.substring(p.justificatif.lastIndexOf('/')+1);
+                            }
+                            <form action="/etudiant/fileDownload" name="downloadJustif">
+                                <td>Justifiée : <a href="#" onclick="document.downloadJustif.submit();">@p.motif</a></td>
+                                <input type="hidden" id="justificatifDownload" name="justificatifDownload" value="@p.justificatif" />
+                            </form>
                         }
 
                     </tr>

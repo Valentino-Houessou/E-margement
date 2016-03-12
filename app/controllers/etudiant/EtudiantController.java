@@ -3,6 +3,7 @@ package controllers.etudiant;
 import com.fasterxml.jackson.databind.JsonNode;
 import controllers.*;
 import models.*;
+import play.Play;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -12,8 +13,11 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
+import org.jboss.vfs.VirtualFile;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -33,7 +37,7 @@ public class EtudiantController extends Controller{
         int idpresence = Integer.parseInt(profil.get("idpresence"));
 
         return ok(justifierAbsences.render("Justifiez vos absences",idpresence));
-}
+    }
 
 
     public Result fileUpload() {
@@ -53,20 +57,28 @@ public class EtudiantController extends Controller{
 
 
         if (fichier != null) {
-            String fileName = fichier.getFilename();
-            String contentType = fichier.getContentType();
-            java.io.File file = fichier.getFile();
+            if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
+                String fileName = fichier.getFilename();
+                String contentType = fichier.getContentType();
+                File file = fichier.getFile();
 
+                // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
+                String myUploadPath = Play.application().configuration().getString("justificatifsPath");
+                String dateToFileNameStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                //file.renameTo(new File(myUploadPath, user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr));
+                file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".pdf"));
 
-            // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
-            String myUploadPath = "D:\\bin\\emargement\\m2a20152016-feuillepresence\\public\\justificatifs";
-            file.renameTo(new File(myUploadPath, fileName));
+                Presence p = Presence.find.where().eq("id", idpresence).findUnique();
+                p.motif = motif;
+                //p.justificatif= myUploadPath + user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr + ".pdf";
+                p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".pdf";
 
-            Presence p = Presence.find.where().eq("id",idpresence).findUnique();
-            p.motif=motif;
-            p.justificatif= myUploadPath +"\\" + fileName;
-
-            p.save();
+                p.save();
+            }
+            else{
+                flash("error", "Fichier PDF requis");
+                return badRequest();
+            }
 
         } else {
             flash("error", "Missing file");
@@ -78,6 +90,19 @@ public class EtudiantController extends Controller{
 
         return redirect(routes.EtudiantController.consulterAbsences());
 
+    }
+
+    /**
+     * Téléchargement du justificatif d'absence
+     * @return
+     */
+    public Result fileDownload(){
+        DynamicForm profil = form().bindFromRequest();
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        String justificatif = profil.get("justificatifDownload");
+
+        response().setContentType("application/x-download");
+        return ok(new File(justificatif));
     }
 
     public Result index() {

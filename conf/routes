@@ -39,6 +39,7 @@ PUT           /etudiant/ajout                                         controller
 POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
 POST          /etudiant/justifierAbsences                             controllers.etudiant.EtudiantController.justifierAbsences()
 POST          /etudiant/fileUpload                                    controllers.etudiant.EtudiantController.fileUpload()
+GET           /etudiant/fileDownload                                  controllers.etudiant.EtudiantController.fileDownload()
 
 
 #Fonction notifier présence
