@@ -28,7 +28,10 @@ create table cours (
   sa_salle_id               integer,
   sa_periode_id             integer,
   sa_promo_id               bigint,
+<<<<<<< HEAD
   signature_enseignant      tinyint(1) default 0,
+=======
+>>>>>>> origin/Val-Branch
   constraint pk_cours primary key (id))
 ;
 
@@ -166,6 +169,7 @@ alter table enseignant add constraint fk_enseignant_sonUtilisateur_8 foreign key
 create index ix_enseignant_sonUtilisateur_8 on enseignant (son_utilisateur_id);
 alter table etudiant add constraint fk_etudiant_sonUtilisateur_9 foreign key (son_utilisateur_id) references utilisateur (id) on delete restrict on update restrict;
 create index ix_etudiant_sonUtilisateur_9 on etudiant (son_utilisateur_id);
+<<<<<<< HEAD
 alter table filiere add constraint fk_filiere_sonBatiment_10 foreign key (son_batiment_id) references batiment (id) on delete restrict on update restrict;
 create index ix_filiere_sonBatiment_10 on filiere (son_batiment_id);
 alter table presence add constraint fk_presence_sonCours_11 foreign key (son_cours_id) references cours (id) on delete restrict on update restrict;
@@ -174,6 +178,14 @@ alter table presence add constraint fk_presence_sonEtudiant_12 foreign key (son_
 create index ix_presence_sonEtudiant_12 on presence (son_etudiant_id);
 alter table salle add constraint fk_salle_sonBatiment_13 foreign key (son_batiment_id) references batiment (id) on delete restrict on update restrict;
 create index ix_salle_sonBatiment_13 on salle (son_batiment_id);
+=======
+alter table presence add constraint fk_presence_sonCours_10 foreign key (son_cours_id) references cours (id) on delete restrict on update restrict;
+create index ix_presence_sonCours_10 on presence (son_cours_id);
+alter table presence add constraint fk_presence_sonEtudiant_11 foreign key (son_etudiant_id) references etudiant (id) on delete restrict on update restrict;
+create index ix_presence_sonEtudiant_11 on presence (son_etudiant_id);
+alter table salle add constraint fk_salle_sonBatiment_12 foreign key (son_batiment_id) references batiment (id) on delete restrict on update restrict;
+create index ix_salle_sonBatiment_12 on salle (son_batiment_id);
+>>>>>>> origin/Val-Branch
 
 
 

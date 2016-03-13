@@ -119,10 +119,10 @@ var gererUtilisateurEtudiant = function() {
     })
 };
 
-var validerJustificatifsAbscences = function() {
+var gererAbscences = function() {
 
     $.ajax({
-        url: "/administrateur/valider-justificatifs-abscences",
+        url: "/administrateur/gestion-abscences",
         dataType : "html",
         type: "GET",
         success: function(data) {
@@ -153,6 +153,22 @@ var exporterJustificatifsAbscences = function() {
     })
 };
 
+var gestionAbsences = function(){
+    $.ajax({
+        url: "/administrateur/exporter-gestion-abscences",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+}
+
 
 $('#ft1').click(chargerListeEtudiant);
 $('#ft2').click(chargerEdt);
@@ -161,5 +177,5 @@ $('#ft4').click(exportFeuillePresence);
 $('#ft5').click(gererUtilisateurAdministrateur);
 $('#ft6').click(gererUtilisateurEnseignant);
 $('#ft7').click(gererUtilisateurEtudiant);
-$('#ft8').click(validerJustificatifsAbscences);
+$('#ft8').click(gererAbscences);
 $('#ft9').click(exporterJustificatifsAbscences);
