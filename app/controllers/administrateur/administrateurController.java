@@ -18,10 +18,7 @@ import views.html.administrateur.chargerListeEtudiant;
 import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
-<<<<<<< HEAD
 import views.html.administrateur.exporterFeuilleDatePDF;
-=======
->>>>>>> origin/Val-Branch
 import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;

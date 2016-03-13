@@ -46,7 +46,6 @@ GET           /etudiant/fileDownload                                  controller
 
 
 # admin
-<<<<<<< HEAD
 GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
 GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
@@ -61,7 +60,7 @@ POST          /administrateur/exporter-feuille/promotion              controller
 POST          /administrateur/exporter-feuille/date                   controllers.administrateur.administrateurController.exporterFeuilleselectionDate()
 POST          /administrateur/exporter-feuille/resultats              controllers.administrateur.administrateurController.exporterFeuilleResultatsParDate()
 GET           /administrateur/exporter-feuille/export-date            controllers.administrateur.administrateurController.exporterFeuilleDatePDF()
-GET           /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
+GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
 PUT           /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
@@ -69,7 +68,7 @@ POST          /administrateur/update-admin                            controller
 DELETE        /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
 GET           /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
 GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
-=======
+
 GET    /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET    /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
 GET    /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
@@ -87,7 +86,6 @@ POST   /administrateur/update-admin                            controllers.admin
 DELETE /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
 GET    /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
 GET    /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
->>>>>>> origin/Val-Branch
 
 
 #matière
