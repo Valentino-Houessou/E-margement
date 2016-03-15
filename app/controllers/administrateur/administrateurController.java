@@ -19,7 +19,7 @@ import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.exporterFeuilleDatePDF;
-import views.html.administrateur.validerJustificatifsAbscences;
+import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
@@ -364,12 +364,12 @@ public class administrateurController extends Controller {
     }
 
     /**
-     * validerJustificatifsAbscences()
+     * gestionAbscencesView()
      * Affichage du bloc dynamique JQuery pour valider les justificatifs d'abscences
      * @return
      */
-    public Result validerJustificatifsAbscences() {
-        return ok(validerJustificatifsAbscences.render("Valider les justificatifs d'abscences"));
+    public Result gestionAbscences() {
+        return ok(gererAbscences.render("Gérer les justificatifs d'abscences"));
     }
 
     /**

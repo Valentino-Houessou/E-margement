@@ -39,6 +39,7 @@ PUT           /etudiant/ajout                                         controller
 POST          /etudiant/modification                                  controllers.etudiant.EtudiantController.modifEtudiant()
 POST          /etudiant/justifierAbsences                             controllers.etudiant.EtudiantController.justifierAbsences()
 POST          /etudiant/fileUpload                                    controllers.etudiant.EtudiantController.fileUpload()
+GET           /etudiant/fileDownload                                  controllers.etudiant.EtudiantController.fileDownload()
 
 
 #Fonction notifier présence
@@ -61,7 +62,7 @@ POST          /administrateur/exporter-feuille/promotion              controller
 POST          /administrateur/exporter-feuille/date                   controllers.administrateur.administrateurController.exporterFeuilleselectionDate()
 POST          /administrateur/exporter-feuille/resultats              controllers.administrateur.administrateurController.exporterFeuilleResultatsParDate()
 GET           /administrateur/exporter-feuille/export-date            controllers.administrateur.administrateurController.exporterFeuilleDatePDF()
-GET           /administrateur/valider-justificatifs-abscences         controllers.administrateur.administrateurController.validerJustificatifsAbscences()
+GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
 PUT           /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
@@ -69,6 +70,24 @@ POST          /administrateur/update-admin                            controller
 DELETE        /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
 GET           /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
 GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
+
+GET    /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
+GET    /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
+GET    /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
+GET    /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
+GET    /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET    /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
+GET    /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
+GET    /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
+POST   /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
+GET    /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
+GET    /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
+
+PUT    /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
+POST   /administrateur/update-admin                            controllers.administrateur.administrateurController.updateAdmin()
+DELETE /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
+GET    /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
+GET    /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
 
 
 #matière
