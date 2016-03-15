@@ -111,7 +111,7 @@ public class EnseignantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Enseignant enseignant = Enseignant.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                Enseignant enseignant = null;//Enseignant.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
                 return ok(Json.toJson(enseignant));
             }

@@ -127,15 +127,6 @@ public class Promotion extends Model{
         return find.all();
     }
 
-
-
-
-
-    public static List<Promotion> getAllPromotion()
-    {
-        return find.all();
-    }
-
     public static List<Matiere> getSerina(int idDeSerina)
     {
         // 0 - Je trouve l'étudiant

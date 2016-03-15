@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import controllers.administrateur.gestionDesParametres.PdfGenerator;
 import models.Universite;
 import play.Configuration;
+import play.Play;
 import play.libs.Json;
 import play.data.DynamicForm;
 import static play.data.Form.form;
@@ -25,8 +26,10 @@ import models.*;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import controllers.administrateur.gestionDesParametres.parametresExportationFeuillesPresence;
+import controllers.administrateur.gestionDesParametres.parametresProfilCree;
 
 
 import javax.inject.Inject;
@@ -36,6 +39,9 @@ public class administrateurController extends Controller {
 
     // (Singleton)Permet de gérer l'ensemble des parametres pour la fonction exporter feuille de présence
     public parametresExportationFeuillesPresence paramEFP = parametresExportationFeuillesPresence.getInstance();
+    // (Singleton)Permet de gérer l'ensemble des parametres pour la fonction gererUtilisateurEnseignantCreer()
+    public parametresProfilCree paramPC = parametresProfilCree.getInstance();
+    // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
 
@@ -73,7 +79,7 @@ public class administrateurController extends Controller {
         // 1 - Récupérer la liste des enseignants
         List<Enseignant> lesEnseignants = Enseignant.findAll();
 
-        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape, paramPC));
     }
 
     /**
@@ -90,7 +96,7 @@ public class administrateurController extends Controller {
         // 1 - Récupérer la liste des enseignants
         List<Enseignant> lesEnseignants = Enseignant.findAll();
 
-        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants - Ajout d'un profil", lesEnseignants, etape, paramPC));
     }
 
     /**
@@ -115,32 +121,64 @@ public class administrateurController extends Controller {
         String datenaissance = profil.get("datepicker10");
         String status = profil.get("status");
         String droits = profil.get("droits");
+        List<Module> module = new ArrayList<Module>();
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        // Liaison avec ses modules
+        // Si droits = OUI Il est enseignant et administrateur
+        if(droits.equals("OUI")){
+            Module ajoutModule1 = Module.findByLibelle("ENSEIGNANTS");
+            Module ajoutModule2 = Module.findByLibelle("ADMINISTRATEURS");
+
+            module.add(ajoutModule1);
+            module.add(ajoutModule2);
+        }else{
+            Module ajoutModule1 = Module.findByLibelle("ENSEIGNANTS");
+
+            module.add(ajoutModule1);
+        }
 
         if (photo != null) {
             String fileName = photo.getFilename();
             String contentType = photo.getContentType();
             java.io.File file = photo.getFile();
 
-            // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
-            //String myUploadPath = Play.application().configuration().getString("myUploadPath");
-            String myUploadPath = "C:\\Users\\Yoan D\\Desktop\\Play_Framework_2.0\\m2a20152016-feuillepresence\\public\\images\\Photos-utilisateurs";
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom+"_"+prenom+"_"+fileName;
+
             file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
 
+            // Création du profil enseignant avec photo
+            datenaissance= datenaissance.replace("/", "-");
+            String[] parts = datenaissance.split("-");
+            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0]+ " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            String lienPhoto = myUploadPath+fileName;
 
+            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, lienPhoto, status, module);
 
+            // Chargement des paramettres pour affichage dans la vue
+            paramPC.remiseAzero();
+            paramPC.affectation(nom, prenom, adresseMail, datenaissance, status, droits, lienPhoto);
         } else {
 
-            // Insertion dans Utilisateur
-            datenaissance = datenaissance.replace("/", "-");
-            Utilisateur.create(nom,prenom,adresseMail,mdp,datenaissance,"");
+            // Création du profil enseignant sans photo
+            datenaissance= datenaissance.replace("/", "-");
+            String[] parts = datenaissance.split("-");
+            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+
+            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status, module);
+
+            // Chargement des paramettres pour affichage dans la vue
+            paramPC.remiseAzero();
+            paramPC.affectation(nom, prenom, adresseMail, datenaissance, status, droits, "");
+
         }
 
-        System.out.println("Information " +" "+ status+ " " + droits);
-
-        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape));
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants - Profil créé", lesEnseignants, etape, paramPC));
     }
 
     /**
@@ -207,7 +245,7 @@ public class administrateurController extends Controller {
         List<Universite> universites = Universite.getUniversite();
         paramEFP.setListeUniversites(universites);
 
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
     /**
@@ -235,7 +273,7 @@ public class administrateurController extends Controller {
         // 3 - On garde l'université sélectionné
         paramEFP.setSelectionUniversite(universite);
 
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
     /**
@@ -267,7 +305,7 @@ public class administrateurController extends Controller {
         int universite = Integer.parseInt(batiments.get("selectionUniversite"));
         paramEFP.setSelectionUniversite(universite);
 
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
     /**
@@ -302,7 +340,7 @@ public class administrateurController extends Controller {
         int universite = Integer.parseInt(selectionfiliere.get("selectionUniversite"));
         paramEFP.setSelectionUniversite(universite);
 
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
     /**
@@ -325,7 +363,7 @@ public class administrateurController extends Controller {
 
         // La filière, le batiment et l'université non pas bouger du singleton !!!
 
-        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
     /**
@@ -360,7 +398,7 @@ public class administrateurController extends Controller {
     }
 
     public  Result exporterFeuilleDatePDF() {
-        return pdfGenerator.ok(exporterFeuilleDatePDF.render("By Ftgotc", parametresExportationFeuillesPresence.getInstance()), Configuration.root().getString("application.host"));
+        return pdfGenerator.ok(exporterFeuilleDatePDF.render("By Ftgotc", paramEFP), Configuration.root().getString("application.host"));
     }
 
     /**
@@ -414,7 +452,7 @@ public class administrateurController extends Controller {
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Administrateur administrateur = Administrateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                Administrateur administrateur = null;//Administrateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
 
                 return ok(Json.toJson(administrateur));
             }

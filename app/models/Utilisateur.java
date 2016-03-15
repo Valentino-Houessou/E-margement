@@ -41,32 +41,43 @@ public class Utilisateur extends Model  {
      * @param lienPhoto
      */
     public Utilisateur(String nom, String prenom, String adresseMail, String motDePasse,
-                       Timestamp dateDeNaissance, String lienPhoto) {
+                       Timestamp dateDeNaissance, String lienPhoto, List<Module> module) {
         this.nom = nom;
         this.prenom = prenom;
         this.adresseMail = adresseMail;
         this.motDePasse = motDePasse;
         this.dateDeNaissance = dateDeNaissance;
         this.lienPhoto = lienPhoto;
-        this.sesModules = new ArrayList<Module>();
+        this.sesModules = module;
     }
 
-    //Use to create an user
+    /**
+     * Use to create an user
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @param module
+     * @return user
+     */
     public static Utilisateur create(String nom, String prenom, String adresseMail, String motDePasse,
-                                     String dateDeNaissance, String lienPhoto){
+                                     String dateDeNaissance, String lienPhoto, List<Module> module){
         Timestamp ddn = null;
         try {
-            DateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date ddnd = (Date) formatter.parse(dateDeNaissance);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date ddnd = formatter.parse(dateDeNaissance);
             ddn = new Timestamp(ddnd.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Utilisateur user = new Utilisateur(nom, prenom, adresseMail,
-                Utilisateur.getEncodedPassword(motDePasse), ddn, lienPhoto);
+                Utilisateur.getEncodedPassword(motDePasse), ddn, lienPhoto, module);
         user.save();
         return user;
     }
+
 
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
                                      String dateDeNaissance, String lienPhoto){
@@ -99,6 +110,10 @@ public class Utilisateur extends Model  {
         return user;
     }
 
+    /**
+     *
+     * @param id
+     */
     public static void deleteUtilisateur(long id){
         Utilisateur user = find.ref(id);
         if (!Etudiant.utilisateurEtudiant(user) &&

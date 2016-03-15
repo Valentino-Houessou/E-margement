@@ -15,6 +15,11 @@ public class Module extends Model{
     //Finder for retrieve data in database
     public static Finder<Long,Module> find = new Finder<Long,Module>(Module.class);
 
+    /**
+     * Retrouver un module par son libéllé
+     * @param libelle
+     * @return
+     */
     public static Module findByLibelle(String libelle){
         return ((libelle == "ENSEIGNANTS") || (libelle == "ETUDIANTS") || (libelle == "ADMINISTRATEURS"))
             ? find.where().eq("libelle", libelle).findUnique() : null;

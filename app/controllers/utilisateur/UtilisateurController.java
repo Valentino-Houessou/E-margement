@@ -17,10 +17,10 @@ public class UtilisateurController extends Controller {
         String ddn = json.findPath("ddn").textValue();
         String lPhoto = json.findPath("lPhoto").textValue();
 
-        if((nom != null) && (prenom != null) && (mail != null) && (mdp != null)){
+        /*if((nom != null) && (prenom != null) && (mail != null) && (mdp != null)){
             return ok(Json.toJson(Utilisateur.create(nom, prenom, mail, mdp, ddn,lPhoto)));
         }
-        else
+        else*/
             return badRequest("Missing parameter");
     }
 

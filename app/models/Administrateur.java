@@ -26,14 +26,14 @@ public class Administrateur extends Model {
         this.sonUtilisateur = sonUtilisateur;
     }
 
-    public static Administrateur create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
+   /* public static Administrateur create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
         Utilisateur.droitAdmin(user.id);
         Administrateur admin = new Administrateur(statut, user);
 
         admin.save();
         return admin;
-    }
+    }*/
 
     public static Administrateur update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         Administrateur admin = find.where().eq("id", id).findUnique();

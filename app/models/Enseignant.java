@@ -30,9 +30,10 @@ public class Enseignant extends Model{
         this.sesMatieres = new ArrayList<Matiere>();
     }
 
-    public static Enseignant create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
-        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
-        Utilisateur.droitEnseignant(user.id);
+    public static Enseignant create(String nom, String prenom, String adresseMail, String motDePasse, String dateDeNaissance, String lienPhoto, String statut, List<Module> module)
+    {
+        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto, module);
+       // Utilisateur.droitEnseignant(user.id);
         Enseignant enseignant = new Enseignant(statut, user);
 
         enseignant.save();

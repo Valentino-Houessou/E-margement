@@ -27,7 +27,7 @@ public class Etudiant extends Model{
 
 
     //TODO : Quand on crée un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
-    public static Etudiant create(String numeroEtudiant, String  nom, String prenom, String adresseMail, String motDePasse,
+    /*public static Etudiant create(String numeroEtudiant, String  nom, String prenom, String adresseMail, String motDePasse,
                                   String dateDeNaissance, String lienPhoto, String Statut){
 
         Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
@@ -39,7 +39,7 @@ public class Etudiant extends Model{
         etudiant.save();
 
         return etudiant;
-    }
+    }*/
 
     public static Etudiant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
 

@@ -12,6 +12,13 @@
     color: #9A9A9A;
 }
 
+.texte_font {
+    color: #9A9A9A;
+    font-family: "Times New Roman", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+
 .paraf {
     padding-bottom: 2%;
     padding-left: 2%;
