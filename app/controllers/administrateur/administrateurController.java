@@ -90,7 +90,7 @@ public class administrateurController extends Controller {
     public Result gererUtilisateurEnseignantAjouter()
     {
 
-        // 0 - Etape : accueil
+        // 0 - Etape : ajout
         String etape = "ajout-simple";
 
         // 1 - Récupérer la liste des enseignants
@@ -106,7 +106,7 @@ public class administrateurController extends Controller {
      */
     public Result gererUtilisateurEnseignantCreer()
     {
-        // 0 - Etape : accueil
+        // 0 - Etape : créer
         String etape = "profile-creer";
 
         // 1 - Récupérer la liste des enseignants
@@ -262,6 +262,32 @@ public class administrateurController extends Controller {
         paramPC.setLenseignant(enseignantAjour);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    /**
+     * Supprimer un enseignant
+     * Suppression trace dans table Enseignant - Utilisateur et Modules
+     * @param id
+     * @return
+     */
+    public Result deleteEnseignant(long id) {
+
+        // 0 - Etape : supprimer
+        String etape = "supprimer-enseignant";
+
+
+        // 1 - On garde le nom et prenom pour affichage
+        paramPC.remiseAzero();
+        Enseignant enseignant = Enseignant.findById(id);
+        paramPC.setLenseignant(enseignant);
+
+        // 2 - Suppression du profil enseignant
+        Enseignant.delete(id);
+
+        // 3 - Récupérer la liste des enseignants à jours
+        List<Enseignant> lesEnseignants = Enseignant.findAll();
+
+        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape, paramPC));
     }
 
     /**

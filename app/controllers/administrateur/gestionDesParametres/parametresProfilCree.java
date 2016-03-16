@@ -136,7 +136,6 @@ public class parametresProfilCree {
 
         if(this.lenseignant.sonUtilisateur.sesModules.size() > 1)
         {
-            System.out.println("On passe par lAA " + this.lenseignant.sonUtilisateur.sesModules.size());
             this.setDroits("OUI"); // L'enseignant est aussi administrateur
         }else{
             this.setDroits("NON"); // L'enseignant est que enseignant

@@ -8,7 +8,7 @@
 <div>
     <h1 style="margin-top: 0px;"> @titrepage </h1>
 
-    @if(etape == "accueil"){
+    @if((etape == "accueil") || (etape == "supprimer-enseignant")){
         <div class="alert alert-info" role="alert">
             <p>
                 <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
@@ -28,6 +28,13 @@
                 </div>
             </div>
             <div class="col-xs-6">
+
+                @if(etape == "supprimer-enseignant"){
+                    <div class="alert alert-danger" role="alert">
+                        L'enseignant @paramProfil.getPrenom() @paramProfil.getNom() a bien été supprimer !
+                    </div>
+                }
+
                 <div class="list-group">
                     <li class="list-group-item active">Ci-joint la liste des professeurs</li>
                     <div class="input-group">
@@ -52,7 +59,7 @@
                                     <td> @enseignant.sonUtilisateur.prenom </td>
                                     <td> @enseignant.statut </td>
                                     <td> <button type="button" onclick="gerer(@enseignant.id);" class="btn btn-default btn-sm">Gérer</button> </td>
-                                    <td class="centrer_texte"> <a href="#"><img src="@routes.Assets.versioned("images/supprimer.png")" alt="Logo Supprimer" height="30" width="30"/></a></td>
+                                    <td class="centrer_texte"> <a href="#" onclick="supprimer('@enseignant.id', '@enseignant.sonUtilisateur.prenom', '@enseignant.sonUtilisateur.nom');"><img src="@routes.Assets.versioned("images/supprimer.png")" alt="Logo Supprimer" height="30" width="30"/></a></td>
                                 </tr>
                             }
                             </tbody>
@@ -457,6 +464,30 @@
                     alert("Erreur de chargement de la page gerer enseignant !")
                 }
             });
+        }
+</script>
+<script>
+        function supprimer(identifiantEnseignant, prenom, nom)
+        {
+            var r = confirm("Voulez-vous supprimer l'enseignant " + prenom + " " + nom);
+            if (r == true) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/administrateur/enseignant/supprimer/"+identifiantEnseignant,
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page gerer enseignant !")
+                    }
+                });
+
+            } else {
+                return false;
+            }
         }
 </script>
 <script>

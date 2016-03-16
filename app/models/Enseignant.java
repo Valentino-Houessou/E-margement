@@ -79,12 +79,35 @@ public class Enseignant extends Model{
 
     }
 
-    public static void delete(int id) {
+    /**
+     * Suppression du profil enseignant
+     * @param id
+     */
+    public static void delete(long id)
+    {
+        // Suppression dans la table enseignant
         Enseignant enseignant = find.where().eq("id", id).findUnique();
-        Utilisateur utilisateur = enseignant.sonUtilisateur;
-        Ebean.delete(enseignant);
-        if (!Administrateur.utilisateurAdmin(utilisateur))
-            Ebean.delete(utilisateur);
+
+        enseignant.delete();
+
+        // suppression dans la table modules
+        Utilisateur user =  enseignant.sonUtilisateur;
+
+        if(user.sesModules.size()>1)
+        {
+            user.sesModules.remove(Module.findByLibelle("ENSEIGNANTS"));
+            user.sesModules.remove(Module.findByLibelle("ADMINISTRATEURS"));
+        }else{
+            if(user.sesModules.size() == 1)
+            {
+                user.sesModules.remove(Module.findByLibelle("ENSEIGNANTS"));
+            }
+        }
+
+        user.update();
+
+        // Suppression dans la table utilisateur
+        user.delete();
     }
 
     public static boolean utilisateurEnseignant(Utilisateur user)

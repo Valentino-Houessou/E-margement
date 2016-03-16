@@ -21,15 +21,9 @@ POST          /enseignant/cours                                       controller
 POST          /enseignant/student                                     controllers.enseignant.EnseignantController.listPresence()
 POST          /enseignant/update                                      controllers.enseignant.EnseignantController.majPresence()
 POST          /enseignant/signature                                   controllers.enseignant.EnseignantController.signature()
-
-
-
-
 GET           /enseignant/profil/:id                                  controllers.enseignant.EnseignantController.getEnseignant(id : Long)
 GET           /enseignant/listEnseignant                              controllers.enseignant.EnseignantController.getListEnseignant()
-PUT           /enseignant/ajout                                       controllers.enseignant.EnseignantController.ajoutProf()
-POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
-DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
+
 
 
 # etudiant
@@ -45,7 +39,7 @@ GET           /etudiant/fileDownload                                  controller
 #Fonction notifier présence
 
 
-# admin : Toutes les fonctionnalité de l'administrateur
+# admin : Toutes les fonctionnalités de l'administrateur
 GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
 GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
@@ -53,6 +47,7 @@ GET           /administrateur/gerer-utilisateur/ajouter-enseignant    controller
 POST          /administrateur/gerer-utilisateur/creer-enseignant      controllers.administrateur.administrateurController.gererUtilisateurEnseignantCreer()
 GET           /administrateur/enseignant/profil/:id                   controllers.administrateur.administrateurController.getEnseignant(id : Long)
 POST          /administrateur/enseignant/profil/modification          controllers.administrateur.administrateurController.modifProf()
+GET           /administrateur/enseignant/supprimer/:id                controllers.administrateur.administrateurController.deleteEnseignant(id : Long)
 GET           /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
 GET           /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
