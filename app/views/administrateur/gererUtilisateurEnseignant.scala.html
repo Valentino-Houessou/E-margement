@@ -51,7 +51,7 @@
                                     <td> @enseignant.sonUtilisateur.nom </td>
                                     <td> @enseignant.sonUtilisateur.prenom </td>
                                     <td> @enseignant.statut </td>
-                                    <td> <button type="button" class="btn btn-default btn-sm">Gérer</button> </td>
+                                    <td> <button type="button" onclick="gerer(@enseignant.id);" class="btn btn-default btn-sm">Gérer</button> </td>
                                     <td class="centrer_texte"> <a href="#"><img src="@routes.Assets.versioned("images/supprimer.png")" alt="Logo Supprimer" height="30" width="30"/></a></td>
                                 </tr>
                             }
@@ -227,7 +227,126 @@
                 </div>
             </div>
         </div>
+    }
 
+    @if((etape == "gerer-un-profil-enseignant") || (etape == "modifier-un-profil-enseignant") ){
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
+                <li><a href="#tab2" data-toggle="tab">Gérer les cours de l'enseignant</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+
+                    @if(etape == "modifier-un-profil-enseignant"){
+                        <div class="alert alert-success" role="alert">
+                            Le profil de @paramProfil.getPrenom() @paramProfil.getNom() a été modifié avec sucess !
+                        </div>
+                    }
+
+                    <div>
+                        <div class="card card-user" style="margin-top: 5%;margin-left:20%;margin-right: 20%;">
+                            <div class="image">
+                                <img src="@routes.Assets.versioned("images/Image-pro1.jpg")"  alt="Image pro"/>
+                            </div>
+                            <div class="content">
+                                @if(paramProfil.getLienphoto == ""){
+                                    <div class="author">
+                                        <img class="avatar border-gray" src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Recrutement"/>
+                                    </div>
+                                }else{
+                                    <div class="author">
+                                        <img class="avatar border-gray" src="@routes.Assets.versioned(paramProfil.getLienphoto)"  alt="Recrutement"/>
+                                    </div>
+                                }
+
+                                <form id="modifProf" method="POST" action="/administrateur/enseignant/profil/modification" enctype="multipart/form-data">
+                                    <div style="margin-left: 10px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nom</label>
+                                                    <input type="text" id="nom" name="nom" class="form-control"  value="@paramProfil.getNom()" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Prenom</label>
+                                                    <input type="text" id="prenom" name="prenom" class="form-control" value="@paramProfil.getPrenom()" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Adresse mail</label>
+                                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" value="@paramProfil.getAdresseMail()" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label for="datepicker10">Date de naissance</label>
+                                                    <input type="text" class="form-control" id="datenaissance" name="datenaissance" value="@paramProfil.getDatenaissance()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Status de l'enseignant</label>
+                                                    <input type="text" class="form-control" id="statut" name="status" value="@paramProfil.getStatus()" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>A t'il des droits administrateur ?</label>
+                                                    @if(paramProfil.getDroits == "OUI"){
+                                                        <label class="radio-inline"><input type="radio" name="droits" value="OUI" checked/>Oui</label>
+                                                        <label class="radio-inline"><input type="radio" name="droits" value="NON"  />Non</label>
+                                                    }else{
+                                                        <label class="radio-inline"><input type="radio" name="droits" value="OUI" />Oui</label>
+                                                        <label class="radio-inline"><input type="radio" name="droits" value="NON" checked />Non</label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Nouveau mot de passe (Facultatif)</label>
+                                                    <input type="password" class="form-control" id="mdp" name="mdp"  />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Changer la photo (Facultatif)</label>
+                                                    <input type="file" class="form-control" id="photo" name="photo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-info btn-fill">Modifier le profil</button>
+                                    </div>
+
+                                    <!-- Pour faciliter la récupération de données dans le controller -->
+                                    <input type="hidden" id="idenseignant" name="idenseignant" value="@paramProfil.getLenseignant().id" />
+                                </form>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <p>Howdy, I'm in Section 2.</p>
+                </div>
+            </div>
+        </div>
     }
 </div>
 
@@ -299,6 +418,60 @@
 
 
                     if(($("#nom").val() != '') && ($("#prenom").val() != '') && ($("#email").val() != '') && ($("#mdp").val() != '') && ($("#status").val() != ''))
+                    {
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            contentType: false, // obligatoire pour de l'upload
+                            processData: false, // obligatoire pour de l'upload
+                            data: data,
+                            dataType: 'html', // selon le retour attendu
+                            success: function (data) {
+
+                                $("#charger_fonctionnalite").html(data);
+
+                            },
+                            error: function() {
+                                alert("Erreur de création du profil enseignant !")
+                            }
+                        });
+                    }else{
+                        alert("Les champs doivent être remplis !")
+                    }
+                });
+            });
+        });
+</script>
+<script>
+        function gerer(identifiantEnseignant)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/enseignant/profil/"+identifiantEnseignant,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page gerer enseignant !")
+                }
+            });
+        }
+</script>
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#modifProf').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var formdata = (window.FormData) ? new FormData($form[0]) : null;
+                    var data = (formdata !== null) ? formdata : $form.serialize();
+
+
+                    if(($("#nom").val() != '') && ($("#prenom").val() != '') && ($("#email").val() != '') && ($("#status").val() != ''))
                     {
                         $.ajax({
                             url: $form.attr('action'),

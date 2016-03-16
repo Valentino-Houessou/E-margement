@@ -82,6 +82,7 @@ public class EnseignantController extends Controller{
         }
     }
 
+    // Plus besoin. Géré dans l'admin /!\
     public Result ajoutProf() {
         JsonNode prof = request().body().asJson();
         if (prof == null)
@@ -118,6 +119,7 @@ public class EnseignantController extends Controller{
         }
     }
 
+    // Plus besoin. Géré dans l'admin /!\
     public Result modifProf() {
         JsonNode updateProf = request().body().asJson();
         if (updateProf == null)

@@ -1,5 +1,10 @@
 package controllers.administrateur.gestionDesParametres;
 
+import models.Enseignant;
+
+
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Yoan D on 11/03/2016.
  */
@@ -14,12 +19,14 @@ public class parametresProfilCree {
     private String droits;
     private String lienphoto;
 
+    private Enseignant lenseignant;
+
     private static parametresProfilCree INSTANCE = null;
 
     /**
      * Constructeur par défaut
      */
-    public parametresProfilCree()
+    private parametresProfilCree()
     {
         this.nom = "";
         this.prenom = "";
@@ -29,6 +36,7 @@ public class parametresProfilCree {
         this.status = "";
         this.droits = "";
         this.lienphoto = "";
+        this.lenseignant = null;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -111,6 +119,36 @@ public class parametresProfilCree {
         this.lienphoto = lienphoto;
     }
 
+    public Enseignant getLenseignant() {
+        return lenseignant;
+    }
+
+    public void setLenseignant(Enseignant lenseignant) {
+        this.lenseignant = lenseignant;
+
+        this.setNom(this.lenseignant.sonUtilisateur.nom);
+        this.setPrenom(this.lenseignant.sonUtilisateur.prenom);
+        this.setAdresseMail(this.lenseignant.sonUtilisateur.adresseMail);
+
+        String dtn = new SimpleDateFormat("dd/MM/yyyy").format(this.lenseignant.sonUtilisateur.dateDeNaissance);
+        this.setDatenaissance(dtn);
+        this.setStatus(this.lenseignant.statut);
+
+        if(this.lenseignant.sonUtilisateur.sesModules.size() > 1)
+        {
+            System.out.println("On passe par lAA " + this.lenseignant.sonUtilisateur.sesModules.size());
+            this.setDroits("OUI"); // L'enseignant est aussi administrateur
+        }else{
+            this.setDroits("NON"); // L'enseignant est que enseignant
+        }
+
+        if((this.lenseignant.sonUtilisateur.lienPhoto != null) && (this.lenseignant.sonUtilisateur.lienPhoto !=""))
+        {
+            String [] lien = this.lenseignant.sonUtilisateur.lienPhoto.split("/"); // On retire le public et on garde le dossier photos-utilisateurs/photo...
+            this.setLienphoto(lien[1]+"/"+lien[2]);
+        }
+    }
+
     /**
      * Remet à zero les paramettres
      */
@@ -124,6 +162,7 @@ public class parametresProfilCree {
         this.status = "";
         this.droits = "";
         this.lienphoto = "";
+        this.lenseignant = null;
     }
 
     /**

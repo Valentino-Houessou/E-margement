@@ -28,8 +28,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import controllers.administrateur.gestionDesParametres.parametresExportationFeuillesPresence;
-import controllers.administrateur.gestionDesParametres.parametresProfilCree;
+import controllers.administrateur.gestionDesParametres.*;
+
 
 
 import javax.inject.Inject;
@@ -126,20 +126,6 @@ public class administrateurController extends Controller {
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
 
-        // Liaison avec ses modules
-        // Si droits = OUI Il est enseignant et administrateur
-        if(droits.equals("OUI")){
-            Module ajoutModule1 = Module.findByLibelle("ENSEIGNANTS");
-            Module ajoutModule2 = Module.findByLibelle("ADMINISTRATEURS");
-
-            module.add(ajoutModule1);
-            module.add(ajoutModule2);
-        }else{
-            Module ajoutModule1 = Module.findByLibelle("ENSEIGNANTS");
-
-            module.add(ajoutModule1);
-        }
-
         if (photo != null) {
             String fileName = photo.getFilename();
             String contentType = photo.getContentType();
@@ -158,7 +144,13 @@ public class administrateurController extends Controller {
             datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0]+ " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             String lienPhoto = myUploadPath+fileName;
 
-            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, lienPhoto, status, module);
+            Enseignant enseignantCree = Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, lienPhoto, status);
+
+            // Liaison avec ses modules
+            // Si droits = OUI L'enseignant a les droits d'administrateur
+            if(droits.equals("OUI")){
+                Utilisateur.droitAdmin(enseignantCree.sonUtilisateur.id);
+            }
 
             // Chargement des paramettres pour affichage dans la vue
             paramPC.remiseAzero();
@@ -170,15 +162,106 @@ public class administrateurController extends Controller {
             String[] parts = datenaissance.split("-");
             datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
 
-            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status, module);
+            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
 
             // Chargement des paramettres pour affichage dans la vue
             paramPC.remiseAzero();
             paramPC.affectation(nom, prenom, adresseMail, datenaissance, status, droits, "");
-
         }
 
         return ok(gererUtilisateurEnseignant.render("Gérer les enseignants - Profil créé", lesEnseignants, etape, paramPC));
+    }
+
+    /**
+     * Partie pour gérer un profil enseignant
+     * @param id
+     * @return
+     */
+    public Result getEnseignant(long id)
+    {
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Récupération du profil enseignant à gérer
+        Enseignant enseignant = Enseignant.findById(id);
+
+        // Chargement des parametres pour affichage dans la vue
+        paramPC.remiseAzero();
+        paramPC.setLenseignant(enseignant);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    /**
+     * Modification d'un profil d'un professeur
+     * @return
+     */
+    public  Result modifProf() {
+        // 0 - Etape : modifier
+        String etape = "modifier-un-profil-enseignant";
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datenaissance");
+        String status = profil.get("status");
+        String droits = profil.get("droits");
+        String lienPhoto = "";
+
+        int idenseignant = Integer.parseInt(profil.get("idenseignant"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        // Mise à jour
+        if((datenaissance !=null) && (datenaissance !=""))
+        {
+            datenaissance= datenaissance.replace("/", "-");
+            String[] parts = datenaissance.split("-");
+            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+        }
+
+        if(photo != null)
+        {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom+"_"+prenom+"_"+fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            lienPhoto = myUploadPath+fileName;
+        }
+
+        Enseignant.update(idenseignant, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+
+        // Affectation ou suppressiondu droit administrateur
+        Enseignant enseignant = Enseignant.findById(idenseignant);
+        if((droits.equals("NON")) && (enseignant.sonUtilisateur.sesModules.size() >1))
+        {
+            // Suppression du droit admin
+            Utilisateur.deleteDroitAdmin(enseignant.sonUtilisateur.id);
+        }else{
+            if((droits.equals("OUI") && (enseignant.sonUtilisateur.sesModules.size() == 1)))
+            {
+                // Affectation du droit admin
+                Utilisateur.droitAdmin(enseignant.sonUtilisateur.id);
+            }
+        }
+
+        // Chargement des parametres pour affichage dans la vue
+        paramPC.remiseAzero();
+        Enseignant enseignantAjour = Enseignant.findById(idenseignant);
+        paramPC.setLenseignant(enseignantAjour);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
 
     /**

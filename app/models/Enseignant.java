@@ -30,20 +30,47 @@ public class Enseignant extends Model{
         this.sesMatieres = new ArrayList<Matiere>();
     }
 
-    public static Enseignant create(String nom, String prenom, String adresseMail, String motDePasse, String dateDeNaissance, String lienPhoto, String statut, List<Module> module)
+    /**
+     * Création d'un profil professeur
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @param statut
+     * @return
+     */
+    public static Enseignant create(String nom, String prenom, String adresseMail, String motDePasse, String dateDeNaissance, String lienPhoto, String statut)
     {
-        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto, module);
-       // Utilisateur.droitEnseignant(user.id);
+        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
+        Utilisateur.droitEnseignant(user.id); // Affecter le droit enseignant automatiquement
         Enseignant enseignant = new Enseignant(statut, user);
 
         enseignant.save();
         return enseignant;
     }
 
+    /**
+     * Mise à jour d'un profil enseignant
+     * @param id
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @param statut
+     * @return
+     */
     public static Enseignant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
         Enseignant enseignant = find.where().eq("id", id).findUnique();
 
-        enseignant.statut = statut;
+        if((statut != null) && (statut != ""))
+        {
+            enseignant.statut = statut;
+        }
+
         Utilisateur.updateUtilisateur(enseignant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
         enseignant.update();
