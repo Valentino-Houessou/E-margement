@@ -13,7 +13,7 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
-import org.jboss.vfs.VirtualFile;
+//import org.jboss.vfs.VirtualFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -251,7 +251,7 @@ public class EtudiantController extends Controller{
 
         int nbabsc=Presence.getNombreAbsence(1);
 
-        return ok(indexEtudiant.render("Partie Etudiant",nbabsc));
+        return ok(indexEtudiant.render("Partie Etudiant", nbabsc));
     }
 
     /**

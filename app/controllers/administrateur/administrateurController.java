@@ -293,6 +293,7 @@ public class administrateurController extends Controller {
      * @return
      */
     public Result gestionAbscences() {
+        List<Promotion> lesPromos = Promotion.findAll();
         return ok(gererAbscences.render("Gérer les justificatifs d'abscences"));
     }
 
