@@ -19,10 +19,10 @@ public class parametresExportationFeuillesPresence
     private int selectionPromotion;
     private String selectionDate;
 
-    List<Universite> listeUniversites; // Affiche la liste de tout les universités enregistré dans la base
-    List<Batiment> listeBatiments;     // Affiche la liste des batiments d'une université sélectionné
-    List<Filiere> listeFilieres;        // Affiche la liste des filières d'un batiment d'une université
-    List<Promotion> listePromotion;    // Affiche la liste des promotions d'une filière
+    private List<Universite> listeUniversites; // Affiche la liste de tout les universités enregistré dans la base
+    private List<Batiment> listeBatiments;     // Affiche la liste des batiments d'une université sélectionné
+    private List<Filiere> listeFilieres;        // Affiche la liste des filières d'un batiment d'une université
+    private List<Promotion> listePromotion;    // Affiche la liste des promotions d'une filière
 
     // Construction de la feuille de présence
     private List<Utilisateur> lesProfesseurs;
@@ -55,7 +55,7 @@ public class parametresExportationFeuillesPresence
 
     }
 
-    /** Point d'accès pour l'instance unique du singleton */
+    /** Point d'accès pour l'instance unique du singleton **/
     public static parametresExportationFeuillesPresence getInstance()
     {
         if (INSTANCE == null)
@@ -204,7 +204,7 @@ public class parametresExportationFeuillesPresence
     /**
      * Remonte l'identitée des étudiants qui sont dans une promotion donnée
      * @param idpromotionselectionnee
-     * @return
+     * @return Les étudiants de la promotion
      */
     public static List<Utilisateur> getEtudiantsParPromotion(int idpromotionselectionnee)
     {

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,14 +48,25 @@ public class Utilisateur extends Model  {
         this.motDePasse = motDePasse;
         this.dateDeNaissance = dateDeNaissance;
         this.lienPhoto = lienPhoto;
-        this.sesModules = new ArrayList<Module>();
     }
 
-    //Use to create an user
+    /**
+     * Use to create an user
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @return user
+     */
     public static Utilisateur create(String nom, String prenom, String adresseMail, String motDePasse,
                                      String dateDeNaissance, String lienPhoto){
         Timestamp ddn = null;
         try {
+            if((dateDeNaissance == null) || (dateDeNaissance.equals("")))
+                dateDeNaissance = "2016-03-17 01:58:00"; // Date imaginaire pour pas que sa bug lors de l'insertion dans la base
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Date ddnd = formatter.parse(dateDeNaissance);
             ddn = new Timestamp(ddnd.getTime());
@@ -67,17 +79,33 @@ public class Utilisateur extends Model  {
         return user;
     }
 
+
+    /**
+     * Mise à jour des informations utilisateur
+     * @param id
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @return
+     */
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
                                      String dateDeNaissance, String lienPhoto){
+
         Utilisateur user = find.ref(id);
+
         if (nom != null)
             user.nom = nom;
         if (prenom != null)
             user.prenom = prenom;
         if (adresseMail != null)
             user.adresseMail = adresseMail;
-        if (motDePasse != null){
+        if ((motDePasse != null) && (!motDePasse.equals(""))){
             user.motDePasse = Utilisateur.getEncodedPassword(motDePasse);
+
+            System.out.println("mdp : " +motDePasse );
         }
         if (dateDeNaissance != null) {
             Timestamp ddn = null;
@@ -90,7 +118,7 @@ public class Utilisateur extends Model  {
             }
             user.dateDeNaissance = ddn;
         }
-        if (lienPhoto != null)
+        if ((lienPhoto != null) && (lienPhoto !=""))
             user.lienPhoto = lienPhoto;
 
         user.update();
@@ -98,6 +126,10 @@ public class Utilisateur extends Model  {
         return user;
     }
 
+    /**
+     *
+     * @param id
+     */
     public static void deleteUtilisateur(long id){
         Utilisateur user = find.ref(id);
         if (!Etudiant.utilisateurEtudiant(user) &&
@@ -106,24 +138,44 @@ public class Utilisateur extends Model  {
             user.delete();
     }
 
+    /**
+     * Affecter les droits enseignant à l'utilisateur
+     * @param id
+     */
     public static void droitEnseignant (long id){
         Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
-        user.update();
+        user.save();
     }
 
+    /**
+     * Affecter les droits étudiant à l'utilisateur
+     * @param id
+     */
     public static void droitEtudiant (long id){
         Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ETUDIANTS"));
         user.update();
     }
 
+    /**
+     * Affecter les droits administrateur à l'utilisateur
+     * @param id
+     */
     public static void droitAdmin (long id){
         Utilisateur user =  find.ref(id);
         user.sesModules.add(Module.findByLibelle("ADMINISTRATEURS"));
-        user.update();
+        user.save();
     }
 
+    public static void deleteDroitAdmin(long id)
+    {
+        Utilisateur user =  find.ref(id);
+
+        user.sesModules.remove(Module.findByLibelle("ADMINISTRATEURS"));
+
+        user.update();
+    }
 
     //Finder for retrieve data in database
     public static Finder<Long,Utilisateur> find = new Finder<Long,Utilisateur>(Utilisateur.class);
@@ -181,7 +233,6 @@ public class Utilisateur extends Model  {
         if (!adresseMail.equals(that.adresseMail)) return false;
         if (!motDePasse.equals(that.motDePasse)) return false;
         return !(dateDeNaissance != null ? !dateDeNaissance.equals(that.dateDeNaissance) : that.dateDeNaissance != null);
-
     }
 
     @Override

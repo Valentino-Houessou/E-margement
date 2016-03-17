@@ -248,10 +248,13 @@
                     </tr>
                     <tr>
                         <td class="borduregray" style="background-color: lightgrey;" width=27%> Signature numérique du professeur </td>
-                        <td class="bordure" width=18%> </td>
-                        <td class="bordure" width=18%> </td>
-                        <td class="bordure" width=18%> </td>
-                        <td class="bordure" width=18%> </td>
+                        @for(infosSignature <- mesParametres.getCoursDuJourDeLaPromotion()) {
+                            @if(infosSignature.signatureEnseignant == true){
+                                <td class="bordure" width=18%> <div class="vert"> Signé </div>  </td>
+                            }else{
+                                <td class="bordure" width=18%> <div class="rouge"> Non signé </div>  </td>
+                            }
+                        }
                     </tr>
                 </table>
             </div>

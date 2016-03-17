@@ -115,6 +115,8 @@ public class EtudiantController extends Controller{
     public Result consulterAbsences() {
         List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
 
+
+
         return ok(consulterAbsences.render("Export de la liste des matières", presences));
     }
 
@@ -153,7 +155,7 @@ public class EtudiantController extends Controller{
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
 
-                Etudiant eleve = Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
+                Etudiant eleve = null;//Etudiant.create(numeroEtudiant,nom,prenom,adresseMail,motDePasse,dateDeNaissance,lienPhoto,statut);
 
                 return ok(/*Json.toJson(etudiant)*/);
             }

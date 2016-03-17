@@ -12,6 +12,13 @@
     color: #9A9A9A;
 }
 
+.texte_font {
+    color: #9A9A9A;
+    font-family: "Times New Roman", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+
 .paraf {
     padding-bottom: 2%;
     padding-left: 2%;
@@ -60,6 +67,12 @@
     visibility: hidden;
 }
 
+#centrer_ajout_admin {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
 .centrer_contenu {
     position: relative; /* on positionne le conteneur */
     margin-left: auto;
@@ -79,4 +92,14 @@
 
 .vert{
     background-color: greenyellow;
+}
+#reduire_espace {
+    margin: 10%;
+}
+
+#espace_boutton_ajout{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    width: 60%
 }

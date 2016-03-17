@@ -243,7 +243,7 @@
             <div class="container" style="width: auto">
                 <h3>Feuille de présence</h3>
 
-                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
+                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Extraire la feuille de présence</a></p>
 
                 <table class="table table-bordered">
                     <thead>
@@ -374,13 +374,16 @@
                     </tr>
                     <tr>
                         <td width=26%> Signature numérique du professeur </td>
-                        <td width=18%> </td>
-                        <td width=18%> </td>
-                        <td width=18%> </td>
-                        <td width=18%> </td>
+                        @for(infosSignature <- mesParametres.getCoursDuJourDeLaPromotion()) {
+                            @if(infosSignature.signatureEnseignant == true){
+                                <td width=18%> <div class="vert"> Signé </div>  </td>
+                            }else{
+                                <td width=18%> <div class="rouge"> Non signé </div>  </td>
+                            }
+                        }
                     </tr>
                 </table>
-                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;">Extraire la feuille de présence</a></p>
+                <p><a href="/administrateur/exporter-feuille/export-date" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Extraire la feuille de présence</a></p>
             </div>
         </div>
     }

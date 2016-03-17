@@ -21,15 +21,9 @@ POST          /enseignant/cours                                       controller
 POST          /enseignant/student                                     controllers.enseignant.EnseignantController.listPresence()
 POST          /enseignant/update                                      controllers.enseignant.EnseignantController.majPresence()
 POST          /enseignant/signature                                   controllers.enseignant.EnseignantController.signature()
-
-
-
-
 GET           /enseignant/profil/:id                                  controllers.enseignant.EnseignantController.getEnseignant(id : Long)
 GET           /enseignant/listEnseignant                              controllers.enseignant.EnseignantController.getListEnseignant()
-PUT           /enseignant/ajout                                       controllers.enseignant.EnseignantController.ajoutProf()
-POST          /enseignant/modification                                controllers.enseignant.EnseignantController.modifProf()
-DELETE        /enseignant/supprimer                                   controllers.enseignant.EnseignantController.supProf()
+
 
 
 # etudiant
@@ -45,10 +39,21 @@ GET           /etudiant/fileDownload                                  controller
 #Fonction notifier présence
 
 
-# admin
+# admin : Toutes les fonctionnalités de l'administrateur
 GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
+GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.gererAdminProfil(id :Long)
+POST          /administrateur/profil/modification                     controllers.administrateur.administrateurController.modifAdmin()
+GET           /administrateur/ajouter-administrateur                  controllers.administrateur.administrateurController.ajoutAdmin()
+POST          /administrateur/ajouter-administrateur/creer            controllers.administrateur.administrateurController.ajoutAdminCreer()
+GET           /administrateur/supprimer/:id                           controllers.administrateur.administrateurController.deleteAdmin(id :Long)
+GET           /administrateur/retirer-droit/:id                       controllers.administrateur.administrateurController.retirerDroit(id :Long)
 GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
+GET           /administrateur/gerer-utilisateur/ajouter-enseignant    controllers.administrateur.administrateurController.gererUtilisateurEnseignantAjouter()
+POST          /administrateur/gerer-utilisateur/creer-enseignant      controllers.administrateur.administrateurController.gererUtilisateurEnseignantCreer()
+GET           /administrateur/enseignant/profil/:id                   controllers.administrateur.administrateurController.getEnseignant(id : Long)
+POST          /administrateur/enseignant/profil/modification          controllers.administrateur.administrateurController.modifProf()
+GET           /administrateur/enseignant/supprimer/:id                controllers.administrateur.administrateurController.deleteEnseignant(id : Long)
 GET           /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
 GET           /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
@@ -63,29 +68,8 @@ GET           /administrateur/exporter-feuille/export-date            controller
 GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
-PUT           /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
-POST          /administrateur/update-admin                            controllers.administrateur.administrateurController.updateAdmin()
-DELETE        /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
-GET           /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
-GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
 
-GET    /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
-GET    /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
-GET    /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
-GET    /administrateur/gerer-utilisateur-etudiant              controllers.administrateur.administrateurController.gererUtilisateurEtudiant()
-GET    /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
-GET    /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
-GET    /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()
-GET    /administrateur/exporter-feuille                        controllers.administrateur.administrateurController.exporterFeuille()
-POST   /administrateur/exporter-feuille/promotion              controllers.administrateur.administrateurController.exporterFeuilleselectionPromotion()
-GET    /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
-GET    /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
-PUT    /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
-POST   /administrateur/update-admin                            controllers.administrateur.administrateurController.updateAdmin()
-DELETE /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
-GET    /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
-GET    /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
 
 
 #matière
