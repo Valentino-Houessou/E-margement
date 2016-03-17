@@ -15,7 +15,6 @@
             </p>
         </div>
 
-            <!-- Columns are always 50% wide, on mobile and desktop -->
         <div class="row">
             <div class="col-xs-6">
                 <div class="list-group">
@@ -47,7 +46,7 @@
                                 <tr>
                                     <th><b>Nom</b></th>
                                     <th><b>Prénom</b></th>
-                                    <th><b>Status</b></th>
+                                    <th><b>Statut</b></th>
                                     <th><b>Gérer</b></th>
                                     <th><b>Supprimer</b></th>
                                 </tr>
@@ -121,7 +120,7 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label>Status de l'enseignant</label>
+                                    <label>Statut de l'enseignant</label>
                                     <input type="text" class="form-control" id="status" name="status" placeholder="Exemple: SUP, VAC, PRAG ..." required />
                                 </div>
                             </div>
@@ -212,7 +211,7 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label>Status de l'enseignant</label>
+                                    <label>Statut de l'enseignant</label>
                                     <input type="text" class="form-control" disabled value="@paramProfil.getStatus()" />
                                 </div>
                             </div>
@@ -302,7 +301,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Status de l'enseignant</label>
+                                                    <label>Statut de l'enseignant</label>
                                                     <input type="text" class="form-control" id="statut" name="status" value="@paramProfil.getStatus()" />
                                                 </div>
                                             </div>
@@ -469,7 +468,7 @@
 <script>
         function supprimer(identifiantEnseignant, prenom, nom)
         {
-            var r = confirm("Voulez-vous supprimer l'enseignant " + prenom + " " + nom);
+            var r = confirm("Voulez-vous supprimer l'enseignant " + prenom + " " + nom +" ?");
             if (r == true) {
 
                 $.ajax({
@@ -517,7 +516,7 @@
 
                             },
                             error: function() {
-                                alert("Erreur de création du profil enseignant !")
+                                alert("Erreur de modification du profil enseignant !")
                             }
                         });
                     }else{

@@ -64,6 +64,9 @@ public class Utilisateur extends Model  {
                                      String dateDeNaissance, String lienPhoto){
         Timestamp ddn = null;
         try {
+            if((dateDeNaissance == null) || (dateDeNaissance.equals("")))
+                dateDeNaissance = "2016-03-17 01:58:00"; // Date imaginaire pour pas que sa bug lors de l'insertion dans la base
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Date ddnd = formatter.parse(dateDeNaissance);
             ddn = new Timestamp(ddnd.getTime());

@@ -42,6 +42,12 @@ GET           /etudiant/fileDownload                                  controller
 # admin : Toutes les fonctionnalités de l'administrateur
 GET           /administrateur/index                                   controllers.administrateur.administrateurController.adminIndex()
 GET           /administrateur/gerer-utilisateur-administrateur        controllers.administrateur.administrateurController.gererUtilisateurAdministrateur()
+GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.gererAdminProfil(id :Long)
+POST          /administrateur/profil/modification                     controllers.administrateur.administrateurController.modifAdmin()
+GET           /administrateur/ajouter-administrateur                  controllers.administrateur.administrateurController.ajoutAdmin()
+POST          /administrateur/ajouter-administrateur/creer            controllers.administrateur.administrateurController.ajoutAdminCreer()
+GET           /administrateur/supprimer/:id                           controllers.administrateur.administrateurController.deleteAdmin(id :Long)
+GET           /administrateur/retirer-droit/:id                       controllers.administrateur.administrateurController.retirerDroit(id :Long)
 GET           /administrateur/gerer-utilisateur-enseignant            controllers.administrateur.administrateurController.gererUtilisateurEnseignant()
 GET           /administrateur/gerer-utilisateur/ajouter-enseignant    controllers.administrateur.administrateurController.gererUtilisateurEnseignantAjouter()
 POST          /administrateur/gerer-utilisateur/creer-enseignant      controllers.administrateur.administrateurController.gererUtilisateurEnseignantCreer()
@@ -62,11 +68,8 @@ GET           /administrateur/exporter-feuille/export-date            controller
 GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 
-PUT           /administrateur/utilisateurs/setAdmin                   controllers.administrateur.administrateurController.addAdmin()
-POST          /administrateur/update-admin                            controllers.administrateur.administrateurController.updateAdmin()
-DELETE        /administrateur/delete-admin                            controllers.administrateur.administrateurController.deleteAdmin()
-GET           /administrateur/listAdministrateur                      controllers.administrateur.administrateurController.getListAdmin()
-GET           /administrateur/profil/:id                              controllers.administrateur.administrateurController.getAdmin(id : Long)
+
+
 
 
 #matière

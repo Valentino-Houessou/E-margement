@@ -39,12 +39,13 @@ public class administrateurController extends Controller {
 
     // (Singleton)Permet de gérer l'ensemble des parametres pour la fonction exporter feuille de présence
     public parametresExportationFeuillesPresence paramEFP = parametresExportationFeuillesPresence.getInstance();
-    // (Singleton)Permet de gérer l'ensemble des parametres pour la fonction gererUtilisateurEnseignantCreer()
+    // (Singleton)Permet de gérer l'ensemble des parametres pour la partie gérer enseignant
     public parametresProfilCree paramPC = parametresProfilCree.getInstance();
+    // (Singleton)Permet de gérer l'ensemble des parametres pour la partie gérer administrateur
+    public parametresAdmin paramAdmin = parametresAdmin.getInstance();
     // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
-
 
     /**
      * adminIndex()
@@ -63,7 +64,213 @@ public class administrateurController extends Controller {
      */
     public Result gererUtilisateurAdministrateur()
     {
-        return ok(gererUtilisateurAdministrateur.render("Gérer un profil administrateur"));
+        // 0 - Etape : accueil
+        String etape = "accueil";
+
+        // 1 - Récupération des profils administrateurs
+        paramAdmin.setLesAdmin(Administrateur.findAll());
+        paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
+
+        return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
+    }
+
+    /**
+     * Redirection vers la partie pour ajouter un administrateur
+     * @return
+     */
+    public Result ajoutAdmin() {
+
+        // 0 - Etape : accueil ajouter
+        String etape = "accueil-ajouter";
+        paramAdmin.remiseAzero();
+
+        return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
+    }
+
+    public Result ajoutAdminCreer() {
+
+        // 0 - Etape : créer
+        String etape = "creer-admin";
+
+        // 1 - Récupérer les champs du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datepicker10");
+        String status = profil.get("status");
+        String lienPhoto ="";
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        Administrateur newAdmin = null;
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom + "_" + prenom + "_" + fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            // Création du profil enseignant avec photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+            lienPhoto = myUploadPath + fileName;
+
+             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+        }else {
+
+            // Création du profil enseignant sans photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+
+             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
+        }
+
+        // 2 -  Chargement des parametres pour affichage dans la vue
+        paramAdmin.remiseAzero();
+        paramAdmin.setProfilAdmin(newAdmin);
+
+        return ok(gererUtilisateurAdministrateur.render("Bienvenue à " +  paramAdmin.getPrenom() + " " + paramAdmin.getNom(), etape, paramAdmin));
+    }
+
+    /**
+     * Affichage du profil de l'administrateur pour modification
+     * @param id
+     * @return
+     */
+    public  Result gererAdminProfil(Long id) {
+
+        // 0 - Etape : gerer
+        String etape = "accueil-gerer";
+
+        // 1 - Récupération du profil administrateur
+        paramAdmin.remiseAzero();
+        paramAdmin.setProfilAdmin(Administrateur.findById(id));
+
+        return ok(gererUtilisateurAdministrateur.render("Modifier le profil de "+ paramAdmin.getPrenom() + " " + paramAdmin.getNom(), etape, paramAdmin));
+    }
+
+    /**
+     * Modification du profil administrateur
+     * @return
+     */
+    public Result modifAdmin() {
+
+        // 0 - Etape : modifier
+        String etape = "modifier-admin";
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datenaissance");
+        String status = profil.get("status");
+        String lienPhoto = "";
+
+        int idadmin = Integer.parseInt(profil.get("idadmin"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        // 2 - Mise à jour
+        if((datenaissance !=null) && (!datenaissance.equals("")))
+        {
+            datenaissance= datenaissance.replace("/", "-");
+            String[] parts = datenaissance.split("-");
+            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+        }
+
+        if(photo != null)
+        {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom+"_"+prenom+"_"+fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            lienPhoto = myUploadPath+fileName;
+        }
+
+        Administrateur.update(idadmin, nom, prenom, adresseMail,  mdp, datenaissance, lienPhoto,  status);
+
+        // 4 -  Chargement des parametres pour affichage dans la vue
+        paramAdmin.remiseAzero();
+        Administrateur ladmin = Administrateur.findById(idadmin);
+        paramAdmin.setProfilAdmin(ladmin);
+
+
+        return ok(gererUtilisateurAdministrateur.render("Profil "+ paramAdmin.getPrenom() + " " + paramAdmin.getNom() + " mis à jours", etape, paramAdmin));
+    }
+
+    /**
+     * Supprimer un administrateur
+     * @param id
+     * @return
+     */
+    public Result deleteAdmin(long id)
+    {
+        // 0 - Etape : supprimer
+        String etape = "supprimer-admonistrateur";
+
+
+        // 1 - On garde le nom et prenom pour affichage
+        paramAdmin.remiseAzero();
+        Administrateur admin = Administrateur.findById(id);
+        paramAdmin.setProfilAdmin(admin);
+
+        // 2 - Suppression du profil administrateur
+        Administrateur.delete(id);
+
+        // 3 - Récupération des profils administrateurs
+        paramAdmin.setLesAdmin(Administrateur.findAll());
+        paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
+
+        return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
+    }
+
+    /**
+     * Retirer droit administrateur d'un enseignant
+     * @param id
+     * @return
+     */
+    public Result retirerDroit(long id) {
+
+        // 0 - Etape : supprimer
+        String etape = "retirer-droit";
+
+        // 1 - Retirer le droit administrateur
+        Enseignant enseignant = Enseignant.findById(id);
+        Utilisateur.deleteDroitAdmin(enseignant.sonUtilisateur.id);
+
+        // 2 - Récupération des profils administrateurs
+        paramAdmin.remiseAzero();
+        paramAdmin.setLesAdmin(Administrateur.findAll());
+        paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
+
+        return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
     }
 
     /**
@@ -121,7 +328,6 @@ public class administrateurController extends Controller {
         String datenaissance = profil.get("datepicker10");
         String status = profil.get("status");
         String droits = profil.get("droits");
-        List<Module> module = new ArrayList<Module>();
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
@@ -139,9 +345,12 @@ public class administrateurController extends Controller {
             file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
 
             // Création du profil enseignant avec photo
-            datenaissance= datenaissance.replace("/", "-");
-            String[] parts = datenaissance.split("-");
-            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0]+ " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
             String lienPhoto = myUploadPath+fileName;
 
             Enseignant enseignantCree = Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, lienPhoto, status);
@@ -158,9 +367,12 @@ public class administrateurController extends Controller {
         } else {
 
             // Création du profil enseignant sans photo
-            datenaissance= datenaissance.replace("/", "-");
-            String[] parts = datenaissance.split("-");
-            datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
 
             Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
 
@@ -169,7 +381,7 @@ public class administrateurController extends Controller {
             paramPC.affectation(nom, prenom, adresseMail, datenaissance, status, droits, "");
         }
 
-        return ok(gererUtilisateurEnseignant.render("Gérer les enseignants - Profil créé", lesEnseignants, etape, paramPC));
+        return ok(gererUtilisateurEnseignant.render("Bienvenue à " + paramPC.getPrenom() + " " + paramPC.getNom(), lesEnseignants, etape, paramPC));
     }
 
     /**
@@ -216,8 +428,8 @@ public class administrateurController extends Controller {
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
 
-        // Mise à jour
-        if((datenaissance !=null) && (datenaissance !=""))
+        // 2 - Mise à jour
+        if((datenaissance !=null) && (!datenaissance.equals("")))
         {
             datenaissance= datenaissance.replace("/", "-");
             String[] parts = datenaissance.split("-");
@@ -242,7 +454,7 @@ public class administrateurController extends Controller {
 
         Enseignant.update(idenseignant, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
 
-        // Affectation ou suppressiondu droit administrateur
+        // 3 - Affectation ou suppressiondu droit administrateur
         Enseignant enseignant = Enseignant.findById(idenseignant);
         if((droits.equals("NON")) && (enseignant.sonUtilisateur.sesModules.size() >1))
         {
@@ -256,7 +468,7 @@ public class administrateurController extends Controller {
             }
         }
 
-        // Chargement des parametres pour affichage dans la vue
+        // 4 -  Chargement des parametres pour affichage dans la vue
         paramPC.remiseAzero();
         Enseignant enseignantAjour = Enseignant.findById(idenseignant);
         paramPC.setLenseignant(enseignantAjour);
@@ -527,105 +739,4 @@ public class administrateurController extends Controller {
     public Result exporterJustificatifsAbscences() {
         return ok(exporterJustificatifsAbscences.render("Exporter les justificatifs d'abscences"));
     }
-
-
-
-
-
-    public Result addAdmin() {
-        JsonNode admin = request().body().asJson();
-        if (admin == null)
-            return badRequest("donnée Json attendu");
-        else {
-            String nom = admin.findPath("nom").textValue();
-            String prenom = admin.findPath("prenom").textValue();
-            String adresseMail = admin.findPath("adresseMail").textValue();
-            String motDePasse = admin.findPath("motDePasse").textValue();
-            String dateDeNaissance = admin.findPath("dateDeNaissance").textValue();
-            String lienPhoto = admin.findPath("lienPhoto").textValue();
-            String statut = admin.findPath("statut").textValue();
-
-            if (statut == null)
-                return badRequest("paramètre [statut] attendu");
-            else if (nom == null)
-                return badRequest("paramètre [nom] attendu");
-            else if (prenom == null)
-                return badRequest("paramètre [prenom] attendu");
-            else if (adresseMail == null)
-                return badRequest("paramètre [adresseMail] attendu");
-            else if (motDePasse == null)
-                return badRequest("paramètre [motDePasse] attendu");
-            else if (dateDeNaissance == null)
-                return badRequest("paramètre [dateDeNaissance] attendu");
-            else if (lienPhoto == null)
-                return badRequest("paramètre [lienPhoto] attendu");
-            else {
-
-                Administrateur administrateur = null;//Administrateur.create(nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
-
-                return ok(Json.toJson(administrateur));
-            }
-        }
-    }
-
-    public  Result updateAdmin() {
-        JsonNode admin = request().body().asJson();
-        if (admin == null)
-            return badRequest("donnée Json attendu");
-        else {
-            int id = admin.findPath("id").intValue();
-            String statut = admin.findPath("statut").textValue();
-            String nom = admin.findPath("nom").textValue();
-            String prenom = admin.findPath("prenom").textValue();
-            String adresseMail = admin.findPath("adresseMail").textValue();
-            String motDePasse = admin.findPath("motDePasse").textValue();
-            String dateDeNaissance = admin.findPath("dateDeNaissance").textValue();
-            String lienPhoto = admin.findPath("lienPhoto").textValue();
-
-            if (statut == null)
-                return badRequest("paramètre [statut] attendu");
-            else if (nom == null)
-                return badRequest("paramètre [nom] attendu");
-            else if (prenom == null)
-                return badRequest("paramètre [prenom] attendu");
-            else if (adresseMail == null)
-                return badRequest("paramètre [adresseMail] attendu");
-            else if (motDePasse == null)
-                return badRequest("paramètre [motDePasse] attendu");
-            else if (dateDeNaissance == null)
-                return badRequest("paramètre [dateDeNaissance] attendu");
-            else if (lienPhoto == null)
-                return badRequest("paramètre [lienPhoto] attendu");
-            else {
-                Administrateur administrateur = Administrateur.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
-
-                return ok(Json.toJson(administrateur));
-            }
-        }
-
-    }
-
-    public  Result getListAdmin() {
-        List<Administrateur> adminList;
-        adminList = Administrateur.findAll();
-        return ok(Json.toJson(adminList));
-    }
-
-    public  Result deleteAdmin() {
-        JsonNode admin = request().body().asJson();
-        if (admin == null)
-            return badRequest("donnée Json attendu");
-        else {
-            int id = admin.findPath("id").intValue();
-            Administrateur.delete(id);
-            return ok();
-        }
-    }
-
-    public  Result getAdmin(long id) {
-        return ok(Json.toJson(Administrateur.findById(id)));
-    }
-
-
-
 }

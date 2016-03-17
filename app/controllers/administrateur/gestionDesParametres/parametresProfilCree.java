@@ -130,9 +130,13 @@ public class parametresProfilCree {
         this.setPrenom(this.lenseignant.sonUtilisateur.prenom);
         this.setAdresseMail(this.lenseignant.sonUtilisateur.adresseMail);
 
-        String dtn = new SimpleDateFormat("dd/MM/yyyy").format(this.lenseignant.sonUtilisateur.dateDeNaissance);
-        this.setDatenaissance(dtn);
-        this.setStatus(this.lenseignant.statut);
+        if((this.lenseignant.sonUtilisateur.dateDeNaissance != null) && (!this.lenseignant.sonUtilisateur.dateDeNaissance.equals("")))
+        {
+            String dtn = new SimpleDateFormat("dd/MM/yyyy").format(this.lenseignant.sonUtilisateur.dateDeNaissance);
+            this.setDatenaissance(dtn);
+            this.setStatus(this.lenseignant.statut);
+        }
+
 
         if(this.lenseignant.sonUtilisateur.sesModules.size() > 1)
         {
@@ -141,7 +145,7 @@ public class parametresProfilCree {
             this.setDroits("NON"); // L'enseignant est que enseignant
         }
 
-        if((this.lenseignant.sonUtilisateur.lienPhoto != null) && (this.lenseignant.sonUtilisateur.lienPhoto !=""))
+        if((this.lenseignant.sonUtilisateur.lienPhoto != null) && (!this.lenseignant.sonUtilisateur.lienPhoto.equals("")))
         {
             String [] lien = this.lenseignant.sonUtilisateur.lienPhoto.split("/"); // On retire le public et on garde le dossier photos-utilisateurs/photo...
             this.setLienphoto(lien[1]+"/"+lien[2]);
