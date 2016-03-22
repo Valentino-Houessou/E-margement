@@ -1,9 +1,12 @@
 package controllers.enseignant;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.*;
 import models.Cours;
 import models.Enseignant;
 import models.Presence;
+import models.Utilisateur;
+import play.Application;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -20,6 +23,8 @@ public class EnseignantController extends Controller{
     private Enseignant teacher;
 
     public Result index() {
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         teacher = Enseignant.findByUser(Long.parseLong(session().get("user_id")));
         Form<DateForm> dateform = Form.form(DateForm.class);
         return ok(indexEnseignant.render("Espace Enseignant", teacher, dateform));
@@ -44,7 +49,7 @@ public class EnseignantController extends Controller{
             return ok();
         Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
         if(cours.signatureEnseignant)
-            return ok("<span class='signature'>La feuille de présence de ce cours a été signé.</span>");
+            return ok("<div class='form-group signature'><span>La feuille de présence de ce cours a été signé.</span></div>");
         return ok(list_etudiants.render(Presence.findbyCours(Long.parseLong(coursform.get().cours))));
     }
 
@@ -53,7 +58,7 @@ public class EnseignantController extends Controller{
         Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
         cours.signatureEnseignant = true;
         cours.update();
-        return ok("<span class='signature'>La feuille de présence de ce cours a été signé.</span>");
+        return ok("<div class='form-group signature'><span>La feuille de présence de ce cours a été signé.</span></div>");
     }
 
     public static class CoursForm {

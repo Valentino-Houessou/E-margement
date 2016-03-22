@@ -57,7 +57,7 @@
                         method : "POST",
                         url : "@controllers.enseignant.routes.EnseignantController.signature()",
                         data : { cours : cours },
-                        success : function(data){console.log("here");
+                        success : function(data){
                             $('#list_etudiant').html(data);
                             $('#validate_list').html("");
                         }
@@ -85,7 +85,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">
+                        <a class="navbar-brand" href="@routes.Application.redirectionModule()">
                             <i class="pe-7s-home" style="color:#9A9A9A;">
                                 <span class="texte_blue"> Accueil </span>
                             </i>
