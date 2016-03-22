@@ -1,9 +1,11 @@
 package controllers.administrateur.gestionDesParametres;
 
+import models.Cours;
 import models.Enseignant;
 
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by Yoan D on 11/03/2016.
@@ -23,6 +25,8 @@ public class parametresProfilCree {
 
     private static parametresProfilCree INSTANCE = null;
 
+    private List<Cours> lesCoursDuProf;
+
     /**
      * Constructeur par défaut
      */
@@ -37,6 +41,7 @@ public class parametresProfilCree {
         this.droits = "";
         this.lienphoto = "";
         this.lenseignant = null;
+        this.lesCoursDuProf = null;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -152,6 +157,14 @@ public class parametresProfilCree {
         }
     }
 
+    public List<Cours> getLesCoursDuProf() {
+        return lesCoursDuProf;
+    }
+
+    public void setLesCoursDuProf(List<Cours> lesCoursDuProf) {
+        this.lesCoursDuProf = lesCoursDuProf;
+    }
+
     /**
      * Remet à zero les paramettres
      */
@@ -166,6 +179,7 @@ public class parametresProfilCree {
         this.droits = "";
         this.lienphoto = "";
         this.lenseignant = null;
+        this.lesCoursDuProf = null;
     }
 
     /**

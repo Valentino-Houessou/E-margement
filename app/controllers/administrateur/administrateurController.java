@@ -417,6 +417,9 @@ public class administrateurController extends Controller {
         paramPC.remiseAzero();
         paramPC.setLenseignant(enseignant);
 
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
+        paramPC.setLesCoursDuProf(lesCoursDuprof);
+
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
@@ -490,6 +493,9 @@ public class administrateurController extends Controller {
         paramPC.remiseAzero();
         Enseignant enseignantAjour = Enseignant.findById(idenseignant);
         paramPC.setLenseignant(enseignantAjour);
+
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
+        paramPC.setLesCoursDuProf(lesCoursDuprof);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }

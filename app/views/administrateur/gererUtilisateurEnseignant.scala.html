@@ -3,6 +3,8 @@
 ********************************************@
 @import controllers.administrateur.gestionDesParametres.parametresProfilCree
 @(titrepage: String)(lesEnseignants: java.util.List[Enseignant])(etape: String)(paramProfil: parametresProfilCree)
+@import java.util.Date; var hdebut=""; var hfin=""; var ladate="";
+@import java.text.SimpleDateFormat;
 
 <!-- Début du block dynamique-->
 <div>
@@ -351,34 +353,45 @@
                 <div class="tab-pane" id="tab2">
 
                     <div class="container">
-                        <h2>Striped Rows</h2>
-                        <p>The .table-striped class adds zebra-stripes to a table:</p>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>johnexample.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>maryexample.com</td>
-                                </tr>
-                                <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>julyexample.com</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h2>Récapitulatif de vos cours</h2>
+
+                        <div style="height: 350px; overflow: auto;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Fillière</th>
+                                        <th>Promotion</th>
+                                        <th>Matière</th>
+                                        <th>Type</th>
+                                        <th>Dates</th>
+                                        <th>Heure début</th>
+                                        <th>Heure fin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for(lesCoursDuProf <- paramProfil.getLesCoursDuProf()){
+                                        <tr>
+                                            <td>@lesCoursDuProf.saPromo.filiere</td>
+                                            <td> @lesCoursDuProf.saPromo.groupe @lesCoursDuProf.saPromo.getType()</td>
+                                            <td>@lesCoursDuProf.saMatiere.getLibelle</td>
+                                            <td>@lesCoursDuProf.saMatiere.libelleAbregee</td>
+                                            @{
+                                                hdebut = new SimpleDateFormat("HH:mm").format(lesCoursDuProf.heureDebut)
+
+                                                hfin = new SimpleDateFormat("HH:mm").format(lesCoursDuProf.heureFin)
+
+                                                hdebut = hdebut.replace(":","H");
+                                                hfin = hfin.replace(":","H");
+                                                ladate = new SimpleDateFormat("dd/MM/yyyy").format(lesCoursDuProf.heureDebut)
+                                            }
+                                            <td>@ladate</td>
+                                            <td>@hdebut</td>
+                                            <td>@hfin</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
