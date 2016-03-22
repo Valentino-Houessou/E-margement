@@ -54,6 +54,8 @@ public class administrateurController extends Controller {
      */
     public Result adminIndex()
     {
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(indexAdministrateur.render("Administration"));
     }
 
@@ -71,6 +73,8 @@ public class administrateurController extends Controller {
         paramAdmin.setLesAdmin(Administrateur.findAll());
         paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
     }
 
@@ -84,6 +88,8 @@ public class administrateurController extends Controller {
         String etape = "accueil-ajouter";
         paramAdmin.remiseAzero();
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
     }
 
@@ -163,6 +169,8 @@ public class administrateurController extends Controller {
         paramAdmin.remiseAzero();
         paramAdmin.setProfilAdmin(Administrateur.findById(id));
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurAdministrateur.render("Modifier le profil de "+ paramAdmin.getPrenom() + " " + paramAdmin.getNom(), etape, paramAdmin));
     }
 
@@ -248,6 +256,8 @@ public class administrateurController extends Controller {
         paramAdmin.setLesAdmin(Administrateur.findAll());
         paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
     }
 
@@ -270,6 +280,8 @@ public class administrateurController extends Controller {
         paramAdmin.setLesAdmin(Administrateur.findAll());
         paramAdmin.setLesEnseingnantAdmin(Enseignant.findAll());
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurAdministrateur.render("Gérer les administrateurs", etape, paramAdmin));
     }
 
@@ -286,6 +298,8 @@ public class administrateurController extends Controller {
         // 1 - Récupérer la liste des enseignants
         List<Enseignant> lesEnseignants = Enseignant.findAll();
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape, paramPC));
     }
 
@@ -303,6 +317,8 @@ public class administrateurController extends Controller {
         // 1 - Récupérer la liste des enseignants
         List<Enseignant> lesEnseignants = Enseignant.findAll();
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer les enseignants - Ajout d'un profil", lesEnseignants, etape, paramPC));
     }
 
@@ -401,6 +417,8 @@ public class administrateurController extends Controller {
         paramPC.remiseAzero();
         paramPC.setLenseignant(enseignant);
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
 
@@ -499,6 +517,8 @@ public class administrateurController extends Controller {
         // 3 - Récupérer la liste des enseignants à jours
         List<Enseignant> lesEnseignants = Enseignant.findAll();
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer les enseignants", lesEnseignants, etape, paramPC));
     }
 
@@ -508,6 +528,9 @@ public class administrateurController extends Controller {
      * @return gererUtilisateurEtudiant.scala.html
      */
     public Result gererUtilisateurEtudiant() {
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEtudiant.render("Gérer un profil etudiant"));
     }
 
@@ -518,6 +541,8 @@ public class administrateurController extends Controller {
      */
     public  Result chargerListeEtudiant()
     {
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
     }
 
@@ -538,6 +563,8 @@ public class administrateurController extends Controller {
      */
     public  Result chargerListeEnseignant()
     {
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(chargerListeEnseignant.render("Charger la liste des enseignants"));
     }
 
@@ -566,6 +593,8 @@ public class administrateurController extends Controller {
         List<Universite> universites = Universite.getUniversite();
         paramEFP.setListeUniversites(universites);
 
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
@@ -719,6 +748,9 @@ public class administrateurController extends Controller {
     }
 
     public  Result exporterFeuilleDatePDF() {
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return pdfGenerator.ok(exporterFeuilleDatePDF.render("By Ftgotc", paramEFP), Configuration.root().getString("application.host"));
     }
 

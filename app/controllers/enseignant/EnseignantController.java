@@ -32,7 +32,8 @@ public class EnseignantController extends Controller{
 
     public Result listCours(){
         Form<DateForm> dateform = Form.form(DateForm.class).bindFromRequest();
-        return ok(list_cours.render(Cours.findByEnseignant(teacher.sonUtilisateur.id,dateform.get().date)));
+        System.out.println(Cours.findByEnseignant(teacher.sonUtilisateur.id,dateform.get().date));
+        return ok(list_cours.render(Cours.findByEnseignant(teacher.id,dateform.get().date)));
     }
 
     public static class DateForm{

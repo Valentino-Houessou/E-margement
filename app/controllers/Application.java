@@ -38,6 +38,8 @@ public class Application extends Controller {
             session("enseignant","true");
         else
             session("enseignant","false");
+
+        System.out.println(session());
         return ok(directionModule.render(session()));
     }
 
