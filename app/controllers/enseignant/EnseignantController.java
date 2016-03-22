@@ -23,8 +23,9 @@ public class EnseignantController extends Controller{
     private Enseignant teacher;
 
     public Result index() {
-        if(session().get("user_id") == null)
+        if(session().get("user_id") == null){
             return redirect(controllers.routes.Application.logout());
+        }
         teacher = Enseignant.findByUser(Long.parseLong(session().get("user_id")));
         Form<DateForm> dateform = Form.form(DateForm.class);
         return ok(indexEnseignant.render("Espace Enseignant", teacher, dateform));
