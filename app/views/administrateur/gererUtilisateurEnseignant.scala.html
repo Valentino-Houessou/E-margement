@@ -240,12 +240,22 @@
     @if((etape == "gerer-un-profil-enseignant") || (etape == "modifier-un-profil-enseignant") ){
         <div class="tabbable"> <!-- Only required for left/right tabs -->
             <ul class="nav nav-tabs">
+            @if((etape == "gerer-un-profil-enseignant") || (etape == "modifier-un-profil-enseignant") ){
                 <li class="active"><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
-                <li><a href="#tab2" data-toggle="tab">Gérer les cours de l'enseignant</a></li>
+            }else{
+                <a href="#tab1" data-toggle="tab">Modifier le profil</a>
+            }
+                <li><a href="#tab2" data-toggle="tab">Affecter des cours</a></li>
+                <li><a href="#tab3" data-toggle="tab">Afficher/supprimer les cours enseignés</a></li>
             </ul>
 
             <div class="tab-content">
+
+            @if((etape == "gerer-un-profil-enseignant") || (etape == "modifier-un-profil-enseignant") ){
                 <div class="tab-pane active" id="tab1">
+            }else{
+                <div class="tab-pane" id="tab1">
+            }
 
                     @if(etape == "modifier-un-profil-enseignant"){
                         <div class="alert alert-success" role="alert">
@@ -347,10 +357,51 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
+
                 <div class="tab-pane" id="tab2">
+
+                            <!-- Affectation d'un cours -->
+                        <div>
+                            <h2>Affecter à un cours</h2> <hr/>
+
+                            <div class="centrer_contenu2">
+                                    <!-- Géré par l'AJAX !!! -->
+                                <form class="form-inline" role="form">
+                                    <div class="form-group" style="margin-right: 50px;">
+                                        <label>1 - </label>
+                                        <select id="o" name="o" class="form-control"  style="width:225px;">
+                                            <option value="-">Sélectionner une université</option>
+                                            @for(listeUniversite <- paramProfil.getListeUniversite()){
+
+                                                <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
+
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>2 - </label>
+                                        <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
+                                            <option value="-">Sélectionner un batiment</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>3 - </label>
+                                        <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
+                                            <option value="-">Sélectionner une filière</option>
+
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="tab-pane" id="tab3">
 
                     <div class="container">
                         <h2>Récapitulatif de vos cours</h2> <hr/>
@@ -395,49 +446,10 @@
                             </table>
                         </div>
 
-                        <!-- Affectation d'un cours -->
-                        <div>
-                            <h2>Affecter un cours</h2> <hr/>
 
-                            <div class="centrer_contenu2">
-                                    <!-- Géré par l'AJAX !!! -->
-                                <form class="form-inline" role="form">
-                                    <div class="form-group" style="margin-right: 50px;">
-                                        <label>1 - </label>
-                                        <select id="o" name="o" class="form-control"  style="width:225px;">
-                                            <option value="-">Sélectionner une université</option>
-                                            @for(listeUniversite <- paramProfil.getListeUniversite()){
-
-                                                <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
-
-                                            }
-
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>2 - </label>
-                                        <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
-                                            <option value="-">Sélectionner un batiment</option>
-
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>3 - </label>
-                                        <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
-                                            <option value="-">Sélectionner une filière</option>
-
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
-            </div>
-        </div>
+            </div> <!-- Fin content --<
     }
 </div>
 
@@ -611,4 +623,5 @@
             });
         });
 </script>
+
 <!-- ./ fin partie script -->
