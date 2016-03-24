@@ -421,6 +421,9 @@ public class administrateurController extends Controller {
         List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
 
+        List<Universite> listeUniversite = Universite.getUniversite();
+        paramPC.setListeUniversite(listeUniversite);
+
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
