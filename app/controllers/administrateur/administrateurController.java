@@ -135,7 +135,7 @@ public class administrateurController extends Controller {
             }
             lienPhoto = myUploadPath + fileName;
 
-             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
         }else {
 
             // Création du profil enseignant sans photo
@@ -146,7 +146,7 @@ public class administrateurController extends Controller {
                 datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             }
 
-             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
         }
 
         // 2 -  Chargement des parametres pour affichage dans la vue
@@ -418,7 +418,7 @@ public class administrateurController extends Controller {
         paramPC.remiseAzero();
         paramPC.setLenseignant(enseignant);
 
-        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
 
         List<Universite> listeUniversite = Universite.getUniversite();
@@ -427,6 +427,7 @@ public class administrateurController extends Controller {
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+
     }
 
     /**

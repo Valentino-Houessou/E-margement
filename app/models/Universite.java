@@ -4,6 +4,8 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -26,6 +28,14 @@ public class Universite extends Model{
     public static List<Universite> getUniversite()
     {
         List<Universite> universite = find.all();
+
+        // Trie des universités par ordre croissant par rapport au nom
+        Collections.sort(universite, new Comparator<Universite>() {
+            @Override
+            public int compare(Universite tc1, Universite tc2) {
+                return tc1.libelle.compareTo(tc2.libelle);
+            }
+        });
 
         return universite;
     }
