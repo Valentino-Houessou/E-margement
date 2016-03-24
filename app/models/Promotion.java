@@ -122,6 +122,11 @@ public class Promotion extends Model{
         return  LesMatieres;
     }
 
+    public static List<Promotion> getPromotionByYear(int year)
+    {
+        return find.where().ilike("anneeScolaire", "%" + year + "%").findList();
+    }
+
     public static List<Promotion> getAllPromotion()
     {
         return find.all();

@@ -61,4 +61,23 @@ public class Presence extends Model {
                 .eq("emergement",0)
                 .findList();
     }
+
+    /**
+     * @param promotion : la promotion concernée
+     * @param theDate : est la date concernée
+     * @return Retourne la liste des présences du mois et de l'année courante
+     */
+
+    public static List<Presence> getAbsences( String promotion, String theDate){
+
+            /*//List<Cours> =
+
+            List<Presence> absences = new ArrayList<>();
+            absences =  find.
+        }*/
+        return null;
+    }
+
+
+
 }

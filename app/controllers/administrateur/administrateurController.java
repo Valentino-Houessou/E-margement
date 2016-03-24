@@ -27,6 +27,7 @@ import models.*;
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import controllers.administrateur.gestionDesParametres.*;
 
@@ -766,8 +767,10 @@ public class administrateurController extends Controller {
      * @return
      */
     public Result gestionAbscences() {
-        List<Promotion> lesPromos = Promotion.findAll();
-        return ok(gererAbscences.render("Gérer les justificatifs d'abscences"));
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        List<Promotion> lesPromos = Promotion.getPromotionByYear(year);
+        return ok(gererAbscences.render("Gérer les justificatifs d'abscences",lesPromos));
     }
 
     /**

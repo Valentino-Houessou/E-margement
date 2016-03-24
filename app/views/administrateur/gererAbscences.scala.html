@@ -1,7 +1,7 @@
 @**************************************************
 * Bloc pour gerer les justificatifs d'abscences *
 ***************************************************@
-@(titrepage: String)
+@(titrepage: String)(promotions : java.util.List[Promotion])
 
 <!-- Récupérer les différentes promotions -->
 <!-- Créer dynamiquement la page pour chaque promotion-->
@@ -16,30 +16,56 @@
     <h1> @titrepage </h1>
 
     <div class="container">
-        <div class="col-md-6"><h3>Tabs -below</h3>
+        <div >
                 <!-- tabs bottom -->
             <div class="tabbable tabs-below">
                 <div class="tab-content">
-                    <div class="tab-pane active" id="one_">Lorem ipsum dolor sit amet, charetra varius quam sit amet vulputate.
-                        Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero.
+                    <div class="tab-pane active" id="one_">
+                        <div id="daylyForm">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="daylyPromoSelect">Promotion</label>
+                                        <!-- selection des différentes promotions -->
+                                    <select class="form-control" id="daylyPromoSelect">
+                                        <option value = "0">choisir une promotion</option>
+                                        @for(promotion <- promotions){
+                                            <option value="@promotion.id">@promotion.filiere - @promotion.groupe - @promotion.getType()</option>
+                                        }
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-default active" id="daylyAbsenceSubmit">Rechercher</button>
+                            </form>
+                        </div>
                         <table id="one_Datatable" class="display" cellspacing="0" width="100%">
                             <thead><tr><th>Date</th><th>Créneau</th><th>Cours</th><th>Etudiant</th><th>Motif</th><th>Justificatif</th></tr></thead>
                             <tbody>
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane" id="two_">Secondo sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-                        Aliquam in felis sit amet augue.
+                    <div class="tab-pane" id="two_">
+                        <div id="yearlyForm">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="yearlyPromoSelect">Promotion</label>
+                                        <!-- selection des différentes promotions -->
+                                    <select class="form-control" id="yearlyPromoSelect">
+                                        <option value = "0">choisir une promotion</option>
+                                        @for(promotion <- promotions){
+                                            <option value="@promotion.id">@promotion.filiere - @promotion.groupe - @promotion.getType()</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="yearlyPromoDate">Date</label>
+                                    <input class="form-control" id="yearlyPromoDate" type="text" value="">
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                                    <!--<div class="input-append date" id="dp3"  data-date-format="dd-mm-yyyy">
+                                    </div>-->
+                                </div>
+                                <button type="submit" class="btn btn-default active" id="yearlyAbsenceSubmit">Rechercher</button>
+                            </form>
+                        </div>
                         <table id="two_Datatable" class="display" cellspacing="0" width="100%">
-                            <thead><tr><th>Date</th><th>Créneau</th><th>Cours</th><th>Etudiant</th><th>Motif</th><th>Justificatif</th></tr></thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="twee_">
-                        Thirdamuno, ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-                        Quisque mauris augue, molestie tincidunt condimentum vitae.
-                        <table id="three_Datatable" class="display" cellspacing="0" width="100%">
                             <thead><tr><th>Date</th><th>Créneau</th><th>Cours</th><th>Etudiant</th><th>Motif</th><th>Justificatif</th></tr></thead>
                             <tbody>
                             </tbody>
@@ -47,9 +73,8 @@
                     </div>
                 </div>
                 <ul class="nav nav-tabs">
-                    <li><a href="#one_" data-toggle="tab">Licence 3 - Apprentissage</a></li>
-                    <li><a href="#two_" data-toggle="tab">Master 1 - Initial</a></li>
-                    <li><a href="#twee_" data-toggle="tab">Master 2 - Apprentissage</a></li>
+                    <li><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
+                    <li><a href="#two_" data-toggle="tab">Rechercher par date</a></li>
                 </ul>
             </div>
         </div>

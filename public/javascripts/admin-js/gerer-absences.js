@@ -10,4 +10,7 @@ $( document ).ready(function() {
     $(function () {
         $('#myTab a:last').tab('show');
     })
+
+    //Pour activer le datepicker
+    $('#yearlyPromoDate').datepicker();
 });
