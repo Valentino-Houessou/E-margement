@@ -24,8 +24,9 @@ public class Presence extends Model {
 
     public static Finder<Integer,Presence> find = new Finder<Integer,Presence>(Presence.class);
 
-    public static int getNombreAbsence(int idetudiant){
-        return find.where().eq("sonEtudiant.id",idetudiant)
+    public static int getNombreAbsence(long idetudiant){
+        return find.where().eq("son_etudiant_id",idetudiant)
+                .eq("emergement",0)
                .findRowCount();
     }
 
@@ -51,7 +52,7 @@ public class Presence extends Model {
      * @param idEtudiantUser
      * @return
      */
-    public static List<Presence> getCreaneauxAbsences(int idEtudiantUser)
+    public static List<Presence> getCreaneauxAbsences(String idEtudiantUser)
     {
         // 1 - Je cherche l'étudiant
         Etudiant etu = Etudiant.find.where().eq("numero_etudiant",idEtudiantUser).findUnique();

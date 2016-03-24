@@ -353,9 +353,9 @@
                 <div class="tab-pane" id="tab2">
 
                     <div class="container">
-                        <h2>Récapitulatif de vos cours</h2>
+                        <h2>Récapitulatif de vos cours</h2> <hr/>
 
-                        <div style="height: 350px; overflow: auto;">
+                        <div style="height: 350px; margin-bottom: 20px; overflow: auto;">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -366,6 +366,7 @@
                                         <th>Dates</th>
                                         <th>Heure début</th>
                                         <th>Heure fin</th>
+                                        <th>Salle</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -387,10 +388,50 @@
                                             <td>@ladate</td>
                                             <td>@hdebut</td>
                                             <td>@hfin</td>
+                                            <td>@lesCoursDuProf.saSalle.libelle</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Affectation d'un cours -->
+                        <div>
+                            <h2>Affecter un cours</h2> <hr/>
+
+                            <div class="centrer_contenu2">
+                                    <!-- Géré par l'AJAX !!! -->
+                                <form class="form-inline" role="form">
+                                    <div class="form-group" style="margin-right: 50px;">
+                                        <label>1 - </label>
+                                        <select id="selectionUniversite" name="selectionUniversite" class="form-control"  style="width:225px;">
+                                            <option value="-">Sélectionner une université</option>
+                                            @for(listeUniversite <- paramProfil.getListeUniversite()){
+
+                                                <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
+
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>2 - </label>
+                                        <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
+                                            <option value="-">Sélectionner un batiment</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>3 - </label>
+                                        <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
+                                            <option value="-">Sélectionner une filière</option>
+
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
