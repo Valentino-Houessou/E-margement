@@ -6,11 +6,4 @@ $( document ).ready(function() {
         e.preventDefault();
         $(this).tab('show');
     });
-
-    $(function () {
-        $('#myTab a:last').tab('show');
-    })
-
-    //Pour activer le datepicker
-    $('#yearlyPromoDate').datepicker();
 });
