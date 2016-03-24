@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="yearlyPromoDate">Date</label>
-                                    <input class="form-control" id="yearlyPromoDate" type="text" value="">
+                                    <input class="form-control" id="yearlyPromoDate" type="text" >
                                     <span class="add-on"><i class="icon-th"></i></span>
                                     <!--<div class="input-append date" id="dp3"  data-date-format="dd-mm-yyyy">
                                     </div>-->
@@ -81,3 +81,14 @@
     </div>
 </div>
     <!-- Fin du block dynamique-->
+
+    <!-- Les scripts -->
+<script>
+        $(function() {
+            $( "#yearlyPromoDate" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange:'-90:+0'
+            });
+        });
+</script>
