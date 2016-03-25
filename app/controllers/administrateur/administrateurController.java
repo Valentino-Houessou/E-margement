@@ -48,6 +48,7 @@ public class administrateurController extends Controller {
     @Inject
     public PdfGenerator pdfGenerator;
 
+
     /**
      * adminIndex()
      * Redirection vers la page d'accueil de l'administrateur
@@ -504,6 +505,59 @@ public class administrateurController extends Controller {
 
         List<Universite> listeUniversite = Universite.getUniversite();
         paramPC.setListeUniversite(listeUniversite);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+
+    /**
+     * Affichage des batiments d'une université sélectionné
+     * @return
+     */
+    public Result selectionUniversite() {
+
+        // paramPC.remiseAzero();
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Récupération des batiments de l'université selectionnée
+        DynamicForm universites = form().bindFromRequest();
+        int universite = Integer.parseInt(universites.get("selectionFac"));
+
+        paramPC.setListeBatiments(Batiment.getBatimentByUniversite(universite));
+
+        // 2 - Etape liste
+        paramPC.setEtapeListes("selectionBatiment");
+
+        // 3 -  université selectionné
+        List<Universite> listeUniversite = Universite.getUniversite();
+        paramPC.setListeUniversite(listeUniversite);
+        System.out.println(" TESSST " + universite);
+        paramPC.setSelectionUniversite(universite);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result selectionBatiment() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("selectionFiliere");
+
+        // 2 - Récupération des filières d'un batiments d'une université selectionnée
+        DynamicForm batiments = form().bindFromRequest();
+        int batiment = Integer.parseInt(batiments.get("selectionBatiment"));
+        paramPC.setListeFilieres(Filiere.getFilieresByBatiment(batiment));
+
+        // 3 - On garde le batiment sélectionné
+        paramEFP.setSelectionBatiment(batiment);
+
+        // 4 - On garde l'université sélectionné
+        int universite = Integer.parseInt(batiments.get("selectionUniversite"));
+        paramEFP.setSelectionUniversite(universite);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
