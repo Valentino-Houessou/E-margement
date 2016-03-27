@@ -8,14 +8,15 @@
 
 <!-- Début du block dynamique-->
 <div>
-    <h1 style="margin-top: 0px;"> @titrepage </h1>
+    <div class="banner">
+        <h1 style="margin-top: 0px;"> @titrepage </h1>
+
+        <p>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
+        </p>
+    </div>
 
     @if((etape == "accueil") || (etape == "supprimer-enseignant")){
-        <div class="alert alert-info" role="alert">
-            <p>
-                <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
-            </p>
-        </div>
 
         <div class="row">
             <div class="col-xs-6">

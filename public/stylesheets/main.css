@@ -128,3 +128,8 @@
 .intro-message {
     position: relative;
 }
+
+.banner {
+    margin-bottom: 20px;
+    background: url("../images/banner.jpg") no-repeat center center;
+}
