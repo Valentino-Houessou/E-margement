@@ -56,9 +56,12 @@ public class administrateurController extends Controller {
      */
     public Result adminIndex()
     {
-        if(session().get("user_id") == null)
+        if(session().get("user_id") == null){
             return redirect(controllers.routes.Application.logout());
-        return ok(indexAdministrateur.render("Administration"));
+        }
+        Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+        session("prenom", utilisateur.prenom);
+        return ok(indexAdministrateur.render("Administration", session()));
     }
 
     /**
@@ -516,10 +519,12 @@ public class administrateurController extends Controller {
      */
     public Result selectionUniversite() {
 
-        // paramPC.remiseAzero();
-
         // 0 - Etape : gerer
         String etape = "gerer-un-profil-enseignant";
+        paramPC.setListeFilieres(null);
+        paramPC.setSelectionFiliere("");
+        paramPC.setSelectionBatiment(0);
+
 
         // 1 - Récupération des batiments de l'université selectionnée
         DynamicForm universites = form().bindFromRequest();
@@ -533,7 +538,6 @@ public class administrateurController extends Controller {
         // 3 -  université selectionné
         List<Universite> listeUniversite = Universite.getUniversite();
         paramPC.setListeUniversite(listeUniversite);
-        System.out.println(" TESSST " + universite);
         paramPC.setSelectionUniversite(universite);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
@@ -553,11 +557,11 @@ public class administrateurController extends Controller {
         paramPC.setListeFilieres(Filiere.getFilieresByBatiment(batiment));
 
         // 3 - On garde le batiment sélectionné
-        paramEFP.setSelectionBatiment(batiment);
+        paramPC.setSelectionBatiment(batiment);
 
         // 4 - On garde l'université sélectionné
         int universite = Integer.parseInt(batiments.get("selectionUniversite"));
-        paramEFP.setSelectionUniversite(universite);
+        paramPC.setSelectionUniversite(universite);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }

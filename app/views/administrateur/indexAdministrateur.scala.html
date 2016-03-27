@@ -1,4 +1,4 @@
-@(titrepage: String)
+@(titrepage: String)(session : play.mvc.Http.Session)
 
 @main("E-margement - Paris X"){
 
@@ -78,7 +78,13 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                            <a href="#">
-                               <i class="glyphicon glyphicon-user"></i> <span class="texte_font"> Bonjour, prénom nom </span>
+                               <i class="glyphicon glyphicon-user"></i>
+                               <span class="texte_font">
+                                   Bonjour,
+                                       @if(session.get("prenom") != null) {
+                                           @session.get("prenom")
+                                   }
+                               </span>
                            </a>
                         </li>
                        <!-- <li class="dropdown">

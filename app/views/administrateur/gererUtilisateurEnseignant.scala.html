@@ -398,7 +398,9 @@
                                     <div class="form-group">
                                         <label>2 - </label>
                                         <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
+                                        @if(paramProfil.getListeFilieres() == null){
                                             <option value="-">Sélectionner un batiment</option>
+                                        }
                                             @if(paramProfil.getListeBatiments() != null){
                                                 @for(listeBatiments <- paramProfil.getListeBatiments()){
                                                     @if(listeBatiments.id == paramProfil.getSelectionBatiment()){
@@ -425,7 +427,6 @@
                                                     }
                                                 }
                                             }
-
                                         </select>
                                     </div>
                                 </form>
