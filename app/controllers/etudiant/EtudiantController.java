@@ -35,8 +35,6 @@ public class EtudiantController extends Controller{
 
         int nbabsc = Presence.getNombreAbsence(idEtudiant.id);
 
-        System.out.println(" ID E " + idEtudiant.id + "  Utilisateur " + idUtilisateur + " nb absence " + nbabsc  );
-
         return ok(indexEtudiant.render("Espace étudiant",nbabsc));
     }
 
