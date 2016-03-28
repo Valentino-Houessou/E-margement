@@ -111,7 +111,7 @@
             }
 
             /*Permet de remplir le dataTable qui présente les absences*/
-            function fillTable(data, tableId, theTable){
+            function fillTable(data, theTable){
                 ligne = "";
                 $.each(data, function(idx, value){
                     ligne = "<tr data-id=" + value.id + "><td>" + value.nomEtudiant + " " + value.prenomEtudiant + " - " + value.numeroEtudiant
@@ -120,7 +120,6 @@
                             + "'> <button type='button' class='btn btn-default' aria-label='Left Align'>"
                             + "<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button>"
                             + "</a> </td> </tr>";
-                    //$("#" + tableId).append(ligne);
                     theTable.row.add($(ligne)).draw();
                     ligne = "";
                 });
@@ -149,7 +148,7 @@
                     dataType: 'JSON',
                     timeout: 3000,
                     success: function(data) {
-                        fillTable(data, "daylyAbsencesContent", daylyTable);
+                        fillTable(data, daylyTable);
                         console.log("success");
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
@@ -173,7 +172,7 @@
                     dataType: 'JSON',
                     timeout: 3000,
                     success: function(data) {
-                        fillTable(data, "yearlyAbsencesContent", yearlyTable);
+                        fillTable(data, yearlyTable);
                         console.log("success");
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
