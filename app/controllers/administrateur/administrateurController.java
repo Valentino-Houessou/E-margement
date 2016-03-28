@@ -2,6 +2,9 @@ package controllers.administrateur;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.administrateur.gestionDesParametres.PdfGenerator;
 import models.Universite;
 import play.Configuration;
@@ -26,8 +29,10 @@ import models.*;
 
 import java.io.File;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import controllers.administrateur.gestionDesParametres.*;
 
@@ -227,7 +232,7 @@ public class administrateurController extends Controller {
             lienPhoto = myUploadPath+fileName;
         }
 
-        Administrateur.update(idadmin, nom, prenom, adresseMail,  mdp, datenaissance, lienPhoto,  status);
+        Administrateur.update(idadmin, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
 
         // 4 -  Chargement des parametres pour affichage dans la vue
         paramAdmin.remiseAzero();
@@ -884,10 +889,62 @@ public class administrateurController extends Controller {
      * @return
      */
     public Result gestionAbscences() {
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         List<Promotion> lesPromos = Promotion.getPromotionByYear(year);
-        return ok(gererAbscences.render("Gérer les justificatifs d'abscences",lesPromos));
+        return ok(gererAbscences.render("Gérer les justificatifs d'abscences", lesPromos));
+    }
+
+    /**
+     * getTheAbscences()
+     * Permet de recupérer la liste des absences d'une promotion et d'une date donnée
+     * @return : Une liste d'information sur les absences
+     */
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result getTheAbscences() {
+        //Récupère les paramètres de la requête au format Json
+        JsonNode json = request().body().asJson();
+        //recupère le paramètre laPromo qui contient id de la promotion
+        int laPromo = json.findPath("promotion").intValue();
+        //recupère le paramètre laDate qui contient la date choisiz
+        String laDate = json.findPath("laDate").textValue();
+        //Variable permettant les formatages des différentes dates
+        SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat slotFormat = new SimpleDateFormat("hh:mm");
+        Date date = new Date();
+        String resultatParse =  null;
+        //Variable permettant de formatter la date en résultat json
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+        ObjectNode child;
+        try {
+            date = originalFormat.parse(laDate);
+            resultatParse = targetFormat.format(date);
+            //Récupération des absences suivant les paramètres de fournie par le front
+            List<Presence> absences = Presence.getAbsences(laPromo, resultatParse);
+            //Formation du resultat Json
+            for(Presence p : absences){
+                child =  Json.newObject();
+                child.put("id", p.id);
+                child.put("heureDebut", slotFormat.format(p.sonCours.heureDebut != null ? p.sonCours.heureDebut : ""));
+                child.put("heureFin", slotFormat.format(p.sonCours.heureFin != null ? p.sonCours.heureFin : ""));
+                child.put("libelle", p.sonCours.saMatiere.libelle != null ? p.sonCours.saMatiere.libelle : "");
+                child.put("libelleAbregee", p.sonCours.saMatiere.libelleAbregee != null ? p.sonCours.saMatiere.libelleAbregee : "");
+                child.put("numeroEtudiant", p.sonEtudiant.numeroEtudiant != null ? p.sonEtudiant.numeroEtudiant : "");
+                child.put("nomEtudiant", p.sonEtudiant.sonUtilisateur.nom != null ? p.sonEtudiant.sonUtilisateur.nom : "");
+                child.put("prenomEtudiant", p.sonEtudiant.sonUtilisateur.prenom != null ? p.sonEtudiant.sonUtilisateur.prenom : "");
+                child.put("motif", p.motif != null ? p.motif : "Aucun");
+                child.put("justificatif", p.justificatif != null ? p.justificatif : "#");
+                result.add(child);
+                child = null;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ok(result);
     }
 
     /**
