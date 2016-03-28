@@ -6,14 +6,16 @@
 
 <!-- Début du block dynamique-->
 <div>
-    <h1 style="margin-top: 0px;"> @titrepage </h1>
+    <div class="banner">
+        <h1 style="margin-top: 0px;"> @titrepage </h1>
 
-    @if((etape == "accueil") || (etape == "supprimer-admonistrateur") || (etape == "retirer-droit")){
-        <div class="alert alert-warning" role="alert">
             <p>
                 <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie administrateur à savoir ajouter, modifier et supprimer un administrateur.</i> <br/>
             </p>
-        </div>
+    </div>
+
+    @if((etape == "accueil") || (etape == "supprimer-admonistrateur") || (etape == "retirer-droit")){
+
 
         <div id="centrer_ajout_admin">
             <div class="list-group">
@@ -482,7 +484,7 @@
 <script>
         function supprimerAdmin(idadmin, prenom, nom)
         {
-            var r = confirm("Voulez-vous supprimer l'enseignant " + prenom + " " + nom + " ?");
+            var r = confirm("Voulez-vous supprimer l'administrateur " + prenom + " " + nom + " ?");
             if (r == true) {
 
                 $.ajax({

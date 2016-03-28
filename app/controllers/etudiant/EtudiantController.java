@@ -27,12 +27,25 @@ public class EtudiantController extends Controller{
 
     private Etudiant user;
 
+    public Result index() {
+
+        //sesssion : idEtudiant
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+        Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
+
+        int nbabsc = Presence.getNombreAbsence(idEtudiant.id);
+
+        return ok(indexEtudiant.render("Espace étudiant",nbabsc));
+    }
+
     public  Result justifierAbsences() {
         //sesssion : idEtudiant
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+        Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
+
         DynamicForm profil = form().bindFromRequest();
 
-        List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
-
+        List<Presence> presences = Presence.getCreaneauxAbsences(idEtudiant.numeroEtudiant); // Obtenir les créneaux absents
 
         int idpresence = Integer.parseInt(profil.get("idpresence"));
 
@@ -105,15 +118,12 @@ public class EtudiantController extends Controller{
         return ok(new File(justificatif));
     }
 
-    public Result index() {
-
-        int nbabsc=Presence.getNombreAbsence(6);
-
-        return ok(indexEtudiant.render("Espace étudiant",nbabsc));
-    }
-
     public Result consulterAbsences() {
-        List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
+        //sesssion : idEtudiant
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+        Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
+
+        List<Presence> presences = Presence.getCreaneauxAbsences(idEtudiant.numeroEtudiant);
 
 
 
@@ -251,7 +261,11 @@ public class EtudiantController extends Controller{
      */
     public Result nbAbsences(){
 
-        int nbabsc=Presence.getNombreAbsence(1);
+        //sesssion : idEtudiant
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+        Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
+
+        int nbabsc=Presence.getNombreAbsence(idEtudiant.id);
 
         return ok(indexEtudiant.render("Partie Etudiant", nbabsc));
     }

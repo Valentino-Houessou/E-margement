@@ -86,6 +86,19 @@
     margin-bottom: 50px;
 }
 
+.centrer_contenu2 {
+    position: relative; /* on positionne le conteneur */
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    border:1px solid darkgrey;
+    border-radius : 5px 4px 3px 2px;
+    margin-bottom: 50px;
+}
+
 .rouge{
     background-color: red;
 }
@@ -102,4 +115,21 @@
     margin-right: auto;
     margin-top: 15px;
     width: 60%
+}
+
+.intro-header {
+    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 50px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url("../images/redirection.jpg") no-repeat center center;
+}
+
+.intro-message {
+    position: relative;
+}
+
+.banner {
+    margin-bottom: 20px;
+    background: url("../images/banner.jpg") no-repeat center center;
 }

@@ -1,4 +1,4 @@
-@(titrepage: String)
+@(titrepage: String)(session : play.mvc.Http.Session)
 
 @main("E-margement - Paris X"){
 
@@ -78,7 +78,13 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                            <a href="#">
-                               <i class="glyphicon glyphicon-user"></i> <span class="texte_font"> Bonjour, prénom nom </span>
+                               <i class="glyphicon glyphicon-user"></i>
+                               <span class="texte_font">
+                                   Bonjour,
+                                       @if(session.get("prenom") != null) {
+                                           @session.get("prenom")
+                                   }
+                               </span>
                            </a>
                         </li>
                        <!-- <li class="dropdown">
@@ -110,7 +116,27 @@
         <div class="content">
             <div class="container-fluid">
 
-                    <div id="charger_fonctionnalite"> <!-- AJAX : Les blocs se chargent ici -->
+                    <div id="charger_fonctionnalite"> <!-- AJAX : Les blocs se chargent dynamiquement ici -->
+
+                        <div class="content-section-a">
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-5 col-sm-6">
+                                        <hr class="section-heading-spacer">
+                                        <div class="clearfix"></div>
+                                        <h2 class="section-heading">Bienvenue sur la page d'administration</h2>
+                                        <p class="lead">Dans cette partie, retrouver les pages de gestion des utilisateurs, chargement de l'emplois du temps, exportation des feuilles de présences et la gestion des absences.</p>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-6" style="padding-top: 30px;">
+                                        <img class="img-responsive" src="@routes.Assets.versioned("images/image1.jpg")" alt="Image 1">
+                                    </div>
+                                </div>
+
+                            </div>
+                                <!-- /.container -->
+
+                        </div>
 
                     </div>
 

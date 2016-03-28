@@ -1,11 +1,45 @@
 @(session : play.mvc.Http.Session)
 
-@if(session.get("enseignant").equals("true")){
-  <button type="button"><a href="@controllers.enseignant.routes.EnseignantController.index()">Acces Module Enseignant</a></button>
+@main("E-margement - Paris X"){
+
+    <div class="intro-header">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Redirection</h1>
+                        <hr class="intro-divider">
+                        <ul class="list-inline intro-social-buttons">
+                            <li>
+                            @if(session.get("enseignant").equals("true")){
+                                <button type="button"><a href="@controllers.enseignant.routes.EnseignantController.index()">Acces Module Enseignant</a></button>
+                            }
+                            </li>
+                            <li>
+                            @if(session.get("etudiant").equals("true")){
+                                <button type="button"><a href="@controllers.etudiant.routes.EtudiantController.index()">Acces Module Etudiant</a></button>
+                            }
+                            </li>
+                            <li>
+                            @if(session.get("administrateur").equals("true")){
+                                <button type="button"><a href="@controllers.administrateur.routes.administrateurController.adminIndex()">Acces Module Administrateur</a></button>
+                            }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <div class="container text-center">
+
+        </div>
+    </div>
 }
-@if(session.get("etudiant").equals("true")){
-    <button type="button"><a href="@controllers.etudiant.routes.EtudiantController.index()">Acces Module Etudiant</a></button>
-}
-@if(session.get("administrateur").equals("true")){
-    <button type="button"><a href="@controllers.administrateur.routes.administrateurController.adminIndex()">Acces Module Administrateur</a></button>
-}
+
+

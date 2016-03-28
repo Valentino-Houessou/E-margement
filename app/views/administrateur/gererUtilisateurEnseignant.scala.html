@@ -8,14 +8,15 @@
 
 <!-- Début du block dynamique-->
 <div>
-    <h1 style="margin-top: 0px;"> @titrepage </h1>
+    <div class="banner">
+        <h1 style="margin-top: 0px;"> @titrepage </h1>
+
+        <p>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
+        </p>
+    </div>
 
     @if((etape == "accueil") || (etape == "supprimer-enseignant")){
-        <div class="alert alert-info" role="alert">
-            <p>
-                <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
-            </p>
-        </div>
 
         <div class="row">
             <div class="col-xs-6">
@@ -238,14 +239,28 @@
     }
 
     @if((etape == "gerer-un-profil-enseignant") || (etape == "modifier-un-profil-enseignant") ){
-        <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <div > <!-- Only required for left/right tabs -->
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
-                <li><a href="#tab2" data-toggle="tab">Gérer les cours de l'enseignant</a></li>
+                @if(paramProfil.getListeBatiments() !=null){
+                    <li><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
+                    <li class="active"><a href="#tab2" data-toggle="tab">Affecter des cours</a></li>
+                    <li><a href="#tab3" data-toggle="tab">Afficher/supprimer les cours enseignés</a></li>
+                }else{
+                    <li class="active"><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Affecter des cours</a></li>
+                    <li><a href="#tab3" data-toggle="tab">Afficher/supprimer les cours enseignés</a></li>
+                }
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
+
+                @if(paramProfil.getListeBatiments() != null){
+
+                    <div class="tab-pane" id="tab1">
+                }else{
+                    <div class="tab-pane active" id="tab1">
+                }
+
 
                     @if(etape == "modifier-un-profil-enseignant"){
                         <div class="alert alert-success" role="alert">
@@ -347,15 +362,87 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-                <div class="tab-pane" id="tab2">
+
+                @if(paramProfil.getListeBatiments() != null){
+                    <!-- Second volet -->
+                    <div class="tab-pane active" id="tab2">
+                }else{
+                    <div class="tab-pane" id="tab2">
+                }
+
+
+                            <!-- Affectation d'un cours -->
+                        <div>
+                            <h2>Affecter à un cours</h2> <hr/>
+
+                            <div class="centrer_contenu2">
+                                    <!-- Géré par l'AJAX !!! -->
+                                <form class="form-inline" role="form">
+                                    <div class="form-group" style="margin-right: 50px;">
+                                        <label>1 - </label>
+                                        <select id="selectionFac" name="selectionFac" class="form-control"  style="width:225px;">
+                                        @if(paramProfil.getListeBatiments() == null){
+                                            <option value="-">Sélectionner une université</option>
+                                        }
+                                            @for(listeUniversite <- paramProfil.getListeUniversite()){
+                                                @if(listeUniversite.id == paramProfil.getSelectionUniversite()){
+                                                    <option value="@listeUniversite.id" selected>@listeUniversite.libelle</option>
+                                                }else{
+                                                    <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>2 - </label>
+                                        <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
+                                        @if(paramProfil.getListeFilieres() == null){
+                                            <option value="-">Sélectionner un batiment</option>
+                                        }
+                                            @if(paramProfil.getListeBatiments() != null){
+                                                @for(listeBatiments <- paramProfil.getListeBatiments()){
+                                                    @if(listeBatiments.id == paramProfil.getSelectionBatiment()){
+                                                        <option value="@listeBatiments.id" selected>@listeBatiments.libelle</option>
+                                                    }else{
+                                                        <option value="@listeBatiments.id" >@listeBatiments.libelle</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>3 - </label>
+                                        <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
+                                            <option value="-">Sélectionner une filière</option>
+                                            @if(paramProfil.getListeFilieres() != null){
+                                                @for(listeFilieres <- paramProfil.getListeFilieres()){
+                                                    @if(listeFilieres.libelle == paramProfil.getSelectionFiliere()){
+                                                        <option value="@listeFilieres.libelle" selected>@listeFilieres.libelle</option>
+                                                    }else{
+                                                        <option value="@listeFilieres.libelle" >@listeFilieres.libelle</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+
+
+                <!-- Troisième volet -->
+                <div class="tab-pane" id="tab3">
 
                     <div class="container">
-                        <h2>Récapitulatif de vos cours</h2>
+                        <h2>Récapitulatif de vos cours</h2> <hr/>
 
-                        <div style="height: 350px; overflow: auto;">
+                        <div style="height: 350px; margin-bottom: 20px; overflow: auto;">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -366,6 +453,7 @@
                                         <th>Dates</th>
                                         <th>Heure début</th>
                                         <th>Heure fin</th>
+                                        <th>Salle</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -387,16 +475,20 @@
                                             <td>@ladate</td>
                                             <td>@hdebut</td>
                                             <td>@hfin</td>
+                                            <td>@lesCoursDuProf.saSalle.libelle</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
-                    </div>
 
+
+                    </div>
                 </div>
+            </div> <!-- Fin content -->
             </div>
         </div>
+    </div>
     }
 </div>
 
@@ -570,4 +662,53 @@
             });
         });
 </script>
+<script>
+        $(document).ready(function(){
+
+            $('select[name="selectionFac"]').change(function(){
+
+                if($(this).val() != "-")
+                {
+                    $.ajax({
+                        url: '/administrateur/affecter-cours/batiment',
+                        type: "POST",
+                        data: "selectionFac="+$(this).val(),
+                        dataType : 'html',
+                        success: function(data) {
+
+                            $("#charger_fonctionnalite").html(data);
+                        },
+                        error: function() {
+                            alert("Erreur de chargement de la page ! La liste des Université est non disponible.")
+                        }
+                    });
+                }
+            });
+        });
+</script>
+    <!-- Gere la liste déroulante : Batiment-->
+<script>
+        $(document).ready(function(){
+
+            $('select[name="selectionBatiment"]').change(function(){
+
+                    $.ajax({
+                        url: '/administrateur/affecter-cours/filiere',
+                        type: "POST",
+                        data: "selectionBatiment="+$(this).val()+"&selectionUniversite="+$("#selectionFac").val(),
+                        dataType : 'html',
+                        success: function(data) {
+
+                            $("#charger_fonctionnalite").html(data);
+
+                        },
+                        error: function() {
+                            alert("Erreur de chargement de la page ! La liste des filières est non disponible.")
+                        }
+                    });
+
+            });
+        });
+</script>
+
 <!-- ./ fin partie script -->

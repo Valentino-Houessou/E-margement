@@ -1,7 +1,6 @@
 package controllers.administrateur.gestionDesParametres;
 
-import models.Cours;
-import models.Enseignant;
+import models.*;
 
 
 import java.text.SimpleDateFormat;
@@ -27,6 +26,18 @@ public class parametresProfilCree {
 
     private List<Cours> lesCoursDuProf;
 
+    // Gestion des listes déroulantes
+    private List<Universite> listeUniversite;// Affiche la liste de tout les universités enregistré dans la base
+    private List<Batiment> listeBatiments;     // Affiche la liste des batiments d'une université sélectionné
+    private List<Filiere> listeFilieres;        // Affiche la liste des filières d'un batiment d'une université
+
+    private int selectionUniversite;
+    private int selectionBatiment;
+    private String selectionFiliere;
+    private int selectionPromotion;
+
+    private String etapeListes; // Gére les listes déroulantes pour "Affecter un cours" à un enseignant
+
     /**
      * Constructeur par défaut
      */
@@ -42,6 +53,14 @@ public class parametresProfilCree {
         this.lienphoto = "";
         this.lenseignant = null;
         this.lesCoursDuProf = null;
+        this.listeUniversite = null;
+        this.etapeListes=null;
+        this.listeBatiments=null;
+        this.listeFilieres=null;
+        this.selectionUniversite=0;
+        this.selectionBatiment=0;
+        this.selectionFiliere="";
+        this.selectionPromotion=0;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -165,6 +184,70 @@ public class parametresProfilCree {
         this.lesCoursDuProf = lesCoursDuProf;
     }
 
+    public List<Universite> getListeUniversite() {
+        return listeUniversite;
+    }
+
+    public void setListeUniversite(List<Universite> listeUniversite) {
+        this.listeUniversite = listeUniversite;
+    }
+
+    public List<Filiere> getListeFilieres() {
+        return listeFilieres;
+    }
+
+    public void setListeFilieres(List<Filiere> listeFilieres) {
+        this.listeFilieres = listeFilieres;
+    }
+
+    public List<Batiment> getListeBatiments() {
+        return listeBatiments;
+    }
+
+    public void setListeBatiments(List<Batiment> listeBatiments) {
+        this.listeBatiments = listeBatiments;
+    }
+
+    public String getEtapeListes() {
+        return etapeListes;
+    }
+
+    public void setEtapeListes(String etapeListes) {
+        this.etapeListes = etapeListes;
+    }
+
+    public int getSelectionUniversite() {
+        return selectionUniversite;
+    }
+
+    public void setSelectionUniversite(int selectionUniversite) {
+        this.selectionUniversite = selectionUniversite;
+    }
+
+    public int getSelectionBatiment() {
+        return selectionBatiment;
+    }
+
+    public void setSelectionBatiment(int selectionBatiment) {
+        this.selectionBatiment = selectionBatiment;
+    }
+
+    public String getSelectionFiliere() {
+        return selectionFiliere;
+    }
+
+    public void setSelectionFiliere(String selectionFiliere) {
+        this.selectionFiliere = selectionFiliere;
+    }
+
+    public int getSelectionPromotion() {
+        return selectionPromotion;
+    }
+
+    public void setSelectionPromotion(int selectionPromotion) {
+        this.selectionPromotion = selectionPromotion;
+    }
+
     /**
      * Remet à zero les paramettres
      */
@@ -180,6 +263,14 @@ public class parametresProfilCree {
         this.lienphoto = "";
         this.lenseignant = null;
         this.lesCoursDuProf = null;
+        this.listeUniversite = null;
+        this.etapeListes=null;
+        this.listeBatiments=null;
+        this.listeFilieres=null;
+        this.selectionUniversite=0;
+        this.selectionBatiment=0;
+        this.selectionFiliere="";
+        this.selectionPromotion=0;
     }
 
     /**

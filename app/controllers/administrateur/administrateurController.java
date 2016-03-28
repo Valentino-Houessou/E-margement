@@ -53,6 +53,7 @@ public class administrateurController extends Controller {
     @Inject
     public PdfGenerator pdfGenerator;
 
+
     /**
      * adminIndex()
      * Redirection vers la page d'accueil de l'administrateur
@@ -60,9 +61,12 @@ public class administrateurController extends Controller {
      */
     public Result adminIndex()
     {
-        if(session().get("user_id") == null)
+        if(session().get("user_id") == null){
             return redirect(controllers.routes.Application.logout());
-        return ok(indexAdministrateur.render("Administration"));
+        }
+        Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+        session("prenom", utilisateur.prenom);
+        return ok(indexAdministrateur.render("Administration", session()));
     }
 
     /**
@@ -140,7 +144,7 @@ public class administrateurController extends Controller {
             }
             lienPhoto = myUploadPath + fileName;
 
-             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
         }else {
 
             // Création du profil enseignant sans photo
@@ -151,7 +155,7 @@ public class administrateurController extends Controller {
                 datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             }
 
-             newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
         }
 
         // 2 -  Chargement des parametres pour affichage dans la vue
@@ -423,12 +427,16 @@ public class administrateurController extends Controller {
         paramPC.remiseAzero();
         paramPC.setLenseignant(enseignant);
 
-        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
+
+        List<Universite> listeUniversite = Universite.getUniversite();
+        paramPC.setListeUniversite(listeUniversite);
 
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+
     }
 
     /**
@@ -502,6 +510,63 @@ public class administrateurController extends Controller {
 
         List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id ).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
+
+        List<Universite> listeUniversite = Universite.getUniversite();
+        paramPC.setListeUniversite(listeUniversite);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+
+    /**
+     * Affichage des batiments d'une université sélectionné
+     * @return
+     */
+    public Result selectionUniversite() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+        paramPC.setListeFilieres(null);
+        paramPC.setSelectionFiliere("");
+        paramPC.setSelectionBatiment(0);
+
+
+        // 1 - Récupération des batiments de l'université selectionnée
+        DynamicForm universites = form().bindFromRequest();
+        int universite = Integer.parseInt(universites.get("selectionFac"));
+
+        paramPC.setListeBatiments(Batiment.getBatimentByUniversite(universite));
+
+        // 2 - Etape liste
+        paramPC.setEtapeListes("selectionBatiment");
+
+        // 3 -  université selectionné
+        List<Universite> listeUniversite = Universite.getUniversite();
+        paramPC.setListeUniversite(listeUniversite);
+        paramPC.setSelectionUniversite(universite);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result selectionBatiment() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("selectionFiliere");
+
+        // 2 - Récupération des filières d'un batiments d'une université selectionnée
+        DynamicForm batiments = form().bindFromRequest();
+        int batiment = Integer.parseInt(batiments.get("selectionBatiment"));
+        paramPC.setListeFilieres(Filiere.getFilieresByBatiment(batiment));
+
+        // 3 - On garde le batiment sélectionné
+        paramPC.setSelectionBatiment(batiment);
+
+        // 4 - On garde l'université sélectionné
+        int universite = Integer.parseInt(batiments.get("selectionUniversite"));
+        paramPC.setSelectionUniversite(universite);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
