@@ -876,6 +876,10 @@ public class administrateurController extends Controller {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
     }
 
+    /**
+     * Exporte la feuille de présence au format PDF
+     * @return
+     */
     public  Result exporterFeuilleDatePDF() {
 
         if(session().get("user_id") == null)
