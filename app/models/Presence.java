@@ -5,6 +5,7 @@ import com.avaje.ebean.Model;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -65,19 +66,14 @@ public class Presence extends Model {
     /**
      * @param promotion : la promotion concernée
      * @param theDate : est la date concernée
-     * @return Retourne la liste des présences du mois et de l'année courante
+     * @return Retourne la liste des absences pour la date et la
      */
 
-    public static List<Presence> getAbsences( String promotion, String theDate){
-
-            /*//List<Cours> =
-
-            List<Presence> absences = new ArrayList<>();
-            absences =  find.
-        }*/
-        return null;
+    public static List<Presence> getAbsences(int promotion, String theDate){
+        return find.where()
+                .eq("emergement",0)
+                .eq("DATE(sonCours.heureDebut)", theDate)
+                .eq("sonCours.saPromo.id", promotion)
+                .findList();
     }
-
-
-
 }
