@@ -418,9 +418,10 @@ public class administrateurController extends Controller {
         // 1 - Récupération du profil enseignant à gérer
         Enseignant enseignant = Enseignant.findById(id);
 
-        // Chargement des parametres pour affichage dans la vue
+        // 2 - Chargement des parametres pour affichage dans la vue
         paramPC.remiseAzero();
         paramPC.setLenseignant(enseignant);
+        paramPC.setEtapeListes("ChoixUniversite");
 
         List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
@@ -509,6 +510,8 @@ public class administrateurController extends Controller {
         List<Universite> listeUniversite = Universite.getUniversite();
         paramPC.setListeUniversite(listeUniversite);
 
+        paramPC.setEtapeListes("ChoixUniversite"); // Pour la liste déroulante Université
+
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
 
@@ -521,10 +524,12 @@ public class administrateurController extends Controller {
 
         // 0 - Etape : gerer
         String etape = "gerer-un-profil-enseignant";
+        paramPC.setListeBatiments(null);
+        paramPC.setSelectionBatiment(0);
         paramPC.setListeFilieres(null);
         paramPC.setSelectionFiliere("");
-        paramPC.setSelectionBatiment(0);
-
+        paramPC.setListePromotion(null);
+        paramPC.setSelectionPromotion(0);
 
         // 1 - Récupération des batiments de l'université selectionnée
         DynamicForm universites = form().bindFromRequest();
@@ -547,6 +552,11 @@ public class administrateurController extends Controller {
 
         // 0 - Etape : gerer
         String etape = "gerer-un-profil-enseignant";
+        paramPC.setListeFilieres(null);
+        paramPC.setSelectionFiliere("");
+        paramPC.setListePromotion(null);
+        paramPC.setSelectionPromotion(0);
+        paramPC.setLesMatieres(null);
 
         // 1 - Etape liste
         paramPC.setEtapeListes("selectionFiliere");
@@ -562,6 +572,48 @@ public class administrateurController extends Controller {
         // 4 - On garde l'université sélectionné
         int universite = Integer.parseInt(batiments.get("selectionUniversite"));
         paramPC.setSelectionUniversite(universite);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result selectionPromotion() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+        paramPC.setLesMatieres(null);
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("selectionPromotion");
+
+        DynamicForm selectionfiliere = form().bindFromRequest();
+        String filiere = selectionfiliere.get("selectionfiliere"); // Récupere libelle de la filiere
+        List<Promotion> promotion = Promotion.getPromotionByFiliere(filiere);
+        paramPC.setListePromotion(promotion);
+
+        // 2 - On garde la filiere
+        paramPC.setSelectionFiliere(filiere);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result affichageCoursPromotion() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("afficheMatiere");
+
+        // 2 - Récupération de l'id de la promotion
+        DynamicForm promo = form().bindFromRequest();
+        int promotion = Integer.parseInt(promo.get("selectionpromotion"));
+
+        // 3 - Récupération des matières de la promotion choisie
+        List<Matiere> lesMatiereDeLaPromotion = Promotion.getMatiereParPromotion(promotion);
+        paramPC.setLesMatieres(lesMatiereDeLaPromotion);
+
+        // 4 - On garde la promotion
+        paramPC.setSelectionPromotion(promotion);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }

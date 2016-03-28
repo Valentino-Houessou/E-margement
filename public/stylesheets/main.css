@@ -96,11 +96,15 @@
     text-align: center;
     border:1px solid darkgrey;
     border-radius : 5px 4px 3px 2px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .rouge{
     background-color: red;
+}
+
+.rouge-texte {
+    color: red;
 }
 
 .vert{
@@ -132,4 +136,8 @@
 .banner {
     margin-bottom: 20px;
     background: url("../images/banner.jpg") no-repeat center center;
+}
+
+#affichage_cour_promotion{
+    visibility: hidden;
 }

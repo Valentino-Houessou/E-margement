@@ -112,13 +112,22 @@ public class Promotion extends Model{
         return find.byId(id);
     }
 
-
-
+    /**
+     * Rechercher les matiières enseignés d'une promotion
+     * @param idPromo
+     * @return
+     */
     public static List<Matiere> getMatiereParPromotion(int idPromo){
 
         Promotion lapromo = Promotion.find.where().eq("id",idPromo).findUnique();
         List<Matiere> LesMatieres= lapromo.sesMatieres;
 
+        Collections.sort(LesMatieres, new Comparator<Matiere>() {
+            @Override
+            public int compare(Matiere tc1, Matiere tc2) {
+                return tc1.getLibelle().compareTo(tc2.getLibelle());
+            }
+        });
         return  LesMatieres;
     }
 

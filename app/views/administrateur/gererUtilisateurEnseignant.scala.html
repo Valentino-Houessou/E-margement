@@ -12,7 +12,7 @@
         <h1 style="margin-top: 0px;"> @titrepage </h1>
 
         <p>
-            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur.</i> <br/>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie enseignante à savoir ajouter, modifier et supprimer un professeur. Vous pouvez aussi lui affecter/retirer un ou des cour(s)</i> <br/>
         </p>
     </div>
 
@@ -374,51 +374,64 @@
 
                             <!-- Affectation d'un cours -->
                         <div>
-                            <h2>Affecter à un cours</h2> <hr/>
+                            <form class="form-inline" role="form">
+                                <h2>Affecter à un cours</h2> <hr/>
 
-                            <div class="centrer_contenu2">
-                                    <!-- Géré par l'AJAX !!! -->
-                                <form class="form-inline" role="form">
-                                    <div class="form-group" style="margin-right: 50px;">
-                                        <label>1 - </label>
-                                        <select id="selectionFac" name="selectionFac" class="form-control"  style="width:225px;">
-                                        @if(paramProfil.getListeBatiments() == null){
-                                            <option value="-">Sélectionner une université</option>
+                                <div class="centrer_contenu2">
+                                        <div class="form-group" style="margin-right: 50px;">
+                                        @if((paramProfil.getEtapeListes() != "") && (paramProfil.getEtapeListes.equals("ChoixUniversite"))){
+                                            <label class="rouge-texte">1 - </label>
+                                        }else{
+                                            <label>1 - </label>
                                         }
-                                            @for(listeUniversite <- paramProfil.getListeUniversite()){
-                                                @if(listeUniversite.id == paramProfil.getSelectionUniversite()){
-                                                    <option value="@listeUniversite.id" selected>@listeUniversite.libelle</option>
-                                                }else{
-                                                    <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
-                                                }
+                                            <select id="selectionFac" name="selectionFac" class="form-control"  style="width:225px;">
+                                            @if(paramProfil.getListeBatiments() == null){
+                                                <option value="-">Sélectionner une université</option>
                                             }
-
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>2 - </label>
-                                        <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
-                                        @if(paramProfil.getListeFilieres() == null){
-                                            <option value="-">Sélectionner un batiment</option>
-                                        }
-                                            @if(paramProfil.getListeBatiments() != null){
-                                                @for(listeBatiments <- paramProfil.getListeBatiments()){
-                                                    @if(listeBatiments.id == paramProfil.getSelectionBatiment()){
-                                                        <option value="@listeBatiments.id" selected>@listeBatiments.libelle</option>
+                                                @for(listeUniversite <- paramProfil.getListeUniversite()){
+                                                    @if(listeUniversite.id == paramProfil.getSelectionUniversite()){
+                                                        <option value="@listeUniversite.id" selected>@listeUniversite.libelle</option>
                                                     }else{
-                                                        <option value="@listeBatiments.id" >@listeBatiments.libelle</option>
+                                                        <option value="@listeUniversite.id" >@listeUniversite.libelle</option>
                                                     }
-
                                                 }
-                                            }
-                                        </select>
-                                    </div>
 
-                                    <div class="form-group">
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                        @if((paramProfil.getEtapeListes() != "") && (paramProfil.getEtapeListes.equals("selectionBatiment"))){
+                                            <label class="rouge-texte">2 - </label>
+                                        }else{
+                                            <label>2 - </label>
+                                        }
+                                            <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px; margin-right: 50px;">
+                                            @if(paramProfil.getListeFilieres() == null){
+                                                <option value="-">Sélectionner un batiment</option>
+                                            }
+                                                @if(paramProfil.getListeBatiments() != null){
+                                                    @for(listeBatiments <- paramProfil.getListeBatiments()){
+                                                        @if(listeBatiments.id == paramProfil.getSelectionBatiment()){
+                                                            <option value="@listeBatiments.id" selected>@listeBatiments.libelle</option>
+                                                        }else{
+                                                            <option value="@listeBatiments.id" >@listeBatiments.libelle</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                </div>
+                                <div class="centrer_contenu2">
+                                    <div class="form-group" style="margin-right: 50px;">
+                                    @if((paramProfil.getEtapeListes() != "") && (paramProfil.getEtapeListes.equals("selectionFiliere"))){
+                                        <label  class="rouge-texte">3 - </label>
+                                    }else{
                                         <label>3 - </label>
+                                    }
                                         <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
-                                            <option value="-">Sélectionner une filière</option>
+                                            @if(paramProfil.getListePromotion() == null){
+                                                <option value="-">Sélectionner une filière</option>
+                                            }
                                             @if(paramProfil.getListeFilieres() != null){
                                                 @for(listeFilieres <- paramProfil.getListeFilieres()){
                                                     @if(listeFilieres.libelle == paramProfil.getSelectionFiliere()){
@@ -428,11 +441,52 @@
                                                     }
                                                 }
                                             }
+                                            </select>
+                                        </div>
+
+                                    <div class="form-group">
+                                    @if((paramProfil.getEtapeListes() != "") && (paramProfil.getEtapeListes.equals("selectionPromotion"))){
+                                        <label class="rouge-texte">4 - </label>
+                                    }else{
+                                        <label>4 - </label>
+                                    }
+                                        <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px; margin-right: 50px;">
+                                            <option value="-">Sélectionner une promotion</option>
+                                            @if(paramProfil.getListePromotion() != null){
+                                                @for(listePromotion <- paramProfil.getListePromotion()){
+                                                    @if(listePromotion.id == paramProfil.getSelectionPromotion()){
+                                                        <option value="@listePromotion.id" selected>@listePromotion.groupe - @listePromotion.getType()</option>
+                                                    }else{
+                                                        <option value="@listePromotion.id" >@listePromotion.groupe - @listePromotion.getType()</option>
+                                                    }
+                                                }
+                                            }
                                         </select>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
+
+                <!-- Affichage des cours à affecter -->
+                <div id="affichage_cour_promotion">
+                    @if(paramProfil.getLesMatieres() != null){
+                        <h3> Sélectionnez une matière enseigné à cette promotion </h3>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="list-group">
+                                    @for(listeMatieres <- paramProfil.getLesMatieres()){
+                                        <a href="#" class="list-group-item"> @listeMatieres.getLibelle()</a>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="col-sm-8">.col-sm-8</div>
+                        </div>
+                    }else{
+                        <p class="rouge-texte"> Il n'y a pas de matières affectés à cette promotion !</p>
+                    }
+                </div>
+                <!-- ./Fin d'affichage -->
                 </div>
 
 
@@ -481,8 +535,6 @@
                                 </tbody>
                             </table>
                         </div>
-
-
                     </div>
                 </div>
             </div> <!-- Fin content -->
@@ -679,7 +731,7 @@
                             $("#charger_fonctionnalite").html(data);
                         },
                         error: function() {
-                            alert("Erreur de chargement de la page ! La liste des Université est non disponible.")
+                            alert("Erreur de chargement de la page ! La liste des batiments est non disponible.")
                         }
                     });
                 }
@@ -706,6 +758,53 @@
                             alert("Erreur de chargement de la page ! La liste des filières est non disponible.")
                         }
                     });
+
+            });
+        });
+</script>
+<script>
+        $(document).ready(function(){
+
+            $('select[name="selectionfiliere"]').change(function(){
+
+                $.ajax({
+                    url: '/administrateur/affecter-cours/promotion',
+                    type: "POST",
+                    data: "selectionfiliere="+$(this).val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionFac").val(),
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page ! La liste des promotions est non disponible.")
+                    }
+                });
+
+            });
+        });
+</script>
+<script>
+        $(document).ready(function(){
+
+            $('select[name="selectionpromotion"]').change(function(){
+
+                $.ajax({
+                    url: '/administrateur/affecter-cours/affichage-cours',
+                    type: "POST",
+                    data: "selectionpromotion="+$(this).val()+"&selectionfiliere="+$("#selectionfiliere").val()+"&selectionBatiment="+$("#selectionBatiment").val()+"&selectionUniversite="+$("#selectionUniversite").val(),
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+                        $('#affichage_cour_promotion').css("visibility", "visible");
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page pour afficher les cours de la promotion !.")
+                    }
+                });
 
             });
         });

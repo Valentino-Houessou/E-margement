@@ -27,9 +27,10 @@ public class parametresProfilCree {
     private List<Cours> lesCoursDuProf;
 
     // Gestion des listes déroulantes
-    private List<Universite> listeUniversite;// Affiche la liste de tout les universités enregistré dans la base
-    private List<Batiment> listeBatiments;     // Affiche la liste des batiments d'une université sélectionné
+    private List<Universite> listeUniversite;   // Affiche la liste de tout les universités enregistré dans la base
+    private List<Batiment> listeBatiments;      // Affiche la liste des batiments d'une université sélectionné
     private List<Filiere> listeFilieres;        // Affiche la liste des filières d'un batiment d'une université
+    private List<Promotion> listePromotion;     // Affiche la liste des promotion d'une filière choisie
 
     private int selectionUniversite;
     private int selectionBatiment;
@@ -37,6 +38,9 @@ public class parametresProfilCree {
     private int selectionPromotion;
 
     private String etapeListes; // Gére les listes déroulantes pour "Affecter un cours" à un enseignant
+
+    // Affichage des matières d'une promotion choisie
+    private List<Matiere> lesMatieres;
 
     /**
      * Constructeur par défaut
@@ -54,13 +58,15 @@ public class parametresProfilCree {
         this.lenseignant = null;
         this.lesCoursDuProf = null;
         this.listeUniversite = null;
-        this.etapeListes=null;
+        this.etapeListes="";
         this.listeBatiments=null;
         this.listeFilieres=null;
+        this.listePromotion=null;
         this.selectionUniversite=0;
         this.selectionBatiment=0;
         this.selectionFiliere="";
         this.selectionPromotion=0;
+        this.lesMatieres = null;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -240,12 +246,28 @@ public class parametresProfilCree {
         this.selectionFiliere = selectionFiliere;
     }
 
+    public List<Promotion> getListePromotion() {
+        return listePromotion;
+    }
+
+    public void setListePromotion(List<Promotion> listePromotion) {
+        this.listePromotion = listePromotion;
+    }
+
     public int getSelectionPromotion() {
         return selectionPromotion;
     }
 
     public void setSelectionPromotion(int selectionPromotion) {
         this.selectionPromotion = selectionPromotion;
+    }
+
+    public List<Matiere> getLesMatieres() {
+        return lesMatieres;
+    }
+
+    public void setLesMatieres(List<Matiere> lesMatieres) {
+        this.lesMatieres = lesMatieres;
     }
 
     /**
@@ -264,13 +286,15 @@ public class parametresProfilCree {
         this.lenseignant = null;
         this.lesCoursDuProf = null;
         this.listeUniversite = null;
-        this.etapeListes=null;
+        this.etapeListes="";
         this.listeBatiments=null;
         this.listeFilieres=null;
+        this.listePromotion=null;
         this.selectionUniversite=0;
         this.selectionBatiment=0;
         this.selectionFiliere="";
         this.selectionPromotion=0;
+        this.lesMatieres = null;
     }
 
     /**

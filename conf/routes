@@ -70,7 +70,8 @@ GET           /administrateur/gestion-abscences                       controller
 GET           /administrateur/exporter-justificatifs-abscences        controllers.administrateur.administrateurController.exporterJustificatifsAbscences()
 POST          /administrateur/affecter-cours/batiment                 controllers.administrateur.administrateurController.selectionUniversite()
 POST          /administrateur/affecter-cours/filiere                  controllers.administrateur.administrateurController.selectionBatiment()
-
+POST          /administrateur/affecter-cours/promotion                controllers.administrateur.administrateurController.selectionPromotion()
+POST          /administrateur/affecter-cours/affichage-cours          controllers.administrateur.administrateurController.affichageCoursPromotion()
 
 
 
