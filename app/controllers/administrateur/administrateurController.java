@@ -923,31 +923,33 @@ public class administrateurController extends Controller {
         //Variable permettant de formatter la date en résultat json
         ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
         ObjectNode child;
-        try {
-            date = originalFormat.parse(laDate);
-            resultatParse = targetFormat.format(date);
-            //Récupération des absences suivant les paramètres de fournie par le front
-            List<Presence> absences = Presence.getAbsences(laPromo, resultatParse);
-            //Formation du resultat Json
-            for(Presence p : absences){
-                child =  Json.newObject();
-                child.put("id", p.id);
-                child.put("heureDebut", slotFormat.format((p.sonCours.heureDebut != null) ? p.sonCours.heureDebut : ""));
-                child.put("heureFin", slotFormat.format(p.sonCours.heureFin != null ? p.sonCours.heureFin : ""));
-                child.put("libelle", p.sonCours.saMatiere.libelle != null ? p.sonCours.saMatiere.libelle : "");
-                child.put("libelleAbregee", p.sonCours.saMatiere.libelleAbregee != null ? p.sonCours.saMatiere.libelleAbregee : "");
-                child.put("numeroEtudiant", p.sonEtudiant.numeroEtudiant != null ? p.sonEtudiant.numeroEtudiant : "");
-                child.put("nomEtudiant", p.sonEtudiant.sonUtilisateur.nom != null ? p.sonEtudiant.sonUtilisateur.nom : "");
-                child.put("prenomEtudiant", p.sonEtudiant.sonUtilisateur.prenom != null ? p.sonEtudiant.sonUtilisateur.prenom : "");
-                child.put("motif", ((p.motif != null) && (!p.motif.equals(""))) ? p.motif : "Aucun");
-                child.put("justificatif", ((p.justificatif != null) && (!p.justificatif.equals(""))) ? p.justificatif : "#");
-                result.add(child);
-                child = null;
-            }
+        //test sur les variables de la requête
+        if((laPromo != 0) && !(laDate.isEmpty()))
+            try {
+                date = originalFormat.parse(laDate);
+                resultatParse = targetFormat.format(date);
+                //Récupération des absences suivant les paramètres de fournie par le front
+                List<Presence> absences = Presence.getAbsences(laPromo, resultatParse);
+                //Formation du resultat Json
+                for(Presence p : absences){
+                    child =  Json.newObject();
+                    child.put("id", p.id);
+                    child.put("heureDebut", slotFormat.format((p.sonCours.heureDebut != null) ? p.sonCours.heureDebut : ""));
+                    child.put("heureFin", slotFormat.format(p.sonCours.heureFin != null ? p.sonCours.heureFin : ""));
+                    child.put("libelle", p.sonCours.saMatiere.libelle != null ? p.sonCours.saMatiere.libelle : "");
+                    child.put("libelleAbregee", p.sonCours.saMatiere.libelleAbregee != null ? p.sonCours.saMatiere.libelleAbregee : "");
+                    child.put("numeroEtudiant", p.sonEtudiant.numeroEtudiant != null ? p.sonEtudiant.numeroEtudiant : "");
+                    child.put("nomEtudiant", p.sonEtudiant.sonUtilisateur.nom != null ? p.sonEtudiant.sonUtilisateur.nom : "");
+                    child.put("prenomEtudiant", p.sonEtudiant.sonUtilisateur.prenom != null ? p.sonEtudiant.sonUtilisateur.prenom : "");
+                    child.put("motif", ((p.motif != null) && (!p.motif.equals(""))) ? p.motif : "Aucun");
+                    child.put("justificatif", ((p.justificatif != null) && (!p.justificatif.equals(""))) ? p.justificatif : "#");
+                    result.add(child);
+                    child = null;
+                }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         return ok(result);
     }
 
