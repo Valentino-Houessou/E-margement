@@ -27,7 +27,7 @@
             <div class="tabbable tabs-below">
                 <div class="tab-content">
                     <div class="tab-pane active" id="one_">
-                        <div id="daylyForm">
+                        <div id="daylyForm" style="margin-left: 30%; margin-right: 20%; margin-bottom: 5%">
                             <form class="form-inline">
                                 <div class="form-group">
                                     <label for="daylyPromoSelect">Promotion</label>
@@ -42,14 +42,17 @@
                                 <a href="#" class="btn btn-default active" id="daylyAbsenceSubmit" role="button">Rechercher</a>
                             </form>
                         </div>
-                        <table id="DaylyDatatable" class="display" cellspacing="0" width="100%">
-                            <thead><tr><th>Etudiant</th><th>Cours</th><th>Créneau</th><th>Motif</th><th>Justificatif</th></tr></thead>
-                            <tbody id="daylyAbsencesContent">
-                            </tbody>
-                        </table>
+                        <hr>
+                        <div style="margin-left: 10%; margin-right: 10%;margin-bottom: 15%">
+                            <table id="DaylyDatatable" class="display" cellspacing="0" width="100%">
+                                <thead><tr><th>Etudiant</th><th>Cours</th><th>Créneau</th><th>Motif</th><th>Justificatif</th></tr></thead>
+                                <tbody id="daylyAbsencesContent">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="tab-pane" id="two_">
-                        <div id="yearlyForm">
+                        <div id="yearlyForm" style="margin-left: 20%; margin-right: 20%; margin-bottom: 5%">
                             <form class="form-inline">
                                 <div class="form-group">
                                     <label for="yearlyPromoSelect">Promotion</label>
@@ -71,13 +74,17 @@
                                 <a href="#" class="btn btn-default active" id="yearlyAbsenceSubmit" role="button">Rechercher</a>
                             </form>
                         </div>
-                        <table id="YearlyDatatable" class="display" cellspacing="0" width="100%">
-                            <thead><tr><th>Etudiant</th><th>Cours</th><th>Créneau</th><th>Motif</th><th>Justificatif</th></tr></thead>
-                            <tbody id="yearlyAbsencesContent">
-                            </tbody>
-                        </table>
+                        <hr>
+                        <div style="margin-left: 10%; margin-right: 10%; margin-bottom: 15%">
+                            <table id="YearlyDatatable" class="display" cellspacing="0" width="100%">
+                                <thead><tr><th>Etudiant</th><th>Cours</th><th>Créneau</th><th>Motif</th><th>Justificatif</th></tr></thead>
+                                <tbody id="yearlyAbsencesContent">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+
                 <ul class="nav nav-tabs">
                     <li><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
                     <li><a href="#two_" data-toggle="tab">Rechercher par date</a></li>
@@ -118,34 +125,26 @@
 
             /*Permet de remplir le dataTable qui présente les absences*/
             function fillTable(data, theTable){
-                ligne = "";
+                var ligne = "";
+                var theButton = "";
                 $.each(data, function(idx, value){
+                    if(value.justificatif != '#')
+                        theButton = "<td><a href='/administrateur/fileDownload/" + value.id + "'>"
+                            + "<button type='button' class='btn btn-info'"
+                            + "aria-label='Left Align'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'>"
+                            + "</span></button></a></td>";
+                    else
+                        theButton = "<td> Pas de justificatif </td>";
+
                     ligne = "<tr data-id=" + value.id + "><td>" + value.nomEtudiant + " " + value.prenomEtudiant + " - " + value.numeroEtudiant
                             + "</td> <td>" + value.libelle + " - " + value.libelleAbregee + "</td> <td>" + value.heureDebut
                             + " - " + value.heureFin + "</td> <td>" + value.motif + "</td>"
-                            + "<td><a href='/administrateur/fileDownload/" + value.id + "'>"
-                            + "<button type='button' class='btn btn-default'"
-                            + "aria-label='Left Align'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'>"
-                            + "</span></button></a></td> </tr>";
+                            + theButton + " </tr>";
                     theTable.row.add($(ligne)).draw();
                     ligne = "";
+                    theButton = "";
                 });
             }
-
-            /*
-            * + "
-
-                + " <form action='/etudiant/fileDownload' name='downloadJustif'><td><a href='#' "
-                            + "onclick='document.downloadJustif.submit();'> <button type='button' class='btn btn-default'"
-                            + "aria-label='Left Align'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'>"
-                            + "</span></button></a></td> <input type='hidden' id='justificatifDownload' name='justificatifDownload'"
-                            + "value='" + value.justificatif + "'/> </form></tr>";
-
-                <td><a href='" + value.justificatif
-                            + "'rel='nofollow'> <button type='button' class='btn btn-default' aria-label='Left Align'>"
-                            + "<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button>"
-                            + "</a> </td> </tr>";
-            * */
 
             /* instanciation du champs date */
             $( "#yearlyPromoDate" ).datepicker({

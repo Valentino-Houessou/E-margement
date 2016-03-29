@@ -932,15 +932,15 @@ public class administrateurController extends Controller {
             for(Presence p : absences){
                 child =  Json.newObject();
                 child.put("id", p.id);
-                child.put("heureDebut", slotFormat.format(p.sonCours.heureDebut != null ? p.sonCours.heureDebut : ""));
+                child.put("heureDebut", slotFormat.format((p.sonCours.heureDebut != null) ? p.sonCours.heureDebut : ""));
                 child.put("heureFin", slotFormat.format(p.sonCours.heureFin != null ? p.sonCours.heureFin : ""));
                 child.put("libelle", p.sonCours.saMatiere.libelle != null ? p.sonCours.saMatiere.libelle : "");
                 child.put("libelleAbregee", p.sonCours.saMatiere.libelleAbregee != null ? p.sonCours.saMatiere.libelleAbregee : "");
                 child.put("numeroEtudiant", p.sonEtudiant.numeroEtudiant != null ? p.sonEtudiant.numeroEtudiant : "");
                 child.put("nomEtudiant", p.sonEtudiant.sonUtilisateur.nom != null ? p.sonEtudiant.sonUtilisateur.nom : "");
                 child.put("prenomEtudiant", p.sonEtudiant.sonUtilisateur.prenom != null ? p.sonEtudiant.sonUtilisateur.prenom : "");
-                child.put("motif", p.motif != null ? p.motif : "Aucun");
-                child.put("justificatif", p.justificatif != null ? p.justificatif : "#");
+                child.put("motif", ((p.motif != null) && (!p.motif.equals(""))) ? p.motif : "Aucun");
+                child.put("justificatif", ((p.justificatif != null) && (!p.justificatif.equals(""))) ? p.justificatif : "#");
                 result.add(child);
                 child = null;
             }
@@ -957,6 +957,8 @@ public class administrateurController extends Controller {
      * @return
      */
     public Result fileDownload(int presenceId){
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         String justificatif = Presence.getJustificatif(presenceId);
         response().setContentType("application/x-download");
         return ok(new File(justificatif));
