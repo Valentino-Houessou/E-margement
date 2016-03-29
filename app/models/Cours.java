@@ -116,4 +116,29 @@ public class Cours extends Model{
     public static Cours findbyId(long id) {
         return find.byId(id);
     }
+
+    /**
+     * Retourne tous les cours par jours
+     * @param id
+     * @return
+     */
+    public static List<Cours> findListCoursByIdMatiere(int id){
+        List<Cours> cours = find.where().eq("sa_matiere_id", id).findList();
+
+        return cours;
+    }
+
+    /**
+     * Affect ou retire un cours à un enseignant
+     * @param idcours
+     * @param idprofesseur
+     */
+    public static void affecterRetirerCours(int idcours, Enseignant idprofesseur)
+    {
+        Cours lecoursAmodifier = Cours.find.where().eq("id", idcours).findUnique();
+
+        lecoursAmodifier.sonEnseignant = idprofesseur;
+
+        lecoursAmodifier.update();
+    }
 }

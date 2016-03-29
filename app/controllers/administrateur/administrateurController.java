@@ -605,6 +605,8 @@ public class administrateurController extends Controller {
 
         // 0 - Etape : gerer
         String etape = "gerer-un-profil-enseignant";
+        paramPC.setLesCoursDelaMatiereDeLaPromotion(null);
+        paramPC.setSelectionMatiere(0);
 
         // 1 - Etape liste
         paramPC.setEtapeListes("afficheMatiere");
@@ -619,6 +621,60 @@ public class administrateurController extends Controller {
 
         // 4 - On garde la promotion
         paramPC.setSelectionPromotion(promotion);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result afficherLesCoursDeLaMatiere() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("afficheLesCoursDeLaMatiere");
+
+        // 2 - Récupération de l'id de la promotion
+        DynamicForm idmatiere = form().bindFromRequest();
+        int idmat = Integer.parseInt(idmatiere.get("idmatiere"));
+
+        // 3 - Récupération des cours par jours de la matière
+        List<Cours> lesCours = Cours.findListCoursByIdMatiere(idmat);
+        paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
+        paramPC.setSelectionMatiere(idmat);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result gererCeCours() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("afficheLesCoursDeLaMatiere");
+
+        // 2 - Récupération des parametres
+        DynamicForm parametres = form().bindFromRequest();
+        int idcours = Integer.parseInt(parametres.get("idcours"));
+        int idenseignant = Integer.parseInt(parametres.get("idenseignant"));
+        int idmatiere = Integer.parseInt(parametres.get("idmatiere"));
+        String action = parametres.get("action");
+
+        // 3 - Affecter le cours sélectionné
+        if(action.equals("cocher")){
+            System.out.println("SAADI");
+            Enseignant enseignant = Enseignant.findById(idenseignant);
+            Cours.affecterRetirerCours(idcours, enseignant);
+        }else{
+            if(action.equals("decocher")){
+                Cours.affecterRetirerCours(idcours, null);
+            }
+        }
+
+        // 3 - Récupération des cours par jours de la matière
+        List<Cours> lesCours = Cours.findListCoursByIdMatiere(idmatiere);
+        paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
+       // paramPC.setSelectionMatiere(idmatiere);
 
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }

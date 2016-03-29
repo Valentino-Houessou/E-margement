@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class parametresProfilCree {
 
+    private int idprofesseur;
     private String nom;
     private String prenom;
     private String adresseMail;
@@ -24,6 +25,7 @@ public class parametresProfilCree {
 
     private static parametresProfilCree INSTANCE = null;
 
+    // Affichage des cours affectés au professeur
     private List<Cours> lesCoursDuProf;
 
     // Gestion des listes déroulantes
@@ -41,12 +43,17 @@ public class parametresProfilCree {
 
     // Affichage des matières d'une promotion choisie
     private List<Matiere> lesMatieres;
+    private int selectionMatiere;
+
+    // Affichage de tous les cours d'une matiere qu'une promotion a
+    private List<Cours> lesCoursDelaMatiereDeLaPromotion;
 
     /**
      * Constructeur par défaut
      */
     private parametresProfilCree()
     {
+        this.idprofesseur=0;
         this.nom = "";
         this.prenom = "";
         this.adresseMail = "";
@@ -67,6 +74,8 @@ public class parametresProfilCree {
         this.selectionFiliere="";
         this.selectionPromotion=0;
         this.lesMatieres = null;
+        this.selectionMatiere=0;
+        this.lesCoursDelaMatiereDeLaPromotion=null;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -83,6 +92,14 @@ public class parametresProfilCree {
             }
         }
         return INSTANCE;
+    }
+
+    public int getIdprofesseur() {
+        return idprofesseur;
+    }
+
+    public void setIdprofesseur(int idprofesseur) {
+        this.idprofesseur = idprofesseur;
     }
 
     public String getNom() {
@@ -156,6 +173,7 @@ public class parametresProfilCree {
     public void setLenseignant(Enseignant lenseignant) {
         this.lenseignant = lenseignant;
 
+        this.setIdprofesseur(this.lenseignant.id);
         this.setNom(this.lenseignant.sonUtilisateur.nom);
         this.setPrenom(this.lenseignant.sonUtilisateur.prenom);
         this.setAdresseMail(this.lenseignant.sonUtilisateur.adresseMail);
@@ -270,11 +288,29 @@ public class parametresProfilCree {
         this.lesMatieres = lesMatieres;
     }
 
+
+    public int getSelectionMatiere() {
+        return selectionMatiere;
+    }
+
+    public void setSelectionMatiere(int selectionMatiere) {
+        this.selectionMatiere = selectionMatiere;
+    }
+
+    public List<Cours> getLesCoursDelaMatiereDeLaPromotion() {
+        return lesCoursDelaMatiereDeLaPromotion;
+    }
+
+    public void setLesCoursDelaMatiereDeLaPromotion(List<Cours> lesCoursDelaMatiereDeLaPromotion) {
+        this.lesCoursDelaMatiereDeLaPromotion = lesCoursDelaMatiereDeLaPromotion;
+    }
+
     /**
      * Remet à zero les paramettres
      */
     public void remiseAzero()
     {
+        this.idprofesseur=0;
         this.nom = "";
         this.prenom = "";
         this.adresseMail = "";
@@ -295,6 +331,8 @@ public class parametresProfilCree {
         this.selectionFiliere="";
         this.selectionPromotion=0;
         this.lesMatieres = null;
+        this.selectionMatiere=0;
+        this.lesCoursDelaMatiereDeLaPromotion=null;
     }
 
     /**

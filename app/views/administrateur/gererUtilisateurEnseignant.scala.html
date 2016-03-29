@@ -4,6 +4,7 @@
 @import controllers.administrateur.gestionDesParametres.parametresProfilCree
 @(titrepage: String)(lesEnseignants: java.util.List[Enseignant])(etape: String)(paramProfil: parametresProfilCree)
 @import java.util.Date; var hdebut=""; var hfin=""; var ladate="";
+@import java.math.BigInteger; var i=0;
 @import java.text.SimpleDateFormat;
 
 <!-- Début du block dynamique-->
@@ -451,7 +452,9 @@
                                         <label>4 - </label>
                                     }
                                         <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px; margin-right: 50px;">
+                                        @if(paramProfil.getLesMatieres() == null){
                                             <option value="-">Sélectionner une promotion</option>
+                                        }
                                             @if(paramProfil.getListePromotion() != null){
                                                 @for(listePromotion <- paramProfil.getListePromotion()){
                                                     @if(listePromotion.id == paramProfil.getSelectionPromotion()){
@@ -467,26 +470,91 @@
                             </form>
                         </div>
 
-                <!-- Affichage des cours à affecter -->
-                <div id="affichage_cour_promotion">
-                    @if(paramProfil.getLesMatieres() != null){
-                        <h3> Sélectionnez une matière enseigné à cette promotion </h3>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="list-group">
-                                    @for(listeMatieres <- paramProfil.getLesMatieres()){
-                                        <a href="#" class="list-group-item"> @listeMatieres.getLibelle()</a>
-                                    }
+                    <!-- Affichage des cours à affecter -->
+                    <div id="affichage_cour_promotion">
+                        @if(paramProfil.getLesMatieres() != null){
+                            <div class="row">
+                                <div class="col-sm-4" style="border-right: 1px solid black;">
+                                    <h3> Sélectionnez une matière enseigné à cette promotion </h3>
+                                    <div class="list-group">
+                                        @for(listeMatieres <- paramProfil.getLesMatieres()){
+                                            @if(paramProfil.getSelectionMatiere() == listeMatieres.id){
+                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id')" class="list-group-item active"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
+                                            }else{
+                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id')" class="list-group-item"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Affectation des cours -->
+                                <div class="col-sm-8">
+                                    <h3> Affecter un ou des cours à l'enseignant </h3>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fillière</th>
+                                                <th>Promotion</th>
+                                                <th>Matière</th>
+                                                <th>Type</th>
+                                                <th>Dates</th>
+                                                <th>Heure début</th>
+                                                <th>Heure fin</th>
+                                                <th>Salle</th>
+                                                <th>Cours affecté à </th>
+                                                <th>Affecter / Désaffecter  </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(paramProfil.getLesCoursDelaMatiereDeLaPromotion() != null){
+                                                @for(lesCoursDelaPromo <- paramProfil.getLesCoursDelaMatiereDeLaPromotion()){
+                                                    <tr>
+                                                        <td>@lesCoursDelaPromo.saPromo.filiere</td>
+                                                        <td> @lesCoursDelaPromo.saPromo.groupe @lesCoursDelaPromo.saPromo.getType()</td>
+                                                        <td>@lesCoursDelaPromo.saMatiere.getLibelle</td>
+                                                        <td>@lesCoursDelaPromo.saMatiere.libelleAbregee</td>
+                                                        @{
+                                                            hdebut = new SimpleDateFormat("HH:mm").format(lesCoursDelaPromo.heureDebut)
+
+                                                            hfin = new SimpleDateFormat("HH:mm").format(lesCoursDelaPromo.heureFin)
+
+                                                            hdebut = hdebut.replace(":","H");
+                                                            hfin = hfin.replace(":","H");
+                                                            ladate = new SimpleDateFormat("dd/MM/yyyy").format(lesCoursDelaPromo.heureDebut)
+                                                        }
+                                                        <td>@ladate</td>
+                                                        <td>@hdebut</td>
+                                                        <td>@hfin</td>
+                                                        <td>@lesCoursDelaPromo.saSalle.libelle</td>
+                                                        <td>
+                                                            @if(lesCoursDelaPromo.sonEnseignant != null){
+                                                                @if(paramProfil.getIdprofesseur() == lesCoursDelaPromo.sonEnseignant.id){
+                                                                    <span class="rouge-texte">@lesCoursDelaPromo.sonEnseignant.sonUtilisateur.prenom @lesCoursDelaPromo.sonEnseignant.sonUtilisateur.nom</span>
+                                                                }else{
+                                                                    @lesCoursDelaPromo.sonEnseignant.sonUtilisateur.prenom @lesCoursDelaPromo.sonEnseignant.sonUtilisateur.nom
+                                                                }
+                                                            }
+                                                        </td>
+                                                        <td class="centrer_texte">
+                                                            @(i += 1)
+                                                            @if((lesCoursDelaPromo.sonEnseignant != null) && (paramProfil.getIdprofesseur() == lesCoursDelaPromo.sonEnseignant.id)){
+                                                                <input  type="checkbox" onclick="affecterDesafferter('decocher','@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" checked /> <!-- La case est cocher on la décoche. On retire le cours au prof -->
+                                                            }else{
+                                                                <input  type="checkbox" onclick="affecterDesafferter('cocher', '@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" /> <!-- La case est décoche on la coche. On affecte le cours au prof -->
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-
-                            <div class="col-sm-8">.col-sm-8</div>
-                        </div>
-                    }else{
-                        <p class="rouge-texte"> Il n'y a pas de matières affectés à cette promotion !</p>
-                    }
-                </div>
-                <!-- ./Fin d'affichage -->
+                        }else{
+                            <p class="rouge-texte"> Il n'y a pas de matières affectés à cette promotion !</p>
+                        }
+                    </div>
+                    <!-- ./Fin d'affichage -->
                 </div>
 
 
@@ -535,9 +603,9 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </div>
             </div> <!-- Fin content -->
+                </div>
             </div>
         </div>
     </div>
@@ -808,6 +876,71 @@
 
             });
         });
+</script>
+<script>
+       function afficherLesCours(idmatiere) {
+            $(document).ready(function(){
+                $.ajax({
+                    url: '/administrateur/affecter-cours/affiche-les-cours',
+                    type: "POST",
+                    data: "idmatiere="+idmatiere,
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+                        $('#affichage_cour_promotion').css("visibility", "visible");
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page pour afficher tous les cours de la promotion !.")
+                    }
+                });
+            });
+        }
+</script>
+<script>
+        function affecterDesafferter(idcheck, idmatiere ,idcours, idenseignant) {
+
+            if( idcheck == "cocher"){
+                $(document).ready(function(){
+                    $.ajax({
+                        url: '/administrateur/affecter-cours/affecter-ce-cours',
+                        type: "POST",
+                        data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=cocher"+"&idmatiere="+idmatiere,
+                        dataType : 'html',
+                        success: function(data) {
+
+                            $("#charger_fonctionnalite").html(data);
+                            $('#affichage_cour_promotion').css("visibility", "visible");
+
+                        },
+                        error: function() {
+                            alert("Erreur de chargement de la page !.")
+                        }
+                    });
+                });
+            }else{
+                if(idcheck == "decocher"){
+                    $(document).ready(function(){
+                        $.ajax({
+                            url: '/administrateur/affecter-cours/affecter-ce-cours',
+                            type: "POST",
+                            data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=decocher"+"&idmatiere="+idmatiere,
+                            dataType : 'html',
+                            success: function(data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#affichage_cour_promotion').css("visibility", "visible");
+
+                            },
+                            error: function() {
+                                alert("Erreur de chargement de la page !.")
+                            }
+                        });
+                    });
+                }
+            }
+        }
 </script>
 
 <!-- ./ fin partie script -->
