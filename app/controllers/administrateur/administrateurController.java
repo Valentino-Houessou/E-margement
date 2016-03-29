@@ -952,11 +952,13 @@ public class administrateurController extends Controller {
     }
 
     /**
-     * exporterJustificatifsAbscences()
-     * Affichage du bloc dynamique JQuery pour exporter les justificatifs d'abscences
+     * fileDownload()
+     * Permer de faire le téléchargement des fichiers de justificatifs
      * @return
      */
-    public Result exporterJustificatifsAbscences() {
-        return ok(exporterJustificatifsAbscences.render("Exporter les justificatifs d'abscences"));
+    public Result fileDownload(int presenceId){
+        String justificatif = Presence.getJustificatif(presenceId);
+        response().setContentType("application/x-download");
+        return ok(new File(justificatif));
     }
 }

@@ -45,7 +45,7 @@ public class Presence extends Model {
     }
 
     public static Presence findbyEtudiant(long id_etu,long id_cours){
-        return find.where().eq("son_etudiant_id",id_etu).eq("son_cours_id",id_cours).findUnique();
+        return find.where().eq("son_etudiant_id", id_etu).eq("son_cours_id",id_cours).findUnique();
     }
 
     /**
@@ -60,7 +60,7 @@ public class Presence extends Model {
 
         // 2 - Je récupére toutes ses absences
         return Presence.find.where().eq("son_etudiant_id", etu.id)
-                .eq("emergement",0)
+                .eq("emergement", 0)
                 .findList();
     }
 
@@ -69,12 +69,21 @@ public class Presence extends Model {
      * @param theDate : est la date concernée
      * @return Retourne la liste des absences pour la date et la
      */
-
     public static List<Presence> getAbsences(int promotion, String theDate){
         return find.where()
-                .eq("emergement",0)
+                .eq("emergement", 0)
                 .eq("DATE(sonCours.heureDebut)", theDate)
                 .eq("sonCours.saPromo.id", promotion)
                 .findList();
     }
+
+    /**
+     * @param presenceId : l'id de la presence
+     * @return Retourne le lien de la présence
+     */
+    public static String getJustificatif(int presenceId){
+        Presence pres =  find.byId(presenceId);
+        return pres.justificatif;
+    }
+
 }

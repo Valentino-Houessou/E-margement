@@ -13,7 +13,13 @@
 <!-- Reproportionner la page pour qu'elle s'adapte à la feuille -->
 <!-- Début du block dynamique -->
 <div>
-    <h1> @titrepage </h1>
+    <div class="banner" style="margin-bottom: 40px;">
+        <h1> @titrepage </h1>
+
+        <p>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer les justificatifs d'abscences des étudiants.</i> <br/>
+        </p>
+    </div>
 
     <div class="container">
         <div >
@@ -116,14 +122,30 @@
                 $.each(data, function(idx, value){
                     ligne = "<tr data-id=" + value.id + "><td>" + value.nomEtudiant + " " + value.prenomEtudiant + " - " + value.numeroEtudiant
                             + "</td> <td>" + value.libelle + " - " + value.libelleAbregee + "</td> <td>" + value.heureDebut
-                            + " - " + value.heureFin + "</td> <td>" + value.motif + "</td> <td><a href='" + value.justificatif
-                            + "'> <button type='button' class='btn btn-default' aria-label='Left Align'>"
-                            + "<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button>"
-                            + "</a> </td> </tr>";
+                            + " - " + value.heureFin + "</td> <td>" + value.motif + "</td>"
+                            + "<td><a href='/administrateur/fileDownload/" + value.id + "'>"
+                            + "<button type='button' class='btn btn-default'"
+                            + "aria-label='Left Align'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'>"
+                            + "</span></button></a></td> </tr>";
                     theTable.row.add($(ligne)).draw();
                     ligne = "";
                 });
             }
+
+            /*
+            * + "
+
+                + " <form action='/etudiant/fileDownload' name='downloadJustif'><td><a href='#' "
+                            + "onclick='document.downloadJustif.submit();'> <button type='button' class='btn btn-default'"
+                            + "aria-label='Left Align'><span class='glyphicon glyphicon-download-alt' aria-hidden='true'>"
+                            + "</span></button></a></td> <input type='hidden' id='justificatifDownload' name='justificatifDownload'"
+                            + "value='" + value.justificatif + "'/> </form></tr>";
+
+                <td><a href='" + value.justificatif
+                            + "'rel='nofollow'> <button type='button' class='btn btn-default' aria-label='Left Align'>"
+                            + "<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span></button>"
+                            + "</a> </td> </tr>";
+            * */
 
             /* instanciation du champs date */
             $( "#yearlyPromoDate" ).datepicker({
