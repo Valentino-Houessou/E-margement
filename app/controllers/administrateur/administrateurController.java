@@ -676,6 +676,10 @@ public class administrateurController extends Controller {
         paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
        // paramPC.setSelectionMatiere(idmatiere);
 
+        // 4 - Mise à jours des cours du prof
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",idenseignant).findList();
+        paramPC.setLesCoursDuProf(lesCoursDuprof);
+
         return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
     }
 

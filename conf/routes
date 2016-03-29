@@ -72,6 +72,8 @@ POST          /administrateur/affecter-cours/batiment                 controller
 POST          /administrateur/affecter-cours/filiere                  controllers.administrateur.administrateurController.selectionBatiment()
 POST          /administrateur/affecter-cours/promotion                controllers.administrateur.administrateurController.selectionPromotion()
 POST          /administrateur/affecter-cours/affichage-cours          controllers.administrateur.administrateurController.affichageCoursPromotion()
+POST          /administrateur/affecter-cours/affiche-les-cours        controllers.administrateur.administrateurController.afficherLesCoursDeLaMatiere()
+POST          /administrateur/affecter-cours/affecter-ce-cours           controllers.administrateur.administrateurController.gererCeCours()
 GET           /administrateur/fileDownload/:presenceId               controllers.administrateur.administrateurController.fileDownload(presenceId : Int)
 
 
