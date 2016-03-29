@@ -636,9 +636,10 @@ public class administrateurController extends Controller {
         // 2 - Récupération de l'id de la promotion
         DynamicForm idmatiere = form().bindFromRequest();
         int idmat = Integer.parseInt(idmatiere.get("idmatiere"));
+        int idpromotion = Integer.parseInt(idmatiere.get("idpromotion"));
 
         // 3 - Récupération des cours par jours de la matière
-        List<Cours> lesCours = Cours.findListCoursByIdMatiere(idmat);
+        List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmat,idpromotion);
         paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
         paramPC.setSelectionMatiere(idmat);
 
@@ -658,11 +659,11 @@ public class administrateurController extends Controller {
         int idcours = Integer.parseInt(parametres.get("idcours"));
         int idenseignant = Integer.parseInt(parametres.get("idenseignant"));
         int idmatiere = Integer.parseInt(parametres.get("idmatiere"));
+        int idpromotion = Integer.parseInt(parametres.get("idpromotion"));
         String action = parametres.get("action");
 
         // 3 - Affecter le cours sélectionné
         if(action.equals("cocher")){
-            System.out.println("SAADI");
             Enseignant enseignant = Enseignant.findById(idenseignant);
             Cours.affecterRetirerCours(idcours, enseignant);
         }else{
@@ -672,9 +673,47 @@ public class administrateurController extends Controller {
         }
 
         // 3 - Récupération des cours par jours de la matière
-        List<Cours> lesCours = Cours.findListCoursByIdMatiere(idmatiere);
+        List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmatiere, idpromotion);
         paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
        // paramPC.setSelectionMatiere(idmatiere);
+
+        // 4 - Mise à jours des cours du prof
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",idenseignant).findList();
+        paramPC.setLesCoursDuProf(lesCoursDuprof);
+
+        return ok(gererUtilisateurEnseignant.render("Gérer l'enseignant " + paramPC.getPrenom() + " " + paramPC.getNom(), null, etape, paramPC));
+    }
+
+    public Result affecterOuRetirerCours() {
+
+        // 0 - Etape : gerer
+        String etape = "gerer-un-profil-enseignant";
+
+        // 1 - Etape liste
+        paramPC.setEtapeListes("afficheLesCoursDeLaMatiere");
+
+        // 2 - Récupération des parametres
+        DynamicForm parametres = form().bindFromRequest();
+        int idenseignant = Integer.parseInt(parametres.get("idprof"));
+        int idmatiere = Integer.parseInt(parametres.get("idmat"));
+        int idpromo = Integer.parseInt(parametres.get("idpromo"));
+        String action = parametres.get("statut");
+
+        if(action.equals("TousAffecter")){
+            Enseignant enseignant = Enseignant.findById(idenseignant);
+            Cours.affecterTousLesCours(idmatiere, idpromo, enseignant);
+
+        }else{
+            if(action.equals("TousRetirer")){
+                Enseignant enseignant = Enseignant.findById(idenseignant);
+                Cours.retirerTousLesCours(idmatiere, idpromo, enseignant);
+            }
+        }
+
+        // 3 - Récupération des cours par jours de la matière
+        List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmatiere, idpromo);
+        paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
+        // paramPC.setSelectionMatiere(idmatiere);
 
         // 4 - Mise à jours des cours du prof
         List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",idenseignant).findList();
