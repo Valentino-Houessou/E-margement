@@ -73,7 +73,7 @@ public class EtudiantController extends Controller{
         String motif=profil.get("motif");
 
 
-        if (fichier != null && fichier.getFile().length()<1000000) {
+        if (fichier != null && fichier.getFile().length()<50000000) {
 
             if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
                 String fileName = fichier.getFilename();
