@@ -14,17 +14,17 @@
                         <ul class="list-inline intro-social-buttons">
                             <li>
                             @if(session.get("enseignant").equals("true")){
-                                <button type="button" class="modules"><a href="@controllers.enseignant.routes.EnseignantController.index()"><span color="#ffffff">Accès Module Enseignant<spa></spa></a></button>
+                                <a role="button" class="modules" href="@controllers.enseignant.routes.EnseignantController.index()"><span color="#ffffff">Accès Module Enseignant</span></a>
                             }
                             </li>
                             <li>
                             @if(session.get("etudiant").equals("true")){
-                                <button type="button" class="modules"><a href="@controllers.etudiant.routes.EtudiantController.index()"><span color="#ffffff">Accès Module Etudiant</span></a></button>
+                                <a role="button" class="modules" href="@controllers.etudiant.routes.EtudiantController.index()"><span color="#ffffff">Accès Module Etudiant</span></a>
                             }
                             </li>
                             <li>
                             @if(session.get("administrateur").equals("true")){
-                                <button type="button" class="modules"><a href="@controllers.administrateur.routes.administrateurController.adminIndex()"><span color="#ffffff">Accès Module Administrateur</span></a></button>
+                                <a role="button" class="modules" href="@controllers.administrateur.routes.administrateurController.adminIndex()"><span color="#ffffff">Accès Module Administrateur</span></a>
                             }
                             </li>
                             <br><br><br><br><br><br>
