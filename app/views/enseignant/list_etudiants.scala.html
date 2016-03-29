@@ -1,4 +1,5 @@
 @(presence : java.util.List[Presence])
+@import java.lang.Integer; var compteur = 0;
 
 <script type="text/javascript" src="@routes.Assets.versioned("javascripts/enseignant-js/button-checkbox.js")"></script>
 
@@ -26,6 +27,7 @@
                             <input id="@student.sonEtudiant.id" name="@student.sonEtudiant.id" value="1" type="radio"
                                 @if(student.emergement){
                                     checked="checked"
+                                    @(compteur+=1)
                                 } class="hidden" />
                         </span>
                         <span class="button-checkbox" id="abs_@student.sonEtudiant.id">
@@ -68,4 +70,5 @@
             </tr>
         }
     }
+    <tr id="nb_abs" @if(compteur == presence.size()){class="alert-success"} else {class="alert-danger"}><td></td><td colspan="2"> @compteur présent(s) sur @presence.size() étudiants</td><td></td></tr>
 </table>
