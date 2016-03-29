@@ -1,12 +1,11 @@
+@(titrepage:String)(nbasbcence:Int)(session : play.mvc.Http.Session)
 @import models.Etudiant
-@(titrepage:String)(nbasbcence:Int)
 
 
-
-    @main("E-margement - Paris X"){
+@main("E-margement - Paris X"){
 
         <div class="wrapper">
-            <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
+            <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/banner.jpg")">
 
                 <div class="sidebar-wrapper">
                     <div class="logo">
@@ -23,13 +22,6 @@
                             </a>
                         </li>
 
-
-                        <li>
-                            <a href="#" id="justi">
-                                <i class="pe-7s-news-paper"></i>
-                                <p>Justifier une absence</p>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -52,10 +44,20 @@
                             <ul class="nav navbar-nav navbar-right">
 
                                 <li>
-                                    <a ><span>Bonjour sox </span> </a >
+                                    <a href="#">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                        <span class="texte_font">
+                                            Bonjour,
+                                            @if(session.get("prenom") != null) {
+                                                @session.get("prenom")
+                                            }
+                                        </span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="@routes.Application.logout()">Déconnexion</a>
+                                    <a href="@routes.Application.logout()">
+                                        <i  class="glyphicon glyphicon-off" style="color: red;"></i> <span class="texte_font"> Déconnexion </span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -64,26 +66,45 @@
 
                     <!-- Contenu principal dynamique JQuery -->
                 <div class="content">
-                    <div class="container-fluid">
-                        <br/>
-                    <h3> Nombre d'absences injustifiées: @nbasbcence</h3>
-                        <br/> <br/>
+
+                    <!-- <div class="panel panel-primary">
+
+                        <p class="paraf">Bonjour,<br>
+                            Bienvenu sur votre espace E-Margement
+                        </p>
+
+                    </div>-->
+
+                    <div class="content-section-a">
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-5 col-sm-6">
+                                    <hr class="section-heading-spacer">
+                                    <div class="clearfix"></div>
+                                    <h2 class="section-heading">Bienvenue sur la page d'étudiant</h2>
+                                    <p class="lead">Dans cette partie, vous pouvez consulter vos absences et les justifier en uploadant votre justificatif</p>
+                                </div>
+                                <div class="col-lg-5 col-sm-6" style="padding-top: 30px;">
+                                    <img class="img-responsive" src="@routes.Assets.versioned("images/emargement.png")" alt="Image 1">
+                                </div>
+                            </div>
+                            <br><br><br><br><br>
+                            <a style="font-size: x-large;"><b>Nombre d'absences injustifiées: @nbasbcence</b> </a>
+                        </div>
+                            <!-- /.container -->
+
                     </div>
+                    <div class="lead">
+                        <br/>
 
-                    <br/> <br/><br/> <br/> <br/> <br/>
-
-                    <div class="panel panel-primary">
-
-                        <p class="paraf">Homines enim eruditos et sobrios ut infaustos et inutiles vitant, eo quoque accedente quod et nomenclatores adsueti haec et talia venditare, mercede accepta lucris quosdam et prandiis inserunt subditicios ignobiles et obscuros.
-
-                        Adolescebat autem obstinatum propositum erga haec et similia multa scrutanda, stimulos admovente regina, quae abrupte mariti fortunas trudebat in exitium praeceps, cum eum potius lenitate feminea ad veritatis humanitatisque viam reducere utilia suadendo deberet, ut in Gordianorum actibus factitasse Maximini truculenti illius imperatoris rettulimus coniugem.
-
-                        Nec sane haec sola pernicies orientem diversis cladibus adfligebat. Namque et Isauri, quibus est usitatum saepe pacari saepeque inopinis excursibus cuncta miscere, ex latrociniis occultis et raris, alente inpunitate adulescentem in peius audaciam ad bella gravia proruperunt, diu quidem perduelles spiritus inrequietis motibus erigentes, hac tamen indignitate perciti vehementer, ut iactitabant, quod eorum capiti quidam consortes apud Iconium Pisidiae oppidum in amphitheatrali spectaculo feris praedatricibus obiecti sunt praeter morem.
-                    </p>
-
+                        <br/> <br/>
                     </div>
                 </div>
 
+
+
+                <!--<br/> <br/><br/> <br/> <br/> <br/>-->
 
                     <!-- Fin contenu principal -->
             </div>

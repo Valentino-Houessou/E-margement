@@ -1,11 +1,13 @@
+@(titrepage:String)(idpresence:Int)(erreur :String)
 @import controllers.routes
-@(titrepage:String)(idpresence:Int)
-
 
 
     @main("E-margement - Paris X"){
+
         <div class="wrapper">
-            <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/jsenc.png")">
+
+            <div class="sidebar" data-color="blue" data-image="@routes.Assets.versioned("images/banner.jpg")">
+
 
 
                 <div class="sidebar-wrapper">
@@ -20,14 +22,6 @@
                             <a href="/etudiant/consulterAbsences" id="consul">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>Consulter les  <span class="recadrer_mot">absences</span></p>
-                            </a>
-                        </li>
-
-
-                        <li>
-                            <a href="#" id="justi">
-                                <i class="pe-7s-news-paper"></i>
-                                <p>Justifier une absence</p>
                             </a>
                         </li>
                     </ul>
@@ -52,10 +46,20 @@
                             <ul class="nav navbar-nav navbar-right">
 
                                 <li>
-                                    <a ><span>Bonjour sox </span> </a >
+                                    <a href="#">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                        <span class="texte_font">
+                                            Bonjour,
+                                            @if(session.get("prenom") != null) {
+                                                @session.get("prenom")
+                                            }
+                                        </span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#">Déconnexion</a>
+                                    <a href="@routes.Application.logout()">
+                                        <i  class="glyphicon glyphicon-off" style="color: red;"></i> <span class="texte_font"> Déconnexion </span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -64,30 +68,75 @@
 
                     <!-- Contenu principal dynamique JQuery -->
                 <div class="content">
-                    <div class="container-fluid">
-                        <br/>
-                        <h3> Ici vous justifierai vos absences</h3>
-                        <br/> <br/>
+
+                    <div class="banner" style="margin-bottom: 20px;">
+                        <h1> @titrepage </h1>
+
+                        <p>
+                            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez justifier vos absences</i> <br/>
+                        </p>
+                        <br><br><br>
                     </div>
 
-                    <br/> <br/><br/> <br/> <br/> <br/>
 
-                    <form action="/etudiant/fileUpload" method="post" enctype="multipart/form-data">
+                    <br/> <br/><br/> <br/>
+
+                    <!--<form action="/etudiant/fileUpload" method="post" enctype="multipart/form-data">
 
                         <input type="file" id="fileUpload" name="fileUpload"/>
                         <br>
                         <input type="text" id="motif" name="motif" required />
-                        <input type="hidden" id="idpresence" name="idpresence" value="@idpresence" />
-
+                        <input type="hidden" id="idpresence" name="idpresence" value="idpresence"/>
 
                         <input type="submit" value="Upload"/>
 
-                    </form>
+                    </form>-->
 
+
+                    <div class="row centered-form">
+                        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Veuillez uploader votre justificatif</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form role="form" action="/etudiant/fileUpload" method="post" enctype="multipart/form-data">
+
+
+                                        <div class="form-group">
+                                            <br><br>
+                                            <input type="file" id="fileUpload" name="fileUpload"/>
+                                            <br><br>
+                                            <input type="text" id="motif" name="motif" required placeholder="Veuillez saisir le motif" />
+                                            <br><br>
+                                            <input type="hidden" id="idpresence" name="idpresence" value="@idpresence" />
+                                        </div>
+                                        <br>
+                                        <div style="text-align: center">
+                                        <input type="submit" value="Upload" class="myulpoad">
+                                            <br><br>
+                                        </div>
+                                    </form>
+
+                                    @if(erreur=="erreurExtension"){
+                                        <a style="color:red">Erreur de format du fichier : Les fichiers autorisés : PDF, JPG et PNG</a>
+                                    }
+                                    @if(erreur=="erreurTaille"){
+                                        <a style="color:red">La taille de votre fichier est importante(>50MO)</a>
+                                    }
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
                         <!-- Fin contenu principal -->
                 </div>
             </div>
+    </div>
+
     }
