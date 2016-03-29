@@ -244,12 +244,12 @@
             <ul class="nav nav-tabs">
                 @if(paramProfil.getListeBatiments() !=null){
                     <li><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
-                    <li class="active"><a href="#tab2" data-toggle="tab">Affecter des cours</a></li>
-                    <li><a href="#tab3" data-toggle="tab">Afficher/supprimer les cours enseignés</a></li>
+                    <li class="active"><a href="#tab2" data-toggle="tab">Affecter/retirer des cours</a></li>
+                    <li><a href="#tab3" data-toggle="tab">Afficher les cours enseignés</a></li>
                 }else{
                     <li class="active"><a href="#tab1" data-toggle="tab">Modifier le profil</a></li>
-                    <li><a href="#tab2" data-toggle="tab">Affecter des cours</a></li>
-                    <li><a href="#tab3" data-toggle="tab">Afficher/supprimer les cours enseignés</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Affecter/retirer des cours</a></li>
+                    <li><a href="#tab3" data-toggle="tab">Afficher les cours enseignés</a></li>
                 }
             </ul>
 
@@ -376,7 +376,7 @@
                             <!-- Affectation d'un cours -->
                         <div>
                             <form class="form-inline" role="form">
-                                <h2>Affecter à un cours</h2> <hr/>
+                                <h2>Affecter l'enseignant à un cours ou lui retirer un/des cour(s)</h2> <hr/>
 
                                 <div class="centrer_contenu2">
                                         <div class="form-group" style="margin-right: 50px;">
@@ -479,9 +479,9 @@
                                     <div class="list-group">
                                         @for(listeMatieres <- paramProfil.getLesMatieres()){
                                             @if(paramProfil.getSelectionMatiere() == listeMatieres.id){
-                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id')" class="list-group-item active"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
+                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id', '@paramProfil.getSelectionPromotion()')" class="list-group-item active"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
                                             }else{
-                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id')" class="list-group-item"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
+                                                <button type="button" onclick="afficherLesCours('@listeMatieres.id', '@paramProfil.getSelectionPromotion()')" class="list-group-item"> @listeMatieres.getLibelle() <i class="glyphicon glyphicon-chevron-right pull-right"></i></button>
                                             }
                                         }
                                     </div>
@@ -489,7 +489,30 @@
 
                                 <!-- Affectation des cours -->
                                 <div class="col-sm-8">
-                                    <h3> Affecter un ou des cours à l'enseignant </h3>
+                                    <h3> Affecter/retirer un ou des cours à l'enseignant </h3>
+
+                                    @if(paramProfil.getLesCoursDelaMatiereDeLaPromotion() != null){
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <form id="formToutCocher" method="POST" action="/administrateur/affecter-cours/affecter-retirer-tous">
+                                                    <input type="hidden" id="statut" name="statut" value="TousAffecter" />
+                                                    <input type="hidden" id="idprof" name="idprof" value="@paramProfil.getIdprofesseur()" />
+                                                    <input type="hidden" id="idmat" name="idmat" value="@paramProfil.getSelectionMatiere()" />
+                                                    <input type="hidden" id="idpromo" name="idpromo" value="@paramProfil.getSelectionPromotion()" />
+                                                    <button type="submit" id="toutCocher">Affecter tous les cours</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form id="formToutRetirer" method="POST" action="/administrateur/affecter-cours/affecter-retirer-tous">
+                                                    <input type="hidden" id="statut" name="statut" value="TousRetirer" />
+                                                    <input type="hidden" id="idprof" name="idprof" value="@paramProfil.getIdprofesseur()" />
+                                                    <input type="hidden" id="idmat" name="idmat" value="@paramProfil.getSelectionMatiere()" />
+                                                    <input type="hidden" id="idpromo" name="idpromo" value="@paramProfil.getSelectionPromotion()" />
+                                                    <button type="submit" id="toutRetirer" style="background: red; color: white;">Retirer tous les cours</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -538,9 +561,9 @@
                                                         <td class="centrer_texte">
                                                             @(i += 1)
                                                             @if((lesCoursDelaPromo.sonEnseignant != null) && (paramProfil.getIdprofesseur() == lesCoursDelaPromo.sonEnseignant.id)){
-                                                                <input  type="checkbox" onclick="affecterDesafferter('decocher','@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" checked /> <!-- La case est cocher on la décoche. On retire le cours au prof -->
+                                                                <input  type="checkbox" onclick="affecterDesafferter('decocher', '@paramProfil.getSelectionPromotion()','@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" checked /> <!-- La case est cocher on la décoche. On retire le cours au prof -->
                                                             }else{
-                                                                <input  type="checkbox" onclick="affecterDesafferter('cocher', '@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" /> <!-- La case est décoche on la coche. On affecte le cours au prof -->
+                                                                <input  type="checkbox" onclick="affecterDesafferter('cocher', '@paramProfil.getSelectionPromotion()','@lesCoursDelaPromo.saMatiere.id','@lesCoursDelaPromo.id','@paramProfil.getIdprofesseur()');" /> <!-- La case est décoche on la coche. On affecte le cours au prof -->
                                                             }
                                                         </td>
                                                     </tr>
@@ -878,12 +901,12 @@
         });
 </script>
 <script>
-       function afficherLesCours(idmatiere) {
+       function afficherLesCours(idmatiere, idpromotion) {
             $(document).ready(function(){
                 $.ajax({
                     url: '/administrateur/affecter-cours/affiche-les-cours',
                     type: "POST",
-                    data: "idmatiere="+idmatiere,
+                    data: "idmatiere="+idmatiere+"&idpromotion="+idpromotion,
                     dataType : 'html',
                     success: function(data) {
 
@@ -899,14 +922,14 @@
         }
 </script>
 <script>
-        function affecterDesafferter(idcheck, idmatiere ,idcours, idenseignant) {
+        function affecterDesafferter(idcheck, idpromotion, idmatiere, idcours, idenseignant) {
 
             if( idcheck == "cocher"){
                 $(document).ready(function(){
                     $.ajax({
                         url: '/administrateur/affecter-cours/affecter-ce-cours',
                         type: "POST",
-                        data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=cocher"+"&idmatiere="+idmatiere,
+                        data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=cocher"+"&idmatiere="+idmatiere+"&idpromotion="+idpromotion,
                         dataType : 'html',
                         success: function(data) {
 
@@ -925,7 +948,7 @@
                         $.ajax({
                             url: '/administrateur/affecter-cours/affecter-ce-cours',
                             type: "POST",
-                            data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=decocher"+"&idmatiere="+idmatiere,
+                            data: "idcours="+idcours+"&idenseignant="+idenseignant+"&action=decocher"+"&idmatiere="+idmatiere+"&idpromotion="+idpromotion,
                             dataType : 'html',
                             success: function(data) {
 
@@ -941,6 +964,64 @@
                 }
             }
         }
+</script>
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#formToutCocher').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var data = $form.serialize();
+
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            data: data,
+                            dataType: 'html', // selon le retour attendu
+                            success: function (data) {
+
+                                $("#charger_fonctionnalite").html(data);
+                                $('#affichage_cour_promotion').css("visibility", "visible");
+
+                            },
+                            error: function() {
+                                alert("Erreur chargement de la page !")
+                            }
+                        });
+                });
+            });
+        });
+</script>
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#formToutRetirer').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var data = $form.serialize();
+
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: $form.attr('method'),
+                        data: data,
+                        dataType: 'html', // selon le retour attendu
+                        success: function (data) {
+
+                            $("#charger_fonctionnalite").html(data);
+                            $('#affichage_cour_promotion').css("visibility", "visible");
+
+                        },
+                        error: function() {
+                            alert("Erreur chargement de la page !")
+                        }
+                    });
+                });
+            });
+        });
 </script>
 
 <!-- ./ fin partie script -->

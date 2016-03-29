@@ -119,17 +119,32 @@ public class Cours extends Model{
 
     /**
      * Retourne tous les cours par jours
-     * @param id
+     * @param idmatiere
      * @return
      */
-    public static List<Cours> findListCoursByIdMatiere(int id){
-        List<Cours> cours = find.where().eq("sa_matiere_id", id).findList();
+    public static List<Cours> findListCoursByIdMatiere(int idmatiere)
+    {
+
+        List<Cours> cours = find.where().eq("sa_matiere_id", idmatiere).findList();
 
         return cours;
     }
 
     /**
-     * Affect ou retire un cours à un enseignant
+     * Retourne tous les cours par jours
+     * @param idmatiere
+     * @return
+     */
+    public static List<Cours> findListCoursByIdMatiereIdPromotion(int idmatiere, int idpromotion)
+    {
+
+        List<Cours> cours = find.where().eq("sa_matiere_id", idmatiere).eq("sa_promo_id",idpromotion).findList();
+
+        return cours;
+    }
+
+    /**
+     * Affecte ou retire un cours à un enseignant
      * @param idcours
      * @param idprofesseur
      */
@@ -140,5 +155,43 @@ public class Cours extends Model{
         lecoursAmodifier.sonEnseignant = idprofesseur;
 
         lecoursAmodifier.update();
+    }
+
+    /**
+     * Affecter tous les cours d'une matière sélectionné à un prof
+     * @param idmatiere
+     * @param idpromo
+     * @param idprofesseur
+     */
+    public static void affecterTousLesCours(int idmatiere, int idpromo ,Enseignant idprofesseur)
+    {
+        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id",idmatiere).eq("sa_promo_id",idpromo).findList();
+
+        if(lesCoursAaffecter != null){
+            for(Cours c : lesCoursAaffecter){
+                c.sonEnseignant = idprofesseur;
+
+                c.update();
+            }
+        }
+    }
+
+    /**
+     * Retirer tous les cours d'une matière sélectionné à un prof
+     * @param idmatiere
+     * @param idpromo
+     * @param idprofesseur
+     */
+    public static void retirerTousLesCours(int idmatiere, int idpromo ,Enseignant idprofesseur)
+    {
+        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id",idmatiere).eq("sa_promo_id",idpromo).eq("son_enseignant_id",idprofesseur.id).findList();
+
+        if(lesCoursAaffecter != null){
+            for(Cours c : lesCoursAaffecter){
+                c.sonEnseignant = null;
+
+                c.update();
+            }
+        }
     }
 }
