@@ -24,10 +24,14 @@
     <div class="container">
         <div >
                 <!-- tabs bottom -->
-            <div class="tabbable tabs-below">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
+                    <li><a href="#two_" data-toggle="tab">Rechercher par date</a></li>
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="one_">
-                        <div id="daylyForm" style="margin-left: 30%; margin-right: 20%; margin-bottom: 5%">
+                        <div id="daylyForm" style="margin-left: 30%; margin-right: 20%; margin-bottom: 5%; margin-top: 5%">
                             <form class="form-inline">
                                 <div class="form-group">
                                     <label for="daylyPromoSelect">Promotion</label>
@@ -52,7 +56,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="two_">
-                        <div id="yearlyForm" style="margin-left: 20%; margin-right: 20%; margin-bottom: 5%">
+                        <div id="yearlyForm" style="margin-left: 20%; margin-right: 20%; margin-bottom: 5%; margin-top: 5%">
                             <form class="form-inline">
                                 <div class="form-group">
                                     <label for="yearlyPromoSelect">Promotion</label>
@@ -84,11 +88,6 @@
                         </div>
                     </div>
                 </div>
-
-                <ul class="nav nav-tabs">
-                    <li><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
-                    <li><a href="#two_" data-toggle="tab">Rechercher par date</a></li>
-                </ul>
             </div>
         </div>
     </div>
