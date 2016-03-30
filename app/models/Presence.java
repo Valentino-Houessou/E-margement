@@ -28,6 +28,8 @@ public class Presence extends Model {
     public static int getNombreAbsence(long idetudiant){
         return find.where().eq("son_etudiant_id",idetudiant)
                 .eq("emergement",0)
+                .eq("motif",null)
+                .eq("justificatif", null)
                .findRowCount();
     }
 
