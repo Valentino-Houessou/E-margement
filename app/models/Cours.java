@@ -26,7 +26,7 @@ public class Cours extends Model{
     public Timestamp heureFin;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Enseignant sonEnseignant;
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne(cascade=CascadeType.ALL)
     public Matiere saMatiere;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Salle saSalle;
@@ -107,6 +107,15 @@ public class Cours extends Model{
 
     public static List<Cours> findByEnseignant(long id, String date){
         return find.where().eq("son_enseignant_id",id).like("heureDebut",date + " %").findList();
+    }
+
+    /**
+     * Retourne une liste de cours correspondant à la maitère dont l'ID est passé en paramètre
+     * @param id : id de la matière associée au cours
+     * @return une liste de cours, null sinon
+     */
+    public static List<Cours> findByMatiere(long id){
+        return find.where().eq("sa_matiere_id", id).findList();
     }
 
     public static List<Cours> findAll(){

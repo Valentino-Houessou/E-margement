@@ -48,6 +48,7 @@ public class Matiere extends Model {
         Ebean.update(this);
     }
 
+
     public void delete(){
         Ebean.delete(this);
     }
@@ -63,7 +64,6 @@ public class Matiere extends Model {
 
         Matiere matiere = (Matiere) o;
 
-        if (nombreHeures != matiere.nombreHeures) return false;
         if (!libelle.equals(matiere.libelle)) return false;
         return libelleAbregee.equals(matiere.libelleAbregee);
 
@@ -75,5 +75,16 @@ public class Matiere extends Model {
         result = 31 * result + libelleAbregee.hashCode();
         result = 31 * result + (int) (nombreHeures ^ (nombreHeures >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Matiere{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                ", libelleAbregee='" + libelleAbregee + '\'' +
+                ", semestre='" + semestre + '\'' +
+                ", nombreHeures=" + nombreHeures +
+                '}';
     }
 }
