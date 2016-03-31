@@ -20,6 +20,7 @@ public class Matiere extends Model {
     public String semestre;
     public long nombreHeures;
 
+
     public Matiere(String libelle, String libelleAbregee, String semestre, long nombreHeures) {
         this.libelle = libelle;
         this.libelleAbregee = libelleAbregee;

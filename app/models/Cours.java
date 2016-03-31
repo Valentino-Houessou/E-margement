@@ -114,7 +114,7 @@ public class Cours extends Model{
      * @param id : id de la matière associée au cours
      * @return une liste de cours, null sinon
      */
-    public static List<Cours> findByMatiere(long id){
+    public static List<Cours> findByMatiere(long id) {
         return find.where().eq("sa_matiere_id", id).findList();
     }
 

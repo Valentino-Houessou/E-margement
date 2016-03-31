@@ -180,9 +180,10 @@ public class administrateurController extends Controller {
             for(Matiere m : matieresBD) {
                 listeCoursTemp = Cours.findByMatiere(m.id);
 
-                if(listeCoursTemp!= null && !listeCoursTemp.isEmpty())
-                    for(Cours c : listeCoursTemp)
+                if(listeCoursTemp!= null && !listeCoursTemp.isEmpty()) {
+                    for (Cours c : listeCoursTemp)
                         c.delete();
+                }
 
                 m.delete();
             }
