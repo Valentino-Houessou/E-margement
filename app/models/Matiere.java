@@ -2,7 +2,12 @@ package models;
 
 import javax.persistence.*;
 import com.avaje.ebean.*;
+import com.avaje.ebean.annotation.ConcurrencyMode;
+import com.avaje.ebean.annotation.EntityConcurrencyMode;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,9 +18,9 @@ public class Matiere extends Model {
     public String libelle;
     public String libelleAbregee;
     public String semestre;
-    public int nombreHeures;
+    public long nombreHeures;
 
-    public Matiere(String libelle, String libelleAbregee, String semestre, int nombreHeures) {
+    public Matiere(String libelle, String libelleAbregee, String semestre, long nombreHeures) {
         this.libelle = libelle;
         this.libelleAbregee = libelleAbregee;
         this.semestre = semestre;
@@ -39,7 +44,7 @@ public class Matiere extends Model {
         this.libelle = (libelle != null) ? libelle : this.libelle;
         this.libelleAbregee = (libelleAbregee != null) ? libelleAbregee : this.libelleAbregee;
         this.semestre = (semestre != null) ? semestre : this.semestre;
-        this.nombreHeures = nombreHeures != null ? Integer.parseInt(nombreHeures) : this.nombreHeures ;
+        this.nombreHeures = (nombreHeures != null) ? Long.parseLong(nombreHeures) : this.nombreHeures ;
         Ebean.update(this);
     }
 
@@ -51,4 +56,24 @@ public class Matiere extends Model {
         return this.libelle;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Matiere matiere = (Matiere) o;
+
+        if (nombreHeures != matiere.nombreHeures) return false;
+        if (!libelle.equals(matiere.libelle)) return false;
+        return libelleAbregee.equals(matiere.libelleAbregee);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = libelle.hashCode();
+        result = 31 * result + libelleAbregee.hashCode();
+        result = 31 * result + (int) (nombreHeures ^ (nombreHeures >>> 32));
+        return result;
+    }
 }

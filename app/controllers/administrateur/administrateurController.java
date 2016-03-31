@@ -27,13 +27,14 @@ import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
-import java.io.File;
+import java.io.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import controllers.administrateur.gestionDesParametres.*;
 
 
@@ -52,6 +53,147 @@ public class administrateurController extends Controller {
     // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
+
+    /**
+     * Ajout des cours dans la base de donnnées à partir d'u fichier ICS
+     * @return
+     */
+    public Result importEDT() {
+
+        //  Récupérer les champs du formulaire
+
+        DynamicForm profil = form().bindFromRequest();
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart fichier = body.getFile("fichierICS");
+
+        int promotion = Integer.parseInt(profil.get("choixFormation"));
+
+        File fichierICS = fichier.getFile();
+        FileReader lectureFichierICS = null;
+
+        Logger log = Logger.getLogger(administrateurController.class.getName());
+
+        try {
+            lectureFichierICS = new FileReader(fichierICS);
+            log.log(Level.INFO, "Succès de l'ouverture du fichier : " + fichierICS);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            log.log(Level.SEVERE, "Pas de fichier " + fichierICS + " trouvé");
+        }
+
+        BufferedReader bufferLectureFichierICS = new BufferedReader(lectureFichierICS);
+
+        String line = null;
+
+        String description = null;
+        String formation = null;
+        String ec = null;
+        String intervenant = null;
+        String salle = null;
+        String dateSTR = null;
+        Date debut = null;
+        String nomIntervenant = "";
+        String prenomIntervenant = null;
+        String[] nomPrenomTab = null;
+        long duree= 0;
+
+        List<String> listeMatieres = new ArrayList<String>();
+        HashMap<String, Long> matiereDuree = new HashMap<String, Long>();
+
+        Date fin = null;
+
+        final String old_format = "yyyyMMdd'T'HHmmss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(old_format);
+
+        try {
+            while ((line = bufferLectureFichierICS.readLine()) != null) {
+                while (!line.contains("END:")) {
+                    if (line.contains("DTSTART")) {
+                        dateSTR = line.substring(line.lastIndexOf(':') + 1);
+                        debut = simpleDateFormat.parse(dateSTR);
+                    }
+
+                    if (line.contains("DTEND")) {
+                        dateSTR = line.substring(line.lastIndexOf(':') + 1);
+                        fin = simpleDateFormat.parse(dateSTR);
+                    }
+
+                    if (line.contains("DESCRIPTION")) {
+                        description = line.substring(line.lastIndexOf("DESCRIPTION"), line.lastIndexOf("Grp") - 1);
+                        description = description.substring(description.lastIndexOf(':')+1);
+
+                        formation = line.substring(line.lastIndexOf("Formation"), line.lastIndexOf("Ec") - 1);
+                        formation = formation.substring(formation.lastIndexOf(':')+1);
+
+                        ec = line.substring(line.lastIndexOf("Ec"), line.lastIndexOf("Intervenant") - 1);
+                        ec = ec.substring(ec.lastIndexOf(':')+1);
+
+                        intervenant = line.substring(line.lastIndexOf("Intervenant"));
+                        intervenant = intervenant.substring(intervenant.lastIndexOf(':')+1);
+
+                        nomPrenomTab = intervenant.split(" ");
+
+                        prenomIntervenant = nomPrenomTab[0];
+
+                        for(int i=1; i<nomPrenomTab.length; i++) {
+                            if(i==nomPrenomTab.length-1)
+                                nomIntervenant += nomPrenomTab[i];
+                            else
+                                nomIntervenant += nomPrenomTab[i] + " ";
+                        }
+
+                        if(!listeMatieres.contains(ec))
+                            listeMatieres.add(ec);
+                    }
+
+                    if (line.contains("LOCATION")) {
+                        salle = line.substring(line.lastIndexOf(" ") + 1);
+                    }
+
+                    line = bufferLectureFichierICS.readLine();
+                }
+
+                duree = fin.getTime() - debut.getTime();
+
+                if(!matiereDuree.containsKey(ec))
+                    matiereDuree.put(ec, new Long(duree));
+                else{
+                    matiereDuree.replace(ec, matiereDuree.get(ec), matiereDuree.get(ec) + duree);
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        for(String s : matiereDuree.keySet()) {
+            Date date = new Date(matiereDuree.get(s));
+            System.out.println(s + " : " + date);
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
+            String dateFormatted = formatter.format(date);
+            System.out.println(s + " : " + dateFormatted);
+        }
+
+        if(!listeMatieres.isEmpty()) {
+            List<Matiere> matieresBD = Matiere.showAll();
+
+            for (String s : listeMatieres) {
+                Matiere temp = new Matiere(s, s, null, matiereDuree.get(s));
+                if (!matieresBD.contains(temp))
+                    temp.save();
+            }
+        }
+
+        try {
+            bufferLectureFichierICS.close();
+            lectureFichierICS.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<Promotion> promotions = Promotion.findAll();
+        return ok(chargerEdt.render("Promotions", promotions));
+    }
 
 
     /**
@@ -675,7 +817,7 @@ public class administrateurController extends Controller {
         // 3 - Récupération des cours par jours de la matière
         List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmatiere, idpromotion);
         paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
-       // paramPC.setSelectionMatiere(idmatiere);
+        // paramPC.setSelectionMatiere(idmatiere);
 
         // 4 - Mise à jours des cours du prof
         List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",idenseignant).findList();
@@ -781,7 +923,8 @@ public class administrateurController extends Controller {
      */
     public Result chargerEdt()
     {
-        return ok(chargerEdt.render("Charger les emplois du temps"));
+        List<Promotion> promotions = Promotion.findAll();
+        return ok(chargerEdt.render("Charger les emplois du temps", promotions));
     }
 
     /**

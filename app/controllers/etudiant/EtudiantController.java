@@ -13,11 +13,13 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
+//import org.jboss.vfs.VirtualFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import static play.data.Form.form;
 
 
@@ -29,22 +31,14 @@ public class EtudiantController extends Controller{
 
         //sesssion : idEtudiant
         int idUtilisateur = Integer.parseInt(session().get("user_id"));
-        if(session().get("user_id") == null){
-            return redirect(controllers.routes.Application.logout());
-        }
-
         Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
-
-        Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
-
-        session("prenom", utilisateur.prenom);
 
         int nbabsc = Presence.getNombreAbsence(idEtudiant.id);
 
-        return ok(indexEtudiant.render("Accueil étudiant",nbabsc,session()));
+        return ok(indexEtudiant.render("Espace étudiant",nbabsc, session()));
     }
 
-    public  Result justifierAbsences(){
+    public  Result justifierAbsences() {
         //sesssion : idEtudiant
         int idUtilisateur = Integer.parseInt(session().get("user_id"));
         Etudiant idEtudiant = Etudiant.find.where().eq("son_utilisateur_id", idUtilisateur).findUnique();
@@ -55,7 +49,7 @@ public class EtudiantController extends Controller{
 
         int idpresence = Integer.parseInt(profil.get("idpresence"));
 
-        return ok(justifierAbsences.render("Justifiez vos absences",idpresence,""));
+        return ok(justifierAbsences.render("Justifiez vos absences",idpresence, String.valueOf(idUtilisateur)));
     }
 
 
@@ -73,9 +67,10 @@ public class EtudiantController extends Controller{
         String motif=profil.get("motif");
 
 
-        if (fichier != null && fichier.getFile().length()<50000000) {
 
-            if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
+
+        if (fichier != null) {
+            if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
                 String fileName = fichier.getFilename();
                 String contentType = fichier.getContentType();
                 File file = fichier.getFile();
@@ -83,44 +78,24 @@ public class EtudiantController extends Controller{
                 // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
                 String myUploadPath = Play.application().configuration().getString("justificatifsPath");
                 String dateToFileNameStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
                 //file.renameTo(new File(myUploadPath, user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr));
-               if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
-                   file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".pdf"));
-               }
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
-                    file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".png"));
-                }
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
-                    file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".jpg"));
-                }
+                file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".pdf"));
 
                 Presence p = Presence.find.where().eq("id", idpresence).findUnique();
                 p.motif = motif;
                 //p.justificatif= myUploadPath + user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr + ".pdf";
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
-                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".pdf";
-                }
-
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
-                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".png";
-                }
-
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
-                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".jpg";
-                }
+                p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".pdf";
 
                 p.save();
             }
             else{
-                String erreur="erreurExtension";
-                return ok(justifierAbsences.render("Justifiez vos absences",idpresence,erreur));
-
+                flash("error", "Fichier PDF requis");
+                return badRequest();
             }
 
         } else {
-            String erreur="erreurTaille";
-            return ok(justifierAbsences.render("Justifiez vos absences",idpresence,erreur));
+            flash("error", "Missing file");
+            return badRequest();
         }
         /*List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
 
@@ -152,7 +127,7 @@ public class EtudiantController extends Controller{
 
 
 
-        return ok(consulterAbsences.render("Consultation d'absences", presences));
+        return ok(consulterAbsences.render("Export de la liste des matières", presences));
     }
 
     /**
@@ -292,9 +267,22 @@ public class EtudiantController extends Controller{
 
         int nbabsc=Presence.getNombreAbsence(idEtudiant.id);
 
-        return ok(indexEtudiant.render("Accueil Etudiant", nbabsc,session()));
+        return ok(indexEtudiant.render("Partie Etudiant", nbabsc, session()));
     }
+
+    /**
+     * Méthode pouur filtrer la page de consultation des absences, en fonction de critères
+     * @param date
+     * @param heure_debut
+     * @param heure_fin
+     * @param cours
+     * @param etat
+     * @return
+     */
+    public Result filtrer(String date, String heure_debut, String heure_fin, String cours, String etat){
+        return null;
     }
+}
 
 
 

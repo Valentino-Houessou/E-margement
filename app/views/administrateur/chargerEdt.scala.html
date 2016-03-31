@@ -1,12 +1,69 @@
 @*******************************************
 * Bloc pour charger l'emplois du temps     *
 ********************************************@
-@(titrepage: String)
+
+@(titrepage: String)(promotions :java.util.List[Promotion])
 
 <!-- Début du block dynamique-->
-    <div>
-        <h1> @titrepage </h1>
+<div>
+    <h1> @titrepage </h1>
 
-        <p> Ici le block pour charger les emplois du temps des promos </p>
-    </div>
-<!-- Fin du block dynamique-->
+    <form method="post" class="form-horizontal" id="formImportICS" action="/administrateur/importer-edt" enctype="multipart/form-data">
+        <fieldset>
+
+                <!-- Form Name -->
+            <legend>Chargement d'un caledrier au format ics</legend>
+
+                <!-- Select Basic -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="choixFormation">Formation</label>
+                <div class="col-md-4">
+                    <select id="choixFormation" name="choixFormation" class="form-control" required>
+                        <option value="no1" disabled selected>Choisissez une formation</option>
+                        <option value="no1" disabled>--</option>
+                        @for(p<-promotions){
+                            <option value="@p.id" > @p.filiere - @p.groupe - @p.getType()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+                <!-- File Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="fichierICS">Emploi du temps (fichier .ics)</label>
+                <div class="col-md-4">
+                    <input id="fichierICS" name="fichierICS" class="input-file" type="file" required>
+                </div>
+            </div>
+
+                <!-- Button (Double) -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="chargerEDT">Valider</label>
+                <div class="col-md-8">
+                    <button id="chargerEDT" name="chargerEDT" class="btn btn-default" style="font-color:white;">Chargement EDT</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+</div>
+<script type="text/javascript">
+        $(document).ready(function(){
+            $('#chargerEDT').click(function(){
+                $('#chargerEDT').preventDefault();
+                $.ajax({
+                    url: '/administrateur/importer-edt',
+                    type: "POST",
+                    dataType : 'html',
+                    success: function(data) {
+                        $("#charger_fonctionnalite").html(data);
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de l'emploi du temps");
+                        $('#chargerEDT').preventDefault();
+                    }
+                });
+            });
+        });
+</script>

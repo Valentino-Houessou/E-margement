@@ -63,7 +63,7 @@ create table matiere (
   libelle                   varchar(255),
   libelle_abregee           varchar(255),
   semestre                  varchar(255),
-  nombre_heures             integer,
+  nombre_heures             bigint,
   constraint pk_matiere primary key (id))
 ;
 
