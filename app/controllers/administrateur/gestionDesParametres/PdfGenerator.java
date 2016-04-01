@@ -95,7 +95,7 @@ public class PdfGenerator {
         return toBytes(string, documentBaseURL, defaultFonts);
     }
 
-   public byte[] toBytes(String string, String documentBaseURL, List<String> fonts) {
+    public byte[] toBytes(String string, String documentBaseURL, List<String> fonts) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         toStream(string, os, documentBaseURL, fonts);
         return os.toByteArray();
@@ -105,7 +105,7 @@ public class PdfGenerator {
         toStream(string, os, documentBaseURL, defaultFonts);
     }
 
-   public void toStream(String string, OutputStream os, String documentBaseURL, List<String> fonts) {
+    public void toStream(String string, OutputStream os, String documentBaseURL, List<String> fonts) {
         try {
             InputStream input = new ByteArrayInputStream(string.getBytes("UTF-8"));
             ITextRenderer renderer = new ITextRenderer();

@@ -105,7 +105,6 @@ public class Utilisateur extends Model  {
         if ((motDePasse != null) && (!motDePasse.equals(""))){
             user.motDePasse = Utilisateur.getEncodedPassword(motDePasse);
 
-            System.out.println("mdp : " +motDePasse );
         }
         if (dateDeNaissance != null) {
             Timestamp ddn = null;
@@ -185,7 +184,7 @@ public class Utilisateur extends Model  {
     }
 
     public static Utilisateur findByMail(String mail){
-        return  find.where().eq("adresseMail", mail).findUnique();
+        return  find.where().eq("adresse_mail", mail).findUnique();
     }
 
     public static String getEncodedPassword(String key) {
@@ -247,6 +246,7 @@ public class Utilisateur extends Model  {
     }
 
     public static Utilisateur authenticate(String email, String password){
+        // return find.where().eq("adresseMail",email).eq("motDePasse",Utilisateur.getEncodedPassword(password)).findUnique(); // A mettre au lancement
         return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
     }
 

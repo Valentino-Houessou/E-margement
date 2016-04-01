@@ -30,6 +30,7 @@ public class Presence extends Model {
                 .eq("emergement",0)
                 .eq("motif",null)
                 .eq("justificatif", null)
+                .eq("sonCours.signatureEnseignant", true)
                .findRowCount();
     }
 
@@ -62,7 +63,10 @@ public class Presence extends Model {
 
         // 2 - Je récupére toutes ses absences
         return Presence.find.where().eq("son_etudiant_id", etu.id)
-                .eq("emergement", 0)
+                .eq("emergement",0)
+                .eq("motif",null)
+                .eq("justificatif", null)
+                .eq("sonCours.signatureEnseignant", true)
                 .findList();
     }
 

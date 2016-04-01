@@ -12,13 +12,15 @@ public class Etudiant extends Model{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     public long id;
+    public String uid;
     public String numeroEtudiant;
     public String statut;
     @OneToOne
     public Utilisateur sonUtilisateur;
 
 
-    public Etudiant(String numeroEtudiant, String status, Utilisateur sonUtilisateur) {
+    public Etudiant(String uid, String numeroEtudiant, String status, Utilisateur sonUtilisateur) {
+        this.uid = uid;
         this.numeroEtudiant = numeroEtudiant;
         this.statut = status;
         this.sonUtilisateur = sonUtilisateur;
@@ -81,7 +83,6 @@ public class Etudiant extends Model{
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,6 +91,7 @@ public class Etudiant extends Model{
         Etudiant etudiant = (Etudiant) o;
 
         if (id != etudiant.id) return false;
+        if (uid != null ? !uid.equals(etudiant.uid) : etudiant.uid != null) return false;
         if (numeroEtudiant != null ? !numeroEtudiant.equals(etudiant.numeroEtudiant) : etudiant.numeroEtudiant != null)
             return false;
         if (statut != null ? !statut.equals(etudiant.statut) : etudiant.statut != null) return false;
@@ -100,10 +102,10 @@ public class Etudiant extends Model{
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (uid != null ? uid.hashCode() : 0);
         result = 31 * result + (numeroEtudiant != null ? numeroEtudiant.hashCode() : 0);
         result = 31 * result + (statut != null ? statut.hashCode() : 0);
         result = 31 * result + (sonUtilisateur != null ? sonUtilisateur.hashCode() : 0);
         return result;
     }
-
 }

@@ -14,7 +14,9 @@ libraryDependencies ++= Seq(
   "it.innove" % "play2-pdf" % "1.4.0",
   "commons-io" % "commons-io" % "2.4",
   "org.xhtmlrenderer" % "flying-saucer-pdf" % "9.0.8",
-  "nu.validator.htmlparser" % "htmlparser" % "1.4"
+  "nu.validator.htmlparser" % "htmlparser" % "1.4",
+  "org.docx4j" % "xhtmlrenderer" % "1.0.0",
+  "junit" % "junit" % "4.11"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
