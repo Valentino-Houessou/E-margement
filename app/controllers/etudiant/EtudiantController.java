@@ -9,6 +9,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import views.html.etudiant.changerMDP;
 import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
@@ -26,6 +27,15 @@ import static play.data.Form.form;
 public class EtudiantController extends Controller{
 
     private Etudiant user;
+
+    public  Result mdpchange() {
+        return redirect(routes.EtudiantController.index());
+    }
+
+    public  Result changerMDP() {
+
+        return ok(changerMDP.render("Changement du mot de passe"));
+    }
 
     public Result index() {
 
@@ -65,8 +75,6 @@ public class EtudiantController extends Controller{
         int idpresence = Integer.parseInt(profil.get("idpresence"));
         //controle sur le motif
         String motif=profil.get("motif");
-
-
 
 
         if (fichier != null) {
@@ -270,18 +278,7 @@ public class EtudiantController extends Controller{
         return ok(indexEtudiant.render("Partie Etudiant", nbabsc, session()));
     }
 
-    /**
-     * Méthode pouur filtrer la page de consultation des absences, en fonction de critères
-     * @param date
-     * @param heure_debut
-     * @param heure_fin
-     * @param cours
-     * @param etat
-     * @return
-     */
-    public Result filtrer(String date, String heure_debut, String heure_fin, String cours, String etat){
-        return null;
-    }
+
 }
 
 
