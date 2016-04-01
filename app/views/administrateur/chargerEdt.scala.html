@@ -50,18 +50,26 @@
 </div>
 <script type="text/javascript">
         $(document).ready(function(){
-            $('#chargerEDT').click(function(){
-                $('#chargerEDT').preventDefault();
+            $('#formImportICS').on('submit', function (e) {
+                e.preventDefault();
+
+                var $form = $(this);
+                var formdata = (window.FormData) ? new FormData($form[0]) : null;
+                var data = (formdata !== null) ? formdata : $form.serialize();
+
                 $.ajax({
-                    url: '/administrateur/importer-edt',
-                    type: "POST",
-                    dataType : 'html',
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    contentType: false, // obligatoire pour de l'upload
+                    processData: false, // obligatoire pour de l'upload
+                    data: data,
+                    dataType: 'html', // selon le retour attendu
                     success: function(data) {
                         $("#charger_fonctionnalite").html(data);
+                        alert("Fichier importé avec succès");
                     },
                     error: function() {
                         alert("Erreur de chargement de l'emploi du temps");
-                        $('#chargerEDT').preventDefault();
                     }
                 });
             });

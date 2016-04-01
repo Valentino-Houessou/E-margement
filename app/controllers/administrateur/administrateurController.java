@@ -158,8 +158,9 @@ public class administrateurController extends Controller {
 
                 if(!matiereDuree.containsKey(ec))
                     matiereDuree.put(ec, new Long(duree));
-                else
+                else{
                     matiereDuree.replace(ec, matiereDuree.get(ec), matiereDuree.get(ec) + duree);
+                }
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -167,29 +168,20 @@ public class administrateurController extends Controller {
 
         for(String s : matiereDuree.keySet()) {
             Date date = new Date(matiereDuree.get(s));
+            System.out.println(s + " : " + date);
             DateFormat formatter = new SimpleDateFormat("HH:mm");
-            String dateFormatted = formatter.format(date).replace(':', 'h');
+            String dateFormatted = formatter.format(date);
+            System.out.println(s + " : " + dateFormatted);
         }
 
         if(!listeMatieres.isEmpty()) {
             List<Matiere> matieresBD = Matiere.showAll();
 
-            Matiere temp = null;
-            List<Cours> listeCoursTemp = null;
-
-            for(Matiere m : matieresBD) {
-                listeCoursTemp = Cours.findByMatiere(m.id);
-
-                if(listeCoursTemp!= null && !listeCoursTemp.isEmpty()) {
-                    for (Cours c : listeCoursTemp)
-                        c.delete();
-                }
-
-                m.delete();
+            for (String s : listeMatieres) {
+                Matiere temp = new Matiere(s, s, null, matiereDuree.get(s));
+                if (!matieresBD.contains(temp))
+                    temp.save();
             }
-
-            for (String s : listeMatieres)
-                new Matiere(s, s, null, matiereDuree.get(s)).save();
         }
 
         try {
@@ -200,7 +192,7 @@ public class administrateurController extends Controller {
         }
 
         List<Promotion> promotions = Promotion.findAll();
-        return ok(chargerEdt.render("Promotions", promotions));
+        return ok(chargerEdt.render("Charger les emplois du temps", promotions));
     }
 
 
