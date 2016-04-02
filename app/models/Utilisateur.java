@@ -226,22 +226,24 @@ public class Utilisateur extends Model  {
 
         Utilisateur that = (Utilisateur) o;
 
-        if (id != that.id) return false;
-        if (!nom.equals(that.nom)) return false;
-        if (!prenom.equals(that.prenom)) return false;
-        if (!adresseMail.equals(that.adresseMail)) return false;
-        if (!motDePasse.equals(that.motDePasse)) return false;
-        return !(dateDeNaissance != null ? !dateDeNaissance.equals(that.dateDeNaissance) : that.dateDeNaissance != null);
+        //if (!nom.equals(that.nom)) return false;
+        //if (!prenom.equals(that.prenom)) return false;
+        //if (!adresseMail.equals(that.adresseMail)) return false;
+        //if (!motDePasse.equals(that.motDePasse)) return false;
+        //return !(dateDeNaissance != null ? !dateDeNaissance.equals(that.dateDeNaissance) : that.dateDeNaissance != null);
+
+        return nom.contains(that.nom) || prenom.contains(that.prenom);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        //int result = (int) (id ^ (id >>> 32));
+        int result = 31;
         result = 31 * result + nom.hashCode();
         result = 31 * result + prenom.hashCode();
-        result = 31 * result + adresseMail.hashCode();
-        result = 31 * result + motDePasse.hashCode();
-        result = 31 * result + (dateDeNaissance != null ? dateDeNaissance.hashCode() : 0);
+        //result = 31 * result + adresseMail.hashCode();
+        //result = 31 * result + motDePasse.hashCode();
+        //result = 31 * result + (dateDeNaissance != null ? dateDeNaissance.hashCode() : 0);
         return result;
     }
 
@@ -256,5 +258,19 @@ public class Utilisateur extends Model  {
             module += " " + sesModules.get(i).libelle;
         }
         return module;
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", adresseMail='" + adresseMail + '\'' +
+                ", motDePasse='" + motDePasse + '\'' +
+                ", dateDeNaissance=" + dateDeNaissance +
+                ", lienPhoto='" + lienPhoto + '\'' +
+                ", sesModules=" + sesModules +
+                '}';
     }
 }

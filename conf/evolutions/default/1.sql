@@ -42,6 +42,7 @@ create table enseignant (
 
 create table etudiant (
   id                        bigint auto_increment not null,
+  uid                       varchar(255),
   numero_etudiant           varchar(255),
   statut                    varchar(255),
   son_utilisateur_id        bigint,

@@ -28,9 +28,11 @@ import views.html.administrateur.exporterJustificatifsAbscences;
 import models.*;
 
 import java.io.*;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,6 +102,7 @@ public class administrateurController extends Controller {
 
         List<String> listeMatieres = new ArrayList<String>();
         HashMap<String, Long> matiereDuree = new HashMap<String, Long>();
+        List<HashMap<String, Object>> listeEDT = new ArrayList<HashMap<String, Object>>();
 
         Date fin = null;
 
@@ -108,34 +111,48 @@ public class administrateurController extends Controller {
 
         try {
             while ((line = bufferLectureFichierICS.readLine()) != null) {
+                HashMap<String, Object> hashEDT = new HashMap<String, Object>();
                 while (!line.contains("END:")) {
+
+                    // Récupération de la date de début l'événement
                     if (line.contains("DTSTART")) {
                         dateSTR = line.substring(line.lastIndexOf(':') + 1);
                         debut = simpleDateFormat.parse(dateSTR);
                     }
 
+                    // Récupération de la date de fin du créneau
                     if (line.contains("DTEND")) {
                         dateSTR = line.substring(line.lastIndexOf(':') + 1);
                         fin = simpleDateFormat.parse(dateSTR);
                     }
 
+                    // Récupération de la description du créneau
                     if (line.contains("DESCRIPTION")) {
+
+                        // Récupération de la description (CM, TP, TD...)
                         description = line.substring(line.lastIndexOf("DESCRIPTION"), line.lastIndexOf("Grp") - 1);
                         description = description.substring(description.lastIndexOf(':')+1);
 
+                        // Récupération de la promotion
                         formation = line.substring(line.lastIndexOf("Formation"), line.lastIndexOf("Ec") - 1);
                         formation = formation.substring(formation.lastIndexOf(':')+1);
 
+                        // Récupération de la matière
                         ec = line.substring(line.lastIndexOf("Ec"), line.lastIndexOf("Intervenant") - 1);
                         ec = ec.substring(ec.lastIndexOf(':')+1);
 
+                        // Récupération de l'enseignant
                         intervenant = line.substring(line.lastIndexOf("Intervenant"));
                         intervenant = intervenant.substring(intervenant.lastIndexOf(':')+1);
 
+                        // Formalisation du nom de l'enseignant
                         nomPrenomTab = intervenant.split(" ");
 
+                        // Le prénom de l'enseignant est la suite de caractères qui vient avant le 1er espace
+                        // (Ex. : Fabrice Legond Aubry, Jean-François Pradat Peyre)
                         prenomIntervenant = nomPrenomTab[0];
 
+                        // Après le 1er espace --> nom de famille de l'enseignant
                         for(int i=1; i<nomPrenomTab.length; i++) {
                             if(i==nomPrenomTab.length-1)
                                 nomIntervenant += nomPrenomTab[i];
@@ -143,24 +160,42 @@ public class administrateurController extends Controller {
                                 nomIntervenant += nomPrenomTab[i] + " ";
                         }
 
+                        // Ajout de la matière dans une liste de Strings
+                        // Si la matière est déjà présente dans la liste alors elle n'est pas ajoutée
                         if(!listeMatieres.contains(ec))
                             listeMatieres.add(ec);
                     }
 
-                    if (line.contains("LOCATION")) {
+                    // Récupération de la salle
+                    if (line.contains("LOCATION"))
                         salle = line.substring(line.lastIndexOf(" ") + 1);
-                    }
 
                     line = bufferLectureFichierICS.readLine();
                 }
 
+                if(!prenomIntervenant.equalsIgnoreCase("autre") && !nomIntervenant.equalsIgnoreCase("autre")) {
+                    hashEDT.put("nomIntervenant", nomIntervenant.replaceAll("�", "ç"));
+                    hashEDT.put("prenomIntervenant", prenomIntervenant.replaceAll("�", "ç"));
+                    hashEDT.put("debut", debut);
+                    hashEDT.put("fin", fin);
+                    hashEDT.put("description", description);
+                    hashEDT.put("formation", formation);
+                    hashEDT.put("ec", ec);
+                    hashEDT.put("intervenant", intervenant);
+                    hashEDT.put("salle", salle);
+
+                    listeEDT.add(hashEDT);
+                }
+
+                nomIntervenant = "";
+
+                // Calcul de la durée globale d'un cours
                 duree = fin.getTime() - debut.getTime();
 
                 if(!matiereDuree.containsKey(ec))
                     matiereDuree.put(ec, new Long(duree));
-                else{
+                else
                     matiereDuree.replace(ec, matiereDuree.get(ec), matiereDuree.get(ec) + duree);
-                }
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -168,12 +203,11 @@ public class administrateurController extends Controller {
 
         for(String s : matiereDuree.keySet()) {
             Date date = new Date(matiereDuree.get(s));
-            System.out.println(s + " : " + date);
             DateFormat formatter = new SimpleDateFormat("HH:mm");
             String dateFormatted = formatter.format(date);
-            System.out.println(s + " : " + dateFormatted);
         }
 
+        // Ajout ou update des matières dans la table Matiere à partir des données du fichier
         if(!listeMatieres.isEmpty()) {
             List<Matiere> matieresBD = Matiere.showAll();
 
@@ -181,7 +215,24 @@ public class administrateurController extends Controller {
                 Matiere temp = new Matiere(s, s, null, matiereDuree.get(s));
                 if (!matieresBD.contains(temp))
                     temp.save();
+                else
+                    matieresBD.get(matieresBD.indexOf(temp)).update(s, s, null, String.valueOf(matiereDuree.get(s)));
             }
+        }
+
+        List<Utilisateur> utilisateursBD = Utilisateur.findAll();
+        List<Enseignant> enseignantBD = Enseignant.findAll();
+
+        for(HashMap<String, Object> tempHash : listeEDT){
+            Utilisateur utilisateurTemp = new Utilisateur((String)tempHash.get("nomIntervenant"),
+                    (String)tempHash.get("prenomIntervenant"),
+                    ((String) tempHash.get("prenomIntervenant")).toLowerCase()+"."+((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase()+"@u-paris10.fr",
+                    "1230",
+                    Timestamp.from(Instant.now()),
+                    "");
+
+            if(!utilisateursBD.contains(utilisateurTemp))
+                utilisateurTemp.save();
         }
 
         try {
