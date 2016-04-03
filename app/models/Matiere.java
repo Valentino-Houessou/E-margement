@@ -65,8 +65,7 @@ public class Matiere extends Model {
 
         Matiere matiere = (Matiere) o;
 
-        if (!libelle.equals(matiere.libelle)) return false;
-        return libelleAbregee.equals(matiere.libelleAbregee);
+        return libelle.equals(matiere.libelle) && libelleAbregee.equals(matiere.libelleAbregee);
 
     }
 

@@ -47,4 +47,16 @@ public class Batiment extends Model {
 
         return bat;
     }
+
+    public static List<Batiment> findAll(){
+        return find.all();
+    }
+
+    public static Batiment findById(int id){
+        return find.byId(Long.parseLong(String.valueOf(id)));
+    }
+
+    public static Batiment findByLibelle(String libelle){
+        return find.where().eq("libelle", libelle).findUnique();
+    }
 }

@@ -48,6 +48,7 @@ public class Utilisateur extends Model  {
         this.motDePasse = motDePasse;
         this.dateDeNaissance = dateDeNaissance;
         this.lienPhoto = lienPhoto;
+        this.sesModules = new ArrayList<Module>();
     }
 
     /**

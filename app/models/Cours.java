@@ -203,4 +203,8 @@ public class Cours extends Model{
             }
         }
     }
+
+    public static Cours findCoursByDebutAndFin(Date debut, Date fin){
+        return find.where().eq("heure_debut", debut).eq("heure_fin", fin).findUnique();
+    }
 }

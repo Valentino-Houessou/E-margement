@@ -207,10 +207,10 @@ public class administrateurController extends Controller {
             String dateFormatted = formatter.format(date);
         }
 
+        List<Matiere> matieresBD = Matiere.showAll();
+
         // Ajout ou update des matières dans la table Matiere à partir des données du fichier
         if(!listeMatieres.isEmpty()) {
-            List<Matiere> matieresBD = Matiere.showAll();
-
             for (String s : listeMatieres) {
                 Matiere temp = new Matiere(s, s, null, matiereDuree.get(s));
                 if (!matieresBD.contains(temp))
@@ -222,8 +222,17 @@ public class administrateurController extends Controller {
 
         List<Utilisateur> utilisateursBD = Utilisateur.findAll();
         List<Enseignant> enseignantBD = Enseignant.findAll();
+        matieresBD = Matiere.showAll();
+        Enseignant enseignantTemp = null;
 
+        // Ajout des enseignants dans les tables Utilisateur et Enseignant
         for(HashMap<String, Object> tempHash : listeEDT){
+
+            /*
+                AJOUT D'UN NOUVEL UTILISATEUR DE TYPE ENSEIGNANT
+             */
+
+            // Création d'un utilisateur temporaire
             Utilisateur utilisateurTemp = new Utilisateur((String)tempHash.get("nomIntervenant"),
                     (String)tempHash.get("prenomIntervenant"),
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase()+"."+((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase()+"@u-paris10.fr",
@@ -231,8 +240,87 @@ public class administrateurController extends Controller {
                     Timestamp.from(Instant.now()),
                     "");
 
-            if(!utilisateursBD.contains(utilisateurTemp))
+            // Si l'utilisateur n'existe pas dans la BDD
+            if(!utilisateursBD.contains(utilisateurTemp)) {
+
+                // On crée l'enseignant
+                enseignantTemp = new Enseignant("", utilisateurTemp);
+
+                // On lui associe son module (ENSEIGNANT)
+                utilisateurTemp.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
+
+                // On lui associe sa / ses matières
+                //enseignantTemp.sesMatieres.add(Matiere.show());
+
+                // On PERSIIIIIIIIIIIIIIIIIIIIIISTE !!!!!!!!!!!!!!!!!!!!
                 utilisateurTemp.save();
+                enseignantTemp.save();
+            }
+
+            // On refresh la liste des utilisateurs
+            utilisateursBD = Utilisateur.findAll();
+
+            /*
+                ---------------------------------------------
+             */
+
+            /*
+                ASSOCIATION DE L'ENSEIGNANT AVEC SES MATIERES
+             */
+
+            // Récupération depuis la BDD de la matière courante
+            Matiere matiereTemp = Matiere.show(matieresBD.get(matieresBD.indexOf(new Matiere((String) tempHash.get("ec"),
+                    (String) tempHash.get("ec"),
+                    null,
+                    matiereDuree.get((String) tempHash.get("ec"))))).id);
+
+            // Récupération depuis la BDD de l'enseignant courant
+            Enseignant ensTemp = Enseignant.findByUser(utilisateursBD.get(utilisateursBD.indexOf(utilisateurTemp)).id);
+
+            // Si l'enseignant n'est pas associé à la matière, on l'associe
+            if(!ensTemp.sesMatieres.contains(matiereTemp)){
+                ensTemp.sesMatieres.add(matiereTemp);
+                ensTemp.save();
+            }
+
+            // On refresh les liste pour prise en compte des insert / update
+            utilisateursBD = Utilisateur.findAll();
+            enseignantBD = Enseignant.findAll();
+            matieresBD = Matiere.showAll();
+
+            /*
+                ---------------------------------------------
+             */
+
+            /*
+                AJOUT DES SALLES DANS LA BDD
+             */
+
+            Batiment batimentTemp = null;
+            Salle temp = null;
+
+            if((batimentTemp = Batiment.findByLibelle("UFR Segmi")) != null)
+                if(Salle.findByLibelle((String)tempHash.get("salle"))==null)
+                    new Salle((String) tempHash.get("salle"), batimentTemp).save();
+
+            /*
+                ---------------------------------------------
+             */
+
+            /*
+                AJOUT DES COURS DANS LA BDD
+             */
+
+            //Cours coursTemp = Cours.findCoursByDebutAndFin();
+
+            /*
+                ---------------------------------------------
+             */
+
+            /*
+                ASSOCIATION DES COURS AVEC LES ENSEIGNANTS
+             */
+
         }
 
         try {
