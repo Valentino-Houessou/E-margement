@@ -80,6 +80,13 @@ public class Utilisateur extends Model  {
         return user;
     }
 
+    /**
+     * Setter du mot de passe
+     * @param motDePasse
+     */
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
+    }
 
     /**
      * Mise à jour des informations utilisateur
@@ -274,4 +281,7 @@ public class Utilisateur extends Model  {
                 ", sesModules=" + sesModules +
                 '}';
     }
+
+
+
 }

@@ -1,4 +1,4 @@
-@(titrepage:String)
+@(titrepage:String)(erreurMdp:Int)
 @import models.Etudiant
 
 
@@ -113,6 +113,11 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        @if(erreurMdp==0){
+                                            <a style="color:red">Mots de passe non identiques</a>
+                                        }
+
                                     </form>
                                     </div>
                                 </div>

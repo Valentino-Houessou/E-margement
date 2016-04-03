@@ -36,6 +36,7 @@ POST          /etudiant/justifierAbsences                             controller
 POST          /etudiant/fileUpload                                    controllers.etudiant.EtudiantController.fileUpload()
 GET           /etudiant/fileDownload                                  controllers.etudiant.EtudiantController.fileDownload()
 GET           /etudiant/changerMDP                                    controllers.etudiant.EtudiantController.changerMDP()
+GET           /etudiant/changerMDPerreur                              controllers.etudiant.EtudiantController.changerMDPerreur()
 POST          /etudiant/mdpchange                                     controllers.etudiant.EtudiantController.mdpchange()
 #Fonction notifier présence
 

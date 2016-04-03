@@ -28,16 +28,58 @@ public class EtudiantController extends Controller{
 
     private Etudiant user;
 
-    public  Result mdpchange() {
-        return redirect(routes.EtudiantController.index());
+    public Result changerMDPerreur() {
+        return ok(changerMDP.render("Changement du mot de passe",0));
     }
+
+    public  Result mdpchange() {
+
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+
+        int erreurMdp;
+        DynamicForm changemdp = form().bindFromRequest();
+        String mdp = changemdp.get("mdp");
+        String mdp2 = changemdp.get("mdp2");
+
+        System.out.println(mdp + " " + mdp2);
+
+        if (mdp.equals(mdp2)) {
+            erreurMdp = 1;
+
+            Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+
+            System.out.println(utilisateur.adresseMail);
+            System.out.println(utilisateur.motDePasse);
+
+            utilisateur.setMotDePasse(mdp);
+            utilisateur.adresseMail="boulit@gmail.com";
+
+            utilisateur.update();
+
+            utilisateur.save();
+
+
+            return redirect(routes.EtudiantController.index());
+        }
+        else {
+            System.out.println("je passe par là");
+            erreurMdp = 0;
+            return redirect(routes.EtudiantController.changerMDPerreur());
+        }
+
+    }
+
 
     public  Result changerMDP() {
 
-        return ok(changerMDP.render("Changement du mot de passe"));
+        return ok(changerMDP.render("Changement du mot de passe",1));
     }
 
     public Result index() {
+
+        if(session().get("user_id") == null){
+            return redirect(controllers.routes.Application.logout());
+        }
 
         //sesssion : idEtudiant
         int idUtilisateur = Integer.parseInt(session().get("user_id"));
@@ -45,6 +87,9 @@ public class EtudiantController extends Controller{
 
         int nbabsc = Presence.getNombreAbsence(idEtudiant.id);
 
+        Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+
+        session("prenom", utilisateur.prenom);
         return ok(indexEtudiant.render("Espace étudiant",nbabsc, session()));
     }
 
