@@ -153,12 +153,22 @@
                                     <input type="text" class="form-control" id="status" name="status" placeholder="Exemple: Secrétariat, CFA ..." required />
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Ajouter une photo (Facultatif)</label>
                                     <input type="file" class="form-control" id="photo" name="photo" />
                                 </div>
                             </div>
+
+                            <br><br>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Est-il un référent CFA?</label>
+                                    <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" />Oui</label>
+                                    <label class="radio-inline"><input type="radio" name="refCFA" value="NON" checked />Non</label>
+                                </div>
+                            </div>
+
                         </div>
 
                         <button type="submit" class="btn btn-info btn-fill">Créer le Profil</button>
@@ -307,7 +317,17 @@
                                         <input type="text" class="form-control" id="statut" name="status" value="@paramAdministrateur.getStatus()" />
                                     </div>
                                 </div>
+
+                                <br><br>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Est-il un référent CFA?</label>
+                                        <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" />Oui</label>
+                                        <label class="radio-inline"><input type="radio" name="refCFA" value="NON" checked />Non</label>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
