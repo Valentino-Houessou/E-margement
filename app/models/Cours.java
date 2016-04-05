@@ -18,7 +18,7 @@ public class Cours extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String type;
-    //public String type_detaille;
+    public String type_detaille;
     /*@Column(columnDefinition = "datetime")
     public Timestamp dateDuCour;*/
     @Column(columnDefinition = "datetime")
@@ -41,9 +41,10 @@ public class Cours extends Model{
 
     public static Finder<Long, Cours> find = new Finder<Long, Cours>(Cours.class);
 
-    public Cours(Enseignant sonEnseignant, String type, Timestamp heureDebut, Timestamp heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
+    public Cours(Enseignant sonEnseignant, String type, String type_detaille, Timestamp heureDebut, Timestamp heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
         this.sonEnseignant = sonEnseignant;
         this.type = type;
+        this.type_detaille = type_detaille;
         this.heureDebut = heureDebut;
         this.heureFin = heureFin;
         this.saMatiere = saMatiere;
@@ -53,7 +54,7 @@ public class Cours extends Model{
         this.sesPresences = new ArrayList<Presence>();
     }
 
-    public static Cours create(Enseignant sonEnseignant, String type, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
+    public static Cours create(Enseignant sonEnseignant, String type, String type_detaille, String heureDebut, String heureFin, Matiere saMatiere, Salle saSalle, Periode saPeriode, Promotion saPromo) {
         Timestamp hd = null;
         Timestamp hf = null;
         try {
@@ -66,7 +67,7 @@ public class Cours extends Model{
             e.printStackTrace();
         }
 
-        Cours cours = new Cours(sonEnseignant, type, hd, hf, saMatiere, saSalle, saPeriode, saPromo);
+        Cours cours = new Cours(sonEnseignant, type, type_detaille, hd, hf, saMatiere, saSalle, saPeriode, saPromo);
         cours.save();
         return cours;
     }
@@ -129,6 +130,11 @@ public class Cours extends Model{
 
     public static Cours findbyId(long id) {
         return find.byId(id);
+    }
+
+    public static List<Cours> findByTypeDetailleAndMatiere(String type_detaille, Matiere saMatiere){
+
+        return Cours.find.where().eq("type_detaille", type_detaille).eq("sa_matiere_id", saMatiere).findList();
     }
 
     /**
@@ -221,6 +227,7 @@ public class Cours extends Model{
         Cours cours = (Cours) o;
 
         if (!type.equals(cours.type)) return false;
+        if (!type_detaille.equals(cours.type_detaille)) return false;
         if (!heureDebut.equals(cours.heureDebut)) return false;
         if (!heureFin.equals(cours.heureFin)) return false;
         if (!sonEnseignant.equals(cours.sonEnseignant)) return false;
@@ -233,6 +240,7 @@ public class Cours extends Model{
     @Override
     public int hashCode() {
         int result = type.hashCode();
+        result = 31 * result + type_detaille.hashCode();
         result = 31 * result + heureDebut.hashCode();
         result = 31 * result + heureFin.hashCode();
         result = 31 * result + sonEnseignant.hashCode();
@@ -247,6 +255,7 @@ public class Cours extends Model{
         return "Cours{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
+                ", type_detaille='" + type_detaille + '\'' +
                 ", heureDebut=" + heureDebut +
                 ", heureFin=" + heureFin +
                 ", sonEnseignant=" + sonEnseignant +

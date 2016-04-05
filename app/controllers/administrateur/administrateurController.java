@@ -217,6 +217,15 @@ public class administrateurController extends Controller {
                     temp.save();
                 else
                     matieresBD.get(matieresBD.indexOf(temp)).update(s, s, null, String.valueOf(matiereDuree.get(s)));
+
+                matieresBD = Matiere.showAll();
+
+                Promotion promo = Promotion.findbyId(idPromotion);
+
+                if(!promo.sesMatieres.contains(temp)) {
+                    promo.sesMatieres.add(matieresBD.get(matieresBD.indexOf(temp)));
+                    promo.update();
+                }
             }
         }
 
@@ -326,6 +335,7 @@ public class administrateurController extends Controller {
 
             Cours coursTemp = new Cours(ensTemp,
                     type,
+                    ((String)tempHash.get("description")),
                     new Timestamp(((Date)tempHash.get("debut")).getTime()),
                     new Timestamp(((Date)tempHash.get("fin")).getTime()),
                     matiereTemp,
@@ -334,15 +344,20 @@ public class administrateurController extends Controller {
                     Promotion.findbyId(idPromotion));
 
             Cours coursBD = Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin);
+            System.out.println(coursBD);
 
-            if(coursBD!=null && !coursBD.equals(coursTemp) && !coursBD.signatureEnseignant){
+            if(coursBD!=null && !coursBD.equals(coursTemp) && !coursBD.signatureEnseignant) {
+                coursBD.heureDebut = coursTemp.heureDebut;
+                coursBD.heureFin = coursTemp.heureFin;
                 coursBD.saMatiere = coursTemp.saMatiere;
                 coursBD.saPromo = coursTemp.saPromo;
                 coursBD.saSalle = coursTemp.saSalle;
                 coursBD.sonEnseignant = coursTemp.sonEnseignant;
                 coursBD.type = coursTemp.type;
+                coursBD.type_detaille = coursTemp.type_detaille;
                 coursTemp.update();
             }
+
             else
                 coursTemp.save();
 

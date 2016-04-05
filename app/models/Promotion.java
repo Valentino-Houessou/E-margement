@@ -43,6 +43,8 @@ public class Promotion extends Model{
         this.type=type;
         this.filiere=filiere;
 
+        this.sesMatieres = new ArrayList<Matiere>();
+
         this.save();
     }
 

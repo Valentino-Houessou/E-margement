@@ -7,6 +7,7 @@ create table administrateur (
   id                        integer auto_increment not null,
   statut                    varchar(255),
   son_utilisateur_id        bigint,
+  referent_cfa              tinyint(1) default 0,
   constraint uq_administrateur_son_utilisateur_id unique (son_utilisateur_id),
   constraint pk_administrateur primary key (id))
 ;
@@ -21,6 +22,7 @@ create table batiment (
 create table cours (
   id                        integer auto_increment not null,
   type                      varchar(255),
+  type_detaille             varchar(255),
   heure_debut               datetime,
   heure_fin                 datetime,
   son_enseignant_id         integer,
