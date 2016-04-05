@@ -18,6 +18,7 @@ public class Cours extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
     public String type;
+    //public String type_detaille;
     /*@Column(columnDefinition = "datetime")
     public Timestamp dateDuCour;*/
     @Column(columnDefinition = "datetime")
@@ -107,6 +108,10 @@ public class Cours extends Model{
 
     public static List<Cours> findByEnseignant(long id, String date){
         return find.where().eq("son_enseignant_id",id).like("heureDebut",date + " %").findList();
+    }
+
+    public static Cours findByDebutEtFin(Timestamp debut, Timestamp fin){
+        return find.where().eq("heure_debut", debut).eq("heure_fin", fin).findUnique();
     }
 
     /**
@@ -206,5 +211,51 @@ public class Cours extends Model{
 
     public static Cours findCoursByDebutAndFin(Date debut, Date fin){
         return find.where().eq("heure_debut", debut).eq("heure_fin", fin).findUnique();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cours cours = (Cours) o;
+
+        if (!type.equals(cours.type)) return false;
+        if (!heureDebut.equals(cours.heureDebut)) return false;
+        if (!heureFin.equals(cours.heureFin)) return false;
+        if (!sonEnseignant.equals(cours.sonEnseignant)) return false;
+        if (!saMatiere.equals(cours.saMatiere)) return false;
+        if (!saSalle.equals(cours.saSalle)) return false;
+        return saPromo.equals(cours.saPromo);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + heureDebut.hashCode();
+        result = 31 * result + heureFin.hashCode();
+        result = 31 * result + sonEnseignant.hashCode();
+        result = 31 * result + saMatiere.hashCode();
+        result = 31 * result + saSalle.hashCode();
+        result = 31 * result + saPromo.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Cours{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", heureDebut=" + heureDebut +
+                ", heureFin=" + heureFin +
+                ", sonEnseignant=" + sonEnseignant +
+                ", saMatiere=" + saMatiere +
+                ", saSalle=" + saSalle +
+                ", saPeriode=" + saPeriode +
+                ", saPromo=" + saPromo +
+                ", sesPresences=" + sesPresences +
+                ", signatureEnseignant=" + signatureEnseignant +
+                '}';
     }
 }

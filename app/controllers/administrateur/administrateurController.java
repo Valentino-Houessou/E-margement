@@ -69,7 +69,7 @@ public class administrateurController extends Controller {
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart fichier = body.getFile("fichierICS");
 
-        int promotion = Integer.parseInt(profil.get("choixFormation"));
+        int idPromotion = Integer.parseInt(profil.get("choixFormation"));
 
         File fichierICS = fichier.getFile();
         FileReader lectureFichierICS = null;
@@ -95,6 +95,7 @@ public class administrateurController extends Controller {
         String salle = null;
         String dateSTR = null;
         Date debut = null;
+        Date fin = null;
         String nomIntervenant = "";
         String prenomIntervenant = null;
         String[] nomPrenomTab = null;
@@ -104,7 +105,6 @@ public class administrateurController extends Controller {
         HashMap<String, Long> matiereDuree = new HashMap<String, Long>();
         List<HashMap<String, Object>> listeEDT = new ArrayList<HashMap<String, Object>>();
 
-        Date fin = null;
 
         final String old_format = "yyyyMMdd'T'HHmmss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(old_format);
@@ -173,19 +173,17 @@ public class administrateurController extends Controller {
                     line = bufferLectureFichierICS.readLine();
                 }
 
-                if(!prenomIntervenant.equalsIgnoreCase("autre") && !nomIntervenant.equalsIgnoreCase("autre")) {
-                    hashEDT.put("nomIntervenant", nomIntervenant.replaceAll("�", "ç"));
-                    hashEDT.put("prenomIntervenant", prenomIntervenant.replaceAll("�", "ç"));
-                    hashEDT.put("debut", debut);
-                    hashEDT.put("fin", fin);
-                    hashEDT.put("description", description);
-                    hashEDT.put("formation", formation);
-                    hashEDT.put("ec", ec);
-                    hashEDT.put("intervenant", intervenant);
-                    hashEDT.put("salle", salle);
+                hashEDT.put("nomIntervenant", nomIntervenant.replaceAll("�", "ç"));
+                hashEDT.put("prenomIntervenant", prenomIntervenant.replaceAll("�", "ç"));
+                hashEDT.put("debut", debut);
+                hashEDT.put("fin", fin);
+                hashEDT.put("description", description);
+                hashEDT.put("formation", formation);
+                hashEDT.put("ec", ec);
+                hashEDT.put("intervenant", intervenant);
+                hashEDT.put("salle", salle);
 
-                    listeEDT.add(hashEDT);
-                }
+                listeEDT.add(hashEDT);
 
                 nomIntervenant = "";
 
@@ -233,12 +231,13 @@ public class administrateurController extends Controller {
              */
 
             // Création d'un utilisateur temporaire
-            Utilisateur utilisateurTemp = new Utilisateur((String)tempHash.get("nomIntervenant"),
-                    (String)tempHash.get("prenomIntervenant"),
-                    ((String) tempHash.get("prenomIntervenant")).toLowerCase()+"."+((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase()+"@u-paris10.fr",
+            Utilisateur utilisateurTemp = new Utilisateur((String) tempHash.get("nomIntervenant"),
+                    (String) tempHash.get("prenomIntervenant"),
+                    ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
                     "1230",
                     Timestamp.from(Instant.now()),
                     "");
+
 
             // Si l'utilisateur n'existe pas dans la BDD
             if(!utilisateursBD.contains(utilisateurTemp)) {
@@ -297,11 +296,13 @@ public class administrateurController extends Controller {
              */
 
             Batiment batimentTemp = null;
-            Salle temp = null;
+            Salle salleTemp = null;
 
-            if((batimentTemp = Batiment.findByLibelle("UFR Segmi")) != null)
-                if(Salle.findByLibelle((String)tempHash.get("salle"))==null)
+            if((batimentTemp = Batiment.findByLibelle("UFR Segmi")) != null) {
+                if (Salle.findByLibelle((String) tempHash.get("salle")) == null)
                     new Salle((String) tempHash.get("salle"), batimentTemp).save();
+                salleTemp = Salle.findByLibelle((String) tempHash.get("salle"));
+            }
 
             /*
                 ---------------------------------------------
@@ -310,6 +311,38 @@ public class administrateurController extends Controller {
             /*
                 AJOUT DES COURS DANS LA BDD
              */
+            String type = null;
+
+            if(((String)tempHash.get("description")).contains("CM"))
+                type = "CM";
+            else if(((String)tempHash.get("description")).contains("TD"))
+                type = "TD";
+            else if(((String)tempHash.get("description")).contains("EX"))
+                type = "EXAMEN";
+            else
+                type = "Autre";
+
+            Cours coursTemp = new Cours(ensTemp,
+                    type,
+                    new Timestamp(((Date)tempHash.get("debut")).getTime()),
+                    new Timestamp(((Date)tempHash.get("fin")).getTime()),
+                    matiereTemp,
+                    salleTemp,
+                    null,
+                    Promotion.findbyId(idPromotion));
+
+            Cours coursBD = Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin);
+
+            if(coursBD!=null && !coursBD.equals(coursTemp) && !coursBD.signatureEnseignant){
+                coursBD.saMatiere = coursTemp.saMatiere;
+                coursBD.saPromo = coursTemp.saPromo;
+                coursBD.saSalle = coursTemp.saSalle;
+                coursBD.sonEnseignant = coursTemp.sonEnseignant;
+                coursBD.type = coursTemp.type;
+                coursTemp.update();
+            }
+            else
+                coursTemp.save();
 
             //Cours coursTemp = Cours.findCoursByDebutAndFin();
 

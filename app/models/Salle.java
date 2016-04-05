@@ -53,4 +53,13 @@ public class Salle extends Model{
     public int hashCode() {
         return libelle.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Salle{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                ", sonBatiment=" + sonBatiment +
+                '}';
+    }
 }

@@ -143,5 +143,13 @@ public class Enseignant extends Model{
         return lesEnseignants;
     }
 
-
+    @Override
+    public String toString() {
+        return "Enseignant{" +
+                "id=" + id +
+                ", statut='" + statut + '\'' +
+                ", sonUtilisateur=" + sonUtilisateur +
+                ", sesMatieres=" + sesMatieres +
+                '}';
+    }
 }
