@@ -52,6 +52,8 @@ public class administrateurController extends Controller {
     public parametresProfilCree paramPC = parametresProfilCree.getInstance();
     // (Singleton)Permet de gérer l'ensemble des parametres pour la partie gérer administrateur
     public parametresAdmin paramAdmin = parametresAdmin.getInstance();
+    // (Singleton)Permet de gérer l'ensemble des parametres pour la partie gérer étudiante
+    public parametresEtudiant paramEtudiant = parametresEtudiant.getInstance();
     // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
@@ -1065,18 +1067,6 @@ public class administrateurController extends Controller {
     }
 
     /**
-     * gererUtilisateurEtudiant()
-     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
-     * @return gererUtilisateurEtudiant.scala.html
-     */
-    public Result gererUtilisateurEtudiant() {
-
-        if(session().get("user_id") == null)
-            return redirect(controllers.routes.Application.logout());
-        return ok(gererUtilisateurEtudiant.render("Gérer un profil etudiant"));
-    }
-
-    /**
      * chargerListeEtudiant()
      * Affichage du bloc dynamique JQuery pour charger la liste des étudiants
      * @return chargerListeEtudiant.scala.html
@@ -1378,5 +1368,24 @@ public class administrateurController extends Controller {
         String justificatif = Presence.getJustificatif(presenceId);
         response().setContentType("application/x-download");
         return ok(new File(justificatif));
+    }
+
+    /**
+     * gererUtilisateurEtudiant()
+     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
+     * @return gererUtilisateurEtudiant.scala.html
+     */
+    public Result gererUtilisateurEtudiant() {
+
+        // 0 - Etape
+        paramEtudiant.setEtape("SELECTIONS");
+
+        // 1 - Récupération des université
+        List<Universite> universites = Universite.getUniversite();
+        paramEtudiant.setListeUniversite(universites);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
 }
