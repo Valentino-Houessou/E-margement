@@ -174,7 +174,7 @@ public class EtudiantController extends Controller{
                     //email.setDebug(true);
                     email.setFrom("dadikadri@gmail.com", "eMargement");
                     email.addTo(Sonmail);
-                    email.setSubject("Justificatif d'absence" + nom + prenom);
+                    email.setSubject("Justificatif d'absence " + nom + prenom);
                     email.setMsg("Bonjour,\n\n" + prenom + " " + nom + " vient de justifier son absence" +
                             "\n\nMotif d'absence : " + p.motif);
 
