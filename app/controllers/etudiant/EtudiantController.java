@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
-
+import org.apache.commons.mail.*;
 
 public class EtudiantController extends Controller{
 
@@ -108,7 +108,7 @@ public class EtudiantController extends Controller{
     }
 
 
-    public Result fileUpload() {
+    public Result fileUpload() throws EmailException {
 
         //  Récupérer les champs du formulaire
 
@@ -122,33 +122,94 @@ public class EtudiantController extends Controller{
         String motif=profil.get("motif");
 
 
-        if (fichier != null) {
-            if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
+        if (fichier != null && fichier.getFile().length()<1000000) {
+            if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")||fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
                 String fileName = fichier.getFilename();
                 String contentType = fichier.getContentType();
                 File file = fichier.getFile();
 
-                // Ajout dans le dossier Image : C:\Users\Yoan D\Desktop\Play_Framework_2.0\m2a20152016-feuillepresence\public\images\Photos-utilisateurs
                 String myUploadPath = Play.application().configuration().getString("justificatifsPath");
                 String dateToFileNameStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                //file.renameTo(new File(myUploadPath, user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr));
-                file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".pdf"));
+
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
+                    file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".pdf"));
+                }
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
+                    file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".png"));
+                }
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
+                    file.renameTo(new File(myUploadPath, "justificatif_" + dateToFileNameStr + ".jpg"));
+                }
 
                 Presence p = Presence.find.where().eq("id", idpresence).findUnique();
                 p.motif = motif;
-                //p.justificatif= myUploadPath + user.numeroEtudiant + "_" + user.sonUtilisateur.prenom + "_" + user.sonUtilisateur.nom + "_justificatif_" + dateToFileNameStr + ".pdf";
-                p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".pdf";
+
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
+                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".pdf";
+                }
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
+                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".png";
+                }
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
+                    p.justificatif = myUploadPath + "justificatif_" + dateToFileNameStr + ".jpg";
+                }
 
                 p.save();
+
+                Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+                String nom = utilisateur.nom;
+                String prenom = utilisateur.prenom;
+
+                MultiPartEmail email = new MultiPartEmail();
+                email.setHostName("smtp.gmail.com");
+                email.setAuthentication("dadikadri@gmail.com","badboy92");
+                email.setSmtpPort(465);
+                email.setSSL(true);
+                //email.setDebug(true);
+                email.setFrom("dadikadri@gmail.com","eMargement");
+                email.addTo("dadikadri@gmail.com");
+                email.setSubject("Justificatif d'absence" + nom + prenom);
+                email.setMsg("Bonjour,\n\n" + prenom + " " + nom + " vient de justifier son absence"+
+                "\n\nMotif d'absence : " + p.motif);
+
+                // Create the attachment
+                EmailAttachment attachment = new EmailAttachment();
+                attachment.setPath(p.justificatif);
+                //attachment.setDisposition(EmailAttachment.ATTACHMENT);
+                attachment.setDisposition(EmailAttachment.ATTACHMENT);
+                attachment.setDescription("Justificatif d'absence");
+
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
+                    attachment.setName("justificatif_" + dateToFileNameStr + ".pdf");
+                }
+
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
+                    attachment.setName("justificatif_" + dateToFileNameStr + ".png");
+                }
+
+                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
+                    attachment.setName("justificatif_" + dateToFileNameStr + ".jpg");
+                }
+
+                email.attach(attachment);
+
+
+                // Envoi du mail
+                email.send();
+
+
+
             }
             else{
-                flash("error", "Fichier PDF requis");
-                return badRequest();
+
+                String erreur="erreurExtension";
+                return ok(justifierAbsences.render("Justifiez vos absences",idpresence,erreur));
             }
 
         } else {
-            flash("error", "Missing file");
-            return badRequest();
+
+            String erreur="erreurTaille";
+            return ok(justifierAbsences.render("Justifiez vos absences",idpresence,erreur));
         }
         /*List<Presence> presences = Presence.getCreaneauxAbsences(3700000);
 
@@ -322,7 +383,6 @@ public class EtudiantController extends Controller{
 
         return ok(indexEtudiant.render("Partie Etudiant", nbabsc, session()));
     }
-
 
 }
 

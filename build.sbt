@@ -16,6 +16,8 @@ libraryDependencies ++= Seq(
   "org.xhtmlrenderer" % "flying-saucer-pdf" % "9.0.8",
   "nu.validator.htmlparser" % "htmlparser" % "1.4",
   "org.docx4j" % "xhtmlrenderer" % "1.0.0",
+  "org.apache.commons" % "commons-email" % "1.1",
+  "com.sun.mail" % "smtp" % "1.5.5",
   "junit" % "junit" % "4.11"
 )
 
