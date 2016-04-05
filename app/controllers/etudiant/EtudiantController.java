@@ -160,43 +160,50 @@ public class EtudiantController extends Controller{
                 String nom = utilisateur.nom;
                 String prenom = utilisateur.prenom;
 
-                MultiPartEmail email = new MultiPartEmail();
-                email.setHostName("smtp.gmail.com");
-                email.setAuthentication("dadikadri@gmail.com","badboy92");
-                email.setSmtpPort(465);
-                email.setSSL(true);
-                //email.setDebug(true);
-                email.setFrom("dadikadri@gmail.com","eMargement");
-                email.addTo("dadikadri@gmail.com");
-                email.setSubject("Justificatif d'absence" + nom + prenom);
-                email.setMsg("Bonjour,\n\n" + prenom + " " + nom + " vient de justifier son absence"+
-                "\n\nMotif d'absence : " + p.motif);
+                List<Administrateur> admin = Administrateur.find.where().eq("referentCFA",1)
+                                                                   .findList();
 
-                // Create the attachment
-                EmailAttachment attachment = new EmailAttachment();
-                attachment.setPath(p.justificatif);
-                //attachment.setDisposition(EmailAttachment.ATTACHMENT);
-                attachment.setDisposition(EmailAttachment.ATTACHMENT);
-                attachment.setDescription("Justificatif d'absence");
+                for(Administrateur ad:admin) {
 
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("pdf")) {
-                    attachment.setName("justificatif_" + dateToFileNameStr + ".pdf");
+                    String Sonmail = ad.sonUtilisateur.adresseMail;
+                    MultiPartEmail email = new MultiPartEmail();
+                    email.setHostName("smtp.gmail.com");
+                    email.setAuthentication("dadikadri@gmail.com", "badboy92");
+                    email.setSmtpPort(465);
+                    email.setSSL(true);
+                    //email.setDebug(true);
+                    email.setFrom("dadikadri@gmail.com", "eMargement");
+                    email.addTo(Sonmail);
+                    email.setSubject("Justificatif d'absence" + nom + prenom);
+                    email.setMsg("Bonjour,\n\n" + prenom + " " + nom + " vient de justifier son absence" +
+                            "\n\nMotif d'absence : " + p.motif);
+
+
+                    // Create the attachment
+                    EmailAttachment attachment = new EmailAttachment();
+                    attachment.setPath(p.justificatif);
+                    //attachment.setDisposition(EmailAttachment.ATTACHMENT);
+                    attachment.setDisposition(EmailAttachment.ATTACHMENT);
+                    attachment.setDescription("Justificatif d'absence");
+
+                    if (fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".") + 1).equalsIgnoreCase("pdf")) {
+                        attachment.setName("justificatif_" + dateToFileNameStr + ".pdf");
+                    }
+
+                    if (fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".") + 1).equalsIgnoreCase("png")) {
+                        attachment.setName("justificatif_" + dateToFileNameStr + ".png");
+                    }
+
+                    if (fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".") + 1).equalsIgnoreCase("jpg")) {
+                        attachment.setName("justificatif_" + dateToFileNameStr + ".jpg");
+                    }
+
+                    email.attach(attachment);
+
+
+                    // Envoi du mail
+                    email.send();
                 }
-
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("png")) {
-                    attachment.setName("justificatif_" + dateToFileNameStr + ".png");
-                }
-
-                if(fichier.getFilename().substring(fichier.getFilename().lastIndexOf(".")+1).equalsIgnoreCase("jpg")) {
-                    attachment.setName("justificatif_" + dateToFileNameStr + ".jpg");
-                }
-
-                email.attach(attachment);
-
-
-                // Envoi du mail
-                email.send();
-
 
 
             }

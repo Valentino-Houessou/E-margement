@@ -17,7 +17,7 @@ public class Administrateur extends Model {
     public String statut;
     @OneToOne
     public Utilisateur sonUtilisateur;
-
+    public boolean referentCFA;
     //TODO : Quand on cré un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
 
     //Finder for retrieve data in database
