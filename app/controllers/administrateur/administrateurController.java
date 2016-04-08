@@ -262,7 +262,7 @@ public class administrateurController extends Controller {
                 // On lui associe sa / ses matières
                 //enseignantTemp.sesMatieres.add(Matiere.show());
 
-                // On PERSIIIIIIIIIIIIIIIIIIIIIISTE !!!!!!!!!!!!!!!!!!!!
+                // On persiste
                 utilisateurTemp.save();
                 enseignantTemp.save();
             }

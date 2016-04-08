@@ -234,13 +234,7 @@ public class Utilisateur extends Model  {
 
         Utilisateur that = (Utilisateur) o;
 
-        //if (!nom.equals(that.nom)) return false;
-        //if (!prenom.equals(that.prenom)) return false;
-        //if (!adresseMail.equals(that.adresseMail)) return false;
-        //if (!motDePasse.equals(that.motDePasse)) return false;
-        //return !(dateDeNaissance != null ? !dateDeNaissance.equals(that.dateDeNaissance) : that.dateDeNaissance != null);
-
-        return nom.contains(that.nom) || prenom.contains(that.prenom);
+        return nom.contains(that.nom) && prenom.contains(that.prenom);
     }
 
     @Override
