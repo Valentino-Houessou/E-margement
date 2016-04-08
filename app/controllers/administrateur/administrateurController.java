@@ -343,34 +343,41 @@ public class administrateurController extends Controller {
                     null,
                     Promotion.findbyId(idPromotion));
 
-            Cours coursBD = Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin);
-            System.out.println(coursBD);
+            Cours coursBD = null;
 
-            if(coursBD!=null && !coursBD.equals(coursTemp) && !coursBD.signatureEnseignant) {
-                coursBD.heureDebut = coursTemp.heureDebut;
-                coursBD.heureFin = coursTemp.heureFin;
-                coursBD.saMatiere = coursTemp.saMatiere;
-                coursBD.saPromo = coursTemp.saPromo;
-                coursBD.saSalle = coursTemp.saSalle;
-                coursBD.sonEnseignant = coursTemp.sonEnseignant;
-                coursBD.type = coursTemp.type;
-                coursBD.type_detaille = coursTemp.type_detaille;
-                coursTemp.update();
+            if((coursBD=Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin))!=null
+                    && coursBD.sesPresences.isEmpty()) {
+                if(!coursBD.signatureEnseignant) {
+                    coursBD.saMatiere = coursTemp.saMatiere;
+                    coursBD.saPromo = coursTemp.saPromo;
+                    coursBD.saSalle = coursTemp.saSalle;
+                    coursBD.sonEnseignant = coursTemp.sonEnseignant;
+                    coursBD.type = coursTemp.type;
+                    coursBD.type_detaille = coursTemp.type_detaille;
+                    coursBD.update();
+                }
+                else
+                    continue;
             }
 
-            else
+            else if((coursBD=Cours.findByTypeDetailleAndMatiere(coursTemp.type_detaille, coursTemp.saMatiere))!=null
+                    && coursBD.sesPresences.isEmpty()){
+                if(!coursBD.signatureEnseignant) {
+                    coursBD.heureDebut = coursTemp.heureDebut;
+                    coursBD.heureFin = coursTemp.heureFin;
+                    coursBD.saMatiere = coursTemp.saMatiere;
+                    coursBD.saPromo = coursTemp.saPromo;
+                    coursBD.saSalle = coursTemp.saSalle;
+                    coursBD.sonEnseignant = coursTemp.sonEnseignant;
+                    coursBD.type = coursTemp.type;
+                    coursBD.type_detaille = coursTemp.type_detaille;
+                    coursBD.update();
+                }
+                else
+                    continue;
+            }
+            else if(!Cours.findAll().contains(coursTemp))
                 coursTemp.save();
-
-            //Cours coursTemp = Cours.findCoursByDebutAndFin();
-
-            /*
-                ---------------------------------------------
-             */
-
-            /*
-                ASSOCIATION DES COURS AVEC LES ENSEIGNANTS
-             */
-
         }
 
         try {

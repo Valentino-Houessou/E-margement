@@ -132,9 +132,9 @@ public class Cours extends Model{
         return find.byId(id);
     }
 
-    public static List<Cours> findByTypeDetailleAndMatiere(String type_detaille, Matiere saMatiere){
+    public static Cours findByTypeDetailleAndMatiere(String type_detaille, Matiere saMatiere){
 
-        return Cours.find.where().eq("type_detaille", type_detaille).eq("sa_matiere_id", saMatiere).findList();
+        return Cours.find.where().eq("type_detaille", type_detaille).eq("sa_matiere_id", saMatiere.id).findUnique();
     }
 
     /**
