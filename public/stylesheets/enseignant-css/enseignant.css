@@ -1,5 +1,7 @@
 .filterable {
     margin-top: 15px;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 .filterable .panel-heading .pull-right {
     margin-top: -20px;
