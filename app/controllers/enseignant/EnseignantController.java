@@ -5,8 +5,6 @@ import controllers.*;
 import models.Cours;
 import models.Enseignant;
 import models.Presence;
-import models.Utilisateur;
-import play.Application;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -15,6 +13,8 @@ import views.html.enseignant.indexEnseignant;
 import views.html.enseignant.list_cours;
 import views.html.enseignant.list_etudiants;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -51,6 +51,10 @@ public class EnseignantController extends Controller{
         Cours cours = Cours.findbyId(Long.parseLong(coursform.get().cours));
         if(cours.signatureEnseignant)
             return ok("<div class='form-group signature'><span>La feuille de présence de ce cours a été signé.</span></div>");
+        if(cours.heureDebut.after(Timestamp.from(Instant.now())))
+            return ok("<div class='form-group signature'><span>Le cours n'a pas commencé.</span></div>");
+        if(Timestamp.from(cours.heureFin.toInstant().plusSeconds(900)).before(Timestamp.from(Instant.now())))
+            return ok("<div class='form-group signature'><span>Le cours a eu lieu.</span></div>");
         return ok(list_etudiants.render(Presence.findbyCours(Long.parseLong(coursform.get().cours))));
     }
 
