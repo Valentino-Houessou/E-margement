@@ -489,12 +489,14 @@ public class administrateurController extends Controller {
         String mdp = profil.get("mdp");
         String datenaissance = profil.get("datepicker10");
         String status = profil.get("status");
+        String referantCFA = profil.get("refCFA");
         String lienPhoto ="";
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
 
         Administrateur newAdmin = null;
+        boolean referant = false;
 
         if (photo != null) {
             String fileName = photo.getFilename();
@@ -517,7 +519,12 @@ public class administrateurController extends Controller {
             }
             lienPhoto = myUploadPath + fileName;
 
-            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+            if(referantCFA.equals("OUI"))
+            {
+                referant = true;
+            }
+
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status, referant);
         }else {
 
             // Création du profil enseignant sans photo
@@ -528,7 +535,12 @@ public class administrateurController extends Controller {
                 datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             }
 
-            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status);
+            if(referantCFA.equals("OUI"))
+            {
+                referant = true;
+            }
+
+            newAdmin = Administrateur.create(nom, prenom, adresseMail, mdp, datenaissance, "", status, referant);
         }
 
         // 2 -  Chargement des parametres pour affichage dans la vue

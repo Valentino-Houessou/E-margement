@@ -23,9 +23,15 @@ public class Administrateur extends Model {
     //Finder for retrieve data in database
     public static Finder<Long, Administrateur> find = new Finder<Long, Administrateur>(Administrateur.class);
 
-    public Administrateur(String statut, Utilisateur sonUtilisateur) {
+    /**
+     * Constructeur
+     * @param statut
+     * @param sonUtilisateur
+     */
+    public Administrateur(String statut, Utilisateur sonUtilisateur, boolean referentCFA) {
         this.statut = statut;
         this.sonUtilisateur = sonUtilisateur;
+        this.referentCFA = referentCFA;
     }
 
     /**
@@ -39,10 +45,11 @@ public class Administrateur extends Model {
      * @param statut
      * @return
      */
-    public static Administrateur create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
+    public static Administrateur create(String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut, boolean referentCFA)
+    {
         Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
         Utilisateur.droitAdmin(user.id); // Affectation automatique de son droit "ADMINISTRATEUR"
-        Administrateur admin = new Administrateur(statut, user);
+        Administrateur admin = new Administrateur(statut, user, referentCFA);
 
         admin.save();
         return admin;
