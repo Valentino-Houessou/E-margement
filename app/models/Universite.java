@@ -16,7 +16,21 @@ public class Universite extends Model{
     public int id;
     public String libelle;
 
+    public Universite(String libelle) {
+        this.libelle = libelle;
+    }
+
+
+    public static Universite create(String libelle) {
+
+        Universite univ  = new Universite(libelle);
+
+        univ.save();
+        return univ;
+    }
+
     /**
+
      * Ebean
      */
     public static Finder<Long,Universite> find = new Finder<Long, Universite>(Universite.class);
@@ -39,4 +53,7 @@ public class Universite extends Model{
 
         return universite;
     }
+
+
+
 }

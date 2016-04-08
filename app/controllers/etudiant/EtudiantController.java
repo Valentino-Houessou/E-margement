@@ -14,7 +14,7 @@ import views.html.etudiant.consulterAbsences;
 import views.html.etudiant.indexEtudiant;
 import views.html.etudiant.justifierAbsences;
 import models.Presence;
-//import org.jboss.vfs.VirtualFile;
+
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,7 +52,7 @@ public class EtudiantController extends Controller{
             System.out.println(utilisateur.motDePasse);
 
             utilisateur.setMotDePasse(mdp);
-            utilisateur.adresseMail="boulit@gmail.com";
+            //utilisateur.adresseMail="boulit@gmail.com";
 
             utilisateur.update();
 

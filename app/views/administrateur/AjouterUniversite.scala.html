@@ -1,0 +1,79 @@
+@(titrepage: String)(erreur:Int)
+<div>
+    <div class="row">
+        <div class="col-lg-10 col-md-9">
+                <!--                        <div class="col-lg-1"><img src="img/ajout_contact.png" alt=""></div>-->
+            <h2 class="titre-contact">Ajout d'une université</h2>
+        </div>
+    </div>
+
+
+        <form class="form-horizontal" id="ajoutFac">
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Nom</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="NomFac" name="NomFac" placeholder="Nom de la nouvelle université"  required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <input id="AjoutFacbtn" name="AjoutFac" type="submit" value="Ajouter" class="btn btn-primary">
+                </div>
+            </div>
+
+            @if(erreur==0){
+                <a style="color:red">Université déja existante</a>
+            }
+
+        </form>
+
+    <div class="row">
+        <div class="col-lg-10 col-md-9">
+                <!--                        <div class="col-lg-1"><img src="img/ajout_contact.png" alt=""></div>-->
+            <h2 class="titre-contact">Ajout d'un batiment</h2>
+        </div>
+    </div>
+
+
+    <form class="form-horizontal" id="ajoutBat">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Nom du batiment</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="NomBat" name="NomBat" placeholder="Nom du nouveau batiment"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input id="AjoutBatbtn" name="AjoutBat" type="submit" value="Ajouter" class="btn btn-primary">
+            </div>
+        </div>
+
+
+    </form>
+   </div>
+
+<script>
+        $(document).ready(function(){
+            $('#ajoutFac').on('submit',function(e){
+                e.preventDefault()
+
+                $.ajax({
+                    url: '/administrateur/ajoutUniversite/creer',
+                    type: "POST",
+                    data: "NomFac="+$("#NomFac").val(),
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page ajouter une université !")
+                    }
+                });
+
+            });
+        });
+</script>

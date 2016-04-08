@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.administrateur.gestionDesParametres.PdfGenerator;
+import controllers.etudiant.*;
 import models.Universite;
 import play.Configuration;
 import play.Play;
@@ -14,17 +15,7 @@ import play.data.DynamicForm;
 import static play.data.Form.form;
 import play.mvc.*;
 
-import views.html.administrateur.indexAdministrateur;
-import views.html.administrateur.gererUtilisateurAdministrateur;
-import views.html.administrateur.gererUtilisateurEnseignant;
-import views.html.administrateur.gererUtilisateurEtudiant;
-import views.html.administrateur.chargerListeEtudiant;
-import views.html.administrateur.chargerEdt;
-import views.html.administrateur.chargerListeEnseignant;
-import views.html.administrateur.exportFeuillePresence;
-import views.html.administrateur.exporterFeuilleDatePDF;
-import views.html.administrateur.gererAbscences;
-import views.html.administrateur.exporterJustificatifsAbscences;
+import views.html.administrateur.*;
 import models.*;
 
 import java.io.*;
@@ -57,6 +48,50 @@ public class administrateurController extends Controller {
     // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
+
+
+
+    public  Result ajoutUniversiteCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String nom = fac.get("NomFac").toUpperCase();
+
+        List<Universite> universite = Universite.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur=0;
+        for(Universite univ: universite) {
+
+            if (nom.toUpperCase().equals(univ.libelle.toUpperCase())) {
+                System.out.println("égale");
+                cpterreur++;
+            }
+        }
+            if(cpterreur==0){
+
+                System.out.println("Passe par là");
+                Universite nouvellefac= Universite.create(nom);
+                return redirect(routes.administrateurController.ajoutUniversite());
+            }
+
+            else{
+
+                return redirect(routes.administrateurController.ajoutUniversiteErreur());
+
+            }
+    }
+
+
+    public  Result ajoutUniversiteErreur() {
+        return ok(AjouterUniversite.render("Ajouter une université",0));
+    }
+
+
+    public Result ajoutUniversite() {
+        return ok(AjouterUniversite.render("Ajouter une université",1));
+    }
+
 
     /**
      * Ajout des cours dans la base de donnnées à partir d'u fichier ICS
@@ -1410,4 +1445,5 @@ public class administrateurController extends Controller {
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
+
 }

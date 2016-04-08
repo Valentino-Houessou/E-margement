@@ -153,6 +153,24 @@ var exporterJustificatifsAbscences = function() {
     })
 };
 
+var ajouteruniversite = function() {
+
+    $.ajax({
+        url: "/administrateur/ajoutUniversite",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+
 
 $('#ft1').click(chargerListeEtudiant);
 $('#ft2').click(chargerEdt);
@@ -163,3 +181,5 @@ $('#ft6').click(gererUtilisateurEnseignant);
 $('#ft7').click(gererUtilisateurEtudiant);
 $('#ft8').click(gererAbscences);
 $('#ft9').click(exporterJustificatifsAbscences);
+$('#ft15').click(ajouteruniversite);
+

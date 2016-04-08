@@ -74,6 +74,9 @@ POST          /administrateur/affecter-cours/filiere                  controller
 POST          /administrateur/affecter-cours/promotion                controllers.administrateur.administrateurController.selectionPromotion()
 POST          /administrateur/affecter-cours/affichage-cours          controllers.administrateur.administrateurController.affichageCoursPromotion()
 POST          /administrateur/importer-edt                            controllers.administrateur.administrateurController.importEDT()
+GET           /administrateur/ajoutUniversite                         controllers.administrateur.administrateurController.ajoutUniversite()
+GET           /administrateur/ajoutUniversiteErreur                   controllers.administrateur.administrateurController.ajoutUniversiteErreur()
+POST          /administrateur/ajoutUniversite/creer                   controllers.administrateur.administrateurController.ajoutUniversiteCreer()
 
 
 
