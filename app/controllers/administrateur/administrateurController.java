@@ -68,18 +68,18 @@ public class administrateurController extends Controller {
                 cpterreur++;
             }
         }
-            if(cpterreur==0){
+        if(cpterreur==0){
 
-                System.out.println("Passe par là");
-                Universite nouvellefac= Universite.create(nom);
-                return redirect(routes.administrateurController.ajoutUniversite());
-            }
+            System.out.println("Passe par là");
+            Universite nouvellefac= Universite.create(nom);
+            return redirect(routes.administrateurController.ajoutUniversite());
+        }
 
-            else{
+        else{
 
-                return redirect(routes.administrateurController.ajoutUniversiteErreur());
+            return redirect(routes.administrateurController.ajoutUniversiteErreur());
 
-            }
+        }
     }
 
 
@@ -294,9 +294,6 @@ public class administrateurController extends Controller {
                 // On lui associe son module (ENSEIGNANT)
                 utilisateurTemp.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
 
-                // On lui associe sa / ses matières
-                //enseignantTemp.sesMatieres.add(Matiere.show());
-
                 // On persiste
                 utilisateurTemp.save();
                 enseignantTemp.save();
@@ -380,24 +377,37 @@ public class administrateurController extends Controller {
 
             Cours coursBD = null;
 
-            if((coursBD=Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin))!=null
-                    && coursBD.sesPresences.isEmpty()) {
-                if(!coursBD.signatureEnseignant) {
+            int condition = 0;
+
+            boolean test = true;
+
+            if((coursBD=Cours.findByDebutEtFin(coursTemp.heureDebut, coursTemp.heureFin))!=null) {
+                for(int i=0; i<coursBD.sesPresences.size() && test; i++)
+                    if(coursBD.sesPresences.get(i).emergement)
+                        test = false;
+                if(test && !coursBD.signatureEnseignant) {
                     coursBD.saMatiere = coursTemp.saMatiere;
                     coursBD.saPromo = coursTemp.saPromo;
                     coursBD.saSalle = coursTemp.saSalle;
                     coursBD.sonEnseignant = coursTemp.sonEnseignant;
                     coursBD.type = coursTemp.type;
                     coursBD.type_detaille = coursTemp.type_detaille;
+
+                    condition = 1;
+
                     coursBD.update();
                 }
                 else
                     continue;
             }
 
-            else if((coursBD=Cours.findByTypeDetailleAndMatiere(coursTemp.type_detaille, coursTemp.saMatiere))!=null
-                    && coursBD.sesPresences.isEmpty()){
-                if(!coursBD.signatureEnseignant) {
+
+            else if((coursBD=Cours.findByTypeDetailleAndMatiere(coursTemp.type_detaille, coursTemp.saMatiere))!=null){
+                test = true;
+                for(int i=0; i<coursBD.sesPresences.size() && test; i++)
+                    if(coursBD.sesPresences.get(i).emergement)
+                        test = false;
+                if(test && !coursBD.signatureEnseignant) {
                     coursBD.heureDebut = coursTemp.heureDebut;
                     coursBD.heureFin = coursTemp.heureFin;
                     coursBD.saMatiere = coursTemp.saMatiere;
@@ -406,14 +416,78 @@ public class administrateurController extends Controller {
                     coursBD.sonEnseignant = coursTemp.sonEnseignant;
                     coursBD.type = coursTemp.type;
                     coursBD.type_detaille = coursTemp.type_detaille;
+
+                    condition = 2;
+
                     coursBD.update();
                 }
                 else
                     continue;
             }
-            else if(!Cours.findAll().contains(coursTemp))
+            else if(!Cours.findAll().contains(coursTemp)) {
+                condition = 3;
                 coursTemp.save();
+            }
+
+            /*
+                ---------------------------------------------
+             */
+
+            /*
+                AJOUT DES PRESENCES
+             */
+            List<Presence> presencesBD = Presence.findAll();
+            List<Etudiant> etudiantsBD = Etudiant.findAll();
+
+            Presence presenceTemp = null;
+
+            for(Etudiant e : etudiantsBD) {
+                presenceTemp = new Presence();
+                presenceTemp.emergement = false;
+                presenceTemp.justificatif = "";
+                presenceTemp.motif = "";
+
+                if (condition == 1 || condition == 2)
+                    presenceTemp.sonCours = coursBD;
+                else if (condition == 3)
+                    presenceTemp.sonCours = coursTemp;
+
+                presenceTemp.sonEtudiant = e;
+
+                if(!presencesBD.contains(presenceTemp)){
+                    presenceTemp.save();
+                    presencesBD = Presence.findAll();
+                }
+            }
         }
+
+        /*for(Utilisateur u : utilisateursBD){
+            if(u.prenom == null || u.prenom.isEmpty() || u.nom == null || u.nom.isEmpty()) {
+                Enseignant enseignantToDelete = Enseignant.findByUser(u.id);
+                List<Cours> coursBD = Cours.findListCoursByListMatiereEtIdEnseignant(enseignantToDelete.sesMatieres, enseignantToDelete.id);
+
+                // Suppression des présences associées
+                List<Presence> presencesBD = Presence.findAll();
+
+                for(Cours c : coursBD) {
+                    for (Presence p : presencesBD)
+                        if (p.sonCours.id == c.id)
+                            p.delete();
+                    c.saMatiere = null;
+                    c.update();
+                    c.delete();
+                }
+
+                enseignantToDelete.sesMatieres.clear();
+                enseignantToDelete.update();
+                enseignantToDelete.delete();
+
+                u.sesModules.clear();
+                u.update();
+                u.delete();
+            }
+            utilisateursBD = Utilisateur.findAll();
+        }*/
 
         try {
             bufferLectureFichierICS.close();

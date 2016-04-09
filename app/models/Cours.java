@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
+import play.api.mvc.Codec;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -146,6 +147,24 @@ public class Cours extends Model{
     {
 
         List<Cours> cours = find.where().eq("sa_matiere_id", idmatiere).findList();
+
+        return cours;
+    }
+
+    /**
+     * Retourne tous les cours par jours
+     * @param idmatiere
+     * @return
+     */
+    public static List<Cours> findListCoursByListMatiereEtIdEnseignant(List<Matiere> matieres, int id_enseignant)
+    {
+        List<Cours> cours = new ArrayList<Cours>();
+        List<Cours> coursBD = Cours.findAll();
+
+        for(Cours c : coursBD)
+            for(Matiere m : matieres)
+                if(c.saMatiere.equals(m) && c.sonEnseignant.id == id_enseignant)
+                    cours.add(c);
 
         return cours;
     }

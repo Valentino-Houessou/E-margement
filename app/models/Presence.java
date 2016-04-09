@@ -22,6 +22,10 @@ public class Presence extends Model {
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Etudiant sonEtudiant;
 
+    public Presence(){
+
+    }
+
 
     public static Finder<Integer,Presence> find = new Finder<Integer,Presence>(Presence.class);
 
@@ -90,4 +94,22 @@ public class Presence extends Model {
         return pres.justificatif;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Presence presence = (Presence) o;
+
+        if (sonCours != null ? !sonCours.equals(presence.sonCours) : presence.sonCours != null) return false;
+        return sonEtudiant != null ? sonEtudiant.equals(presence.sonEtudiant) : presence.sonEtudiant == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sonCours != null ? sonCours.hashCode() : 0;
+        result = 31 * result + (sonEtudiant != null ? sonEtudiant.hashCode() : 0);
+        return result;
+    }
 }
