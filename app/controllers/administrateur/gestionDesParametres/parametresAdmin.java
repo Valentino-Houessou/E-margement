@@ -27,6 +27,9 @@ public class parametresAdmin {
 
     private static parametresAdmin INSTANCE = null;
 
+    /**
+     * Constructeur
+     */
     private parametresAdmin()
     {
         this.nom = "";

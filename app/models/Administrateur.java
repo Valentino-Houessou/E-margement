@@ -104,6 +104,11 @@ public class Administrateur extends Model {
         utilisateur.delete();
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public static boolean utilisateurAdmin(Utilisateur user){
         return (Administrateur.find.where().eq("sonUtilisateur", user).findUnique()) != null ? true : false;
     }

@@ -38,7 +38,6 @@ GET           /etudiant/fileDownload                                  controller
 GET           /etudiant/changerMDP                                    controllers.etudiant.EtudiantController.changerMDP()
 GET           /etudiant/changerMDPerreur                              controllers.etudiant.EtudiantController.changerMDPerreur()
 POST          /etudiant/mdpchange                                     controllers.etudiant.EtudiantController.mdpchange()
-#Fonction notifier présence
 
 
 # admin : Toutes les fonctionnalités de l'administrateur
