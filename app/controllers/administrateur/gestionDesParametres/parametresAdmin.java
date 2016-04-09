@@ -19,6 +19,7 @@ public class parametresAdmin {
     private String datenaissance;
     private String status;
     private String lienphoto;
+    private int referantCFA;
 
     private List<Administrateur> lesAdmin;
     private List<Enseignant> lesEnseingnantAdmin;
@@ -35,6 +36,7 @@ public class parametresAdmin {
         this.datenaissance = "";
         this.status = "";
         this.lienphoto = "";
+        this.referantCFA = 0;
 
         this.lesAdmin = null;
         this.lesEnseingnantAdmin = null;
@@ -94,6 +96,11 @@ public class parametresAdmin {
             String [] lien = this.profilAdmin.sonUtilisateur.lienPhoto.split("/"); // On retire le public et on garde le dossier photos-utilisateurs/photo...
             this.setLienphoto(lien[1]+"/"+lien[2]);
         }
+
+        if(this.profilAdmin.referentCFA == true)
+            this.referantCFA = 1;
+        else
+            this.referantCFA =0;
     }
 
     public void setLesEnseingnantAdmin(List<Enseignant> lesEnseingnantAdmin) {
@@ -168,6 +175,14 @@ public class parametresAdmin {
         this.lienphoto = lienphoto;
     }
 
+    public int getReferantCFA() {
+        return referantCFA;
+    }
+
+    public void setReferantCFA(int referantCFA) {
+        this.referantCFA = referantCFA;
+    }
+
     /**
      * Remet à zero les paramettres
      */
@@ -180,6 +195,7 @@ public class parametresAdmin {
         this.datenaissance = "";
         this.status = "";
         this.lienphoto = "";
+        this.referantCFA =0;
 
         this.lesAdmin = null;
         this.lesEnseingnantAdmin = null;

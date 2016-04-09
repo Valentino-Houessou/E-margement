@@ -158,12 +158,10 @@
                                     <label>Ajouter une photo (Facultatif)</label>
                                     <input type="file" class="form-control" id="photo" name="photo" />
                                 </div>
-                            </div>
-
-                            <br><br>
+                            </div><br/>
                             <div class="row">
                                 <div class="form-group">
-                                    <label>Est-il un référent CFA?</label>
+                                    <label>Est-il un référent CFA ?</label>
                                     <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" />Oui</label>
                                     <label class="radio-inline"><input type="radio" name="refCFA" value="NON" checked />Non</label>
                                 </div>
@@ -245,6 +243,17 @@
                                 <input type="text" class="form-control" disabled value="@paramAdministrateur.getStatus()" />
                             </div>
                         </div>
+                        <br/>
+                        <div class="row">
+                            <div class="form-group">
+                                <label>Est-il un référent CFA ?</label>
+                                @if(paramAdministrateur.getReferantCFA == 1){
+                                    Oui
+                                }else{
+                                    Non
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <hr>
@@ -322,8 +331,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Est-il un référent CFA?</label>
-                                        <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" />Oui</label>
-                                        <label class="radio-inline"><input type="radio" name="refCFA" value="NON" checked />Non</label>
+                                        @if(paramAdministrateur.getReferantCFA == 1){
+                                            <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" checked />Oui</label>
+                                            <label class="radio-inline"><input type="radio" name="refCFA" value="NON"  />Non</label>
+                                        }else{
+                                            <label class="radio-inline"><input type="radio" name="refCFA" value="OUI" />Oui</label>
+                                            <label class="radio-inline"><input type="radio" name="refCFA" value="NON" checked />Non</label>
+                                        }
                                     </div>
                                 </div>
                             </div>

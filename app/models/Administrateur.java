@@ -18,7 +18,6 @@ public class Administrateur extends Model {
     @OneToOne
     public Utilisateur sonUtilisateur;
     public boolean referentCFA;
-    //TODO : Quand on cré un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
 
     //Finder for retrieve data in database
     public static Finder<Long, Administrateur> find = new Finder<Long, Administrateur>(Administrateur.class);
@@ -65,9 +64,10 @@ public class Administrateur extends Model {
      * @param dateDeNaissance
      * @param lienPhoto
      * @param statut
+     * @param referentCFA
      * @return
      */
-    public static Administrateur update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut)
+    public static Administrateur update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut, boolean referentCFA)
     {
         Administrateur admin = find.where().eq("id", id).findUnique();
 
@@ -75,6 +75,8 @@ public class Administrateur extends Model {
         {
             admin.statut = statut;
         }
+
+        admin.referentCFA = referentCFA;
 
         Utilisateur.updateUtilisateur(admin.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
         admin.update();

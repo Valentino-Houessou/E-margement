@@ -15,7 +15,19 @@ import play.data.DynamicForm;
 import static play.data.Form.form;
 import play.mvc.*;
 
-import views.html.administrateur.*;
+
+import views.html.administrateur.indexAdministrateur;
+import views.html.administrateur.gererUtilisateurAdministrateur;
+import views.html.administrateur.gererUtilisateurEnseignant;
+import views.html.administrateur.gererUtilisateurEtudiant;
+import views.html.administrateur.chargerListeEtudiant;
+import views.html.administrateur.chargerEdt;
+import views.html.administrateur.chargerListeEnseignant;
+import views.html.administrateur.exportFeuillePresence;
+import views.html.administrateur.exporterFeuilleDatePDF;
+import views.html.administrateur.gererAbscences;
+import views.html.administrateur.exporterJustificatifsAbscences;
+import views.html.administrateur.AjouterUniversite;
 import models.*;
 
 import java.io.*;
@@ -661,8 +673,11 @@ public class administrateurController extends Controller {
         String datenaissance = profil.get("datenaissance");
         String status = profil.get("status");
         String lienPhoto = "";
+        String referantCFA = profil.get("refCFA");
 
         int idadmin = Integer.parseInt(profil.get("idadmin"));
+
+        boolean referant = false;
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart photo = body.getFile("photo");
@@ -691,7 +706,12 @@ public class administrateurController extends Controller {
             lienPhoto = myUploadPath+fileName;
         }
 
-        Administrateur.update(idadmin, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status);
+        if(referantCFA.equals("OUI"))
+        {
+            referant = true;
+        }
+
+        Administrateur.update(idadmin, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, status, referant);
 
         // 4 -  Chargement des parametres pour affichage dans la vue
         paramAdmin.remiseAzero();

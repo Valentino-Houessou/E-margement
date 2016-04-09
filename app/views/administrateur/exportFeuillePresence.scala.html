@@ -9,13 +9,13 @@
 
     <!-- Début du block dynamique-->
 <div>
-    <h1> @titrepage </h1>
+    <h1 style="margin-top:0px"> @titrepage </h1>
 
     <div class="centrer_contenu">
             <!-- Géré par l'AJAX !!! -->
         <form class="form-inline" role="form">
             <div class="form-group" style="margin-right: 50px;">
-                <label>1 - </label>
+                <label style=" min-width: 0px;">1 - </label>
                 <select id="selectionUniversite" name="selectionUniversite" class="form-control"  style="width:225px;">
                     <option value="-">Sélectionner une université</option>
                     @for(listeUniversite <- mesParametres.getListeUniversites()){
@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                <label>2 - </label>
+                <label style=" min-width: 0px;">2 - </label>
                 <select id="selectionBatiment" name="selectionBatiment" class="form-control" style="width:225px;">
                     <option value="-">Sélectionner un batiment</option>
                     @if(mesParametres.getListeBatiments() != null){
@@ -50,7 +50,7 @@
     <div id="selection_filiere_promo" class="centrer_contenu">
         <form class="form-inline" role="form">
             <div class="form-group" style="margin-right: 50px;">
-                <label>3 - </label>
+                <label style=" min-width: 0px;">3 - </label>
                 <select id="selectionfiliere" name="selectionfiliere" class="form-control"  style="width:225px;">
                     <option value="-">Sélectionner une filière</option>
                     @if(mesParametres.getListeFilieres() != null){
@@ -66,7 +66,7 @@
             </div>
 
             <div class="form-group">
-                <label>3 - </label>
+                <label style=" min-width: 0px;">4 - </label>
                 <select id="selectionpromotion" name="selectionpromotion" class="form-control"  style="width:225px;">
                     <option value="-">Sélectionner une promotion</option>
                     @if(mesParametres.getListePromotion() != null){
