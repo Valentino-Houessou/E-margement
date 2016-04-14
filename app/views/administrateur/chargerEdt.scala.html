@@ -4,47 +4,92 @@
 @(titrepage: String)(promotions: java.util.List[Promotion])
 
 <!-- Début du block dynamique-->
+<style>
+    .form-area
+    {
+    margin: 10% 0% 60%;
+    }
+</style>
 <div>
-    <h1> @titrepage </h1>
+    <div class="banner" style="margin-bottom: 40px;">
+        <h1> @titrepage </h1>
 
-    <form method="post" class="form-horizontal" id="formImportICS" action="/administrateur/importer-edt" enctype="multipart/form-data">
-        <fieldset>
+        <p>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer les emplois du temps.</i> <br/>
+        </p>
+    </div>
 
-                <!-- Form Name -->
-            <legend>Chargement d'un caledrier au format ics</legend>
+    <div class="container">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li><a href="#one_" data-toggle="tab"> Import </a></li>
+                <li><a href="#two_" data-toggle="tab"> Créer un cours </a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="one_">
+                    <form method="post" class="form-horizontal" id="formImportICS" action="/administrateur/importer-edt" enctype="multipart/form-data">
+                        <fieldset>
+                                <!-- Form Name -->
+                            <legend>Chargement d'un caledrier au format ics</legend>
 
-                <!-- Select Basic -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="choixFormation">Formation</label>
-                <div class="col-md-4">
-                    <select id="choixFormation" name="choixFormation" class="form-control" required>
-                        <option value="no1" disabled selected>Choisissez une formation</option>
-                        <option value="no1" disabled>--</option>
-                        @for(p<-promotions){
-                            <option value="@p.id" > @p.filiere - @p.groupe - @p.getType()</option>
-                        }
-                    </select>
+                                <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="choixFormation">Formation</label>
+                                <div class="col-md-4">
+                                    <select id="choixFormation" name="choixFormation" class="form-control" required>
+                                        <option value="no1" disabled selected>Choisissez une formation</option>
+                                        <option value="no1" disabled>--</option>
+                                        @for(p<-promotions){
+                                            <option value="@p.id" > @p.filiere - @p.groupe - @p.getType()</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                                <!-- File Button -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="fichierICS">Emploi du temps (fichier .ics)</label>
+                                <div class="col-md-4">
+                                    <input id="fichierICS" name="fichierICS" class="input-file" type="file" required>
+                                </div>
+                            </div>
+
+                                <!-- Button (Double) -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="chargerEDT">Valider</label>
+                                <div class="col-md-8">
+                                    <button id="chargerEDT" name="chargerEDT" class="btn btn-default" style="font-color:white;">Chargement EDT</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="tab-pane" id="two_">
+                    <div class="col-md-5">
+                        <div class="form-area">
+                            <form role="form">
+                                <br style="clear:both">
+                                <h3 style="margin-bottom: 25px; text-align: center;"> Ajout d'un nouveau Cours </h3>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
+                                </div>
+                                <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">Submit Form</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-                <!-- File Button -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="fichierICS">Emploi du temps (fichier .ics)</label>
-                <div class="col-md-4">
-                    <input id="fichierICS" name="fichierICS" class="input-file" type="file" required>
-                </div>
-            </div>
-
-                <!-- Button (Double) -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="chargerEDT">Valider</label>
-                <div class="col-md-8">
-                    <button id="chargerEDT" name="chargerEDT" class="btn btn-default" style="font-color:white;">Chargement EDT</button>
-                </div>
-            </div>
-
-        </fieldset>
-    </form>
+        </div>
+    </div>
 
 </div>
 <script type="text/javascript">
