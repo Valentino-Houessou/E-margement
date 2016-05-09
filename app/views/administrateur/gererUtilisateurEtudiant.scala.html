@@ -172,8 +172,8 @@
                                     <img src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Photo utilisateur" height="150" width="130" style="margin: auto;"/>
                                 }
                             <hr style="margin: 1px;"/>
-
-                                <table  width="230">
+                            <div >
+                                <table  style="margin: 0 auto;">
                                     <tr><td>@lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom </td></tr>
                                     <tr><td>
                                         @{
@@ -184,6 +184,7 @@
                                     <tr><td> @lesEtudiants.sonUtilisateur.adresseMail</td></tr>
                                 </table>
                                 <p><button type="button" >Modifier</button> <button type="button" class="rouge">Supprimer</button></p>
+                            </div>
                         </div>
                     </div>
                 }
@@ -286,7 +287,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>UID de la carte étudiante (Facultatif)</label>
-                                    <input type="text" class="form-control" id="uid" name="uid" />
+                                    <input type="text" class="form-control" id="uid" name="uid" placeholder="Respecter les espaces de la carte : Exemple 04 70 98 E2 B6 37 90" />
                                 </div>
                             </div><br/>
                         </div>
