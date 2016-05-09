@@ -61,8 +61,6 @@ public class administrateurController extends Controller {
     @Inject
     public PdfGenerator pdfGenerator;
 
-
-
     public  Result ajoutUniversiteCreer() {
 
         DynamicForm fac = form().bindFromRequest();
@@ -1407,7 +1405,7 @@ public class administrateurController extends Controller {
         int promotion = Integer.parseInt(selectionpromotion.get("selectionpromotion"));
         paramEFP.setSelectionPromotion(promotion);
 
-        // La filière, le batiment et l'université non pas bouger du singleton !!!
+        // La filière, le batiment et l'université n'ont pas bouger du singleton !!!
 
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
@@ -1535,13 +1533,15 @@ public class administrateurController extends Controller {
 
     /**
      * gererUtilisateurEtudiant()
-     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
+     * Affichage du bloc dynamique JQuery pour gérer les promotions
      * @return gererUtilisateurEtudiant.scala.html
      */
     public Result gererUtilisateurEtudiant() {
 
+        paramEtudiant.remiseAzero();
+
         // 0 - Etape
-        paramEtudiant.setEtape("SELECTIONS");
+        paramEtudiant.setEtape("ChoixUniversite");
 
         // 1 - Récupération des université
         List<Universite> universites = Universite.getUniversite();
@@ -1549,7 +1549,221 @@ public class administrateurController extends Controller {
 
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
-        return ok(gererUtilisateurEtudiant.render("Gérer les étudiants", paramEtudiant));
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des batiments d'une université
+     * @param id
+     * @return
+     */
+    public Result listeDesBatiments(int id) {
+
+        // Remise à zéro des filières et promotion
+        paramEtudiant.setListeFilieres(null);
+        paramEtudiant.setSelectionFiliere("");
+        paramEtudiant.setListePromotion(null);
+        paramEtudiant.setSelectionPromotion(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixBatiments");
+
+        // 1 - on garde l'université sélectionné
+        paramEtudiant.setSelectionUniversite(id);
+
+        // 2 - Récupération des batiments
+        List<Batiment> lesBatiments = Batiment.getBatimentByUniversite(id);
+        paramEtudiant.setListeBatiments(lesBatiments);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des filiére présent dans le batiment de l'université
+     * @param id
+     * @return
+     */
+    public Result listeDesFilieres(int id) {
+
+        // Remise à zéro des promotion
+        paramEtudiant.setListePromotion(null);
+        paramEtudiant.setSelectionPromotion(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixFiliere");
+
+        // 1 - on garde le batiment sélectionné
+        paramEtudiant.setSelectionBatiment(id);
+
+        // 2 - On récupérer la liste des filières du batiment
+        List<Filiere> lesfilieres = Filiere.getFilieresByBatiment(id);
+        paramEtudiant.setListeFilieres(lesfilieres);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des promotions de la filière sélectionné
+     * @param id
+     * @return
+     */
+    public Result listeDesPromotions(String id) {
+
+        // Remise à zéro de la promotion sélectionné
+        paramEtudiant.setLaPromoAgerer(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixPromotion");
+
+        // 1 - on garde la filière sélectionné
+        paramEtudiant.setSelectionFiliere(id);
+
+        // 2 - On récupére la liste des promotions
+        List<Promotion> lespromotion = Promotion.getPromotionByFiliere(id);
+        paramEtudiant.setListePromotion(lespromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Affichage de la promotion à gérer
+     * Liste des étudiants
+     * @param id
+     * @return
+     */
+    public Result affichagePromotion(long id) {
+
+        // Remise à zéro de la promotion sélectionné
+        paramEtudiant.setLaPromoAgerer(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - On garde la promotion
+        paramEtudiant.setSelectionPromotion(id);
+
+        // 2 - On récupére la promotion sélectionné
+        Promotion lapromotion = Promotion.findbyId(id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Accès à la création d'un nouveau profil étudiant dans une promotion sélectionnée
+     * @param id
+     * @return
+     */
+    public Result nouveauEtudiant(long id) {
+
+        paramEtudiant.setTousLesEtudiants(null);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("nouveauEtudiant");
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Créer un nouveau profil étudiant
+     * @return
+     */
+    public Result creerNouveauEtudiant() {
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = "password";
+        String datenaissance = profil.get("datepicker10");
+        String numero_etudiant = profil.get("numero_etudiant");
+        String uid = profil.get("uid");
+        String lienPhoto ="";
+
+        long idpromo = Long.parseLong(profil.get("idpromo"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        Etudiant newEtudiant = null;
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom + "_" + prenom + "_" + fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            // Création du profil étudiant avec photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+            lienPhoto = myUploadPath + fileName;
+
+            newEtudiant = Etudiant.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, uid, numero_etudiant, "none");
+
+        }else {
+
+            // Création du profil étudiant sans photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+
+            newEtudiant = Etudiant.create(nom, prenom, adresseMail, mdp, datenaissance, "", uid, numero_etudiant, "none");
+        }
+
+        // 2 - On test si l'étudiant n'existe pas déjà dans la base
+        if(newEtudiant != null){
+            paramEtudiant.setCheckEtudiant(1);
+
+            // 3 - Affectation de l'étudiant à la promotion sélectionnée
+            Promotion.AddEtudiantPromotion(idpromo, newEtudiant.id);
+
+            // 4 - Initialisation de ses présences (Utile si l'Edt a déjà été généré !)
+            Presence.initialisationPresenceCoursEtudiant(idpromo, newEtudiant);
+
+        }else{
+            paramEtudiant.setCheckEtudiant(2);
+        }
+
+        // 5 - On récupére la promotion sélectionnée
+        Promotion lapromotion = Promotion.findbyId(idpromo);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
     }
 
 }

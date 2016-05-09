@@ -4,6 +4,8 @@ import javax.persistence.*;
 import com.avaje.ebean.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -26,22 +28,43 @@ public class Etudiant extends Model{
         this.sonUtilisateur = sonUtilisateur;
     }
 
+    /**
+     * Création d'un profil étudiant
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @param uid
+     * @param numeroEtudiant
+     * @param Statut
+     * @return
+     */
+    public static Etudiant create(String nom, String prenom, String adresseMail, String motDePasse, String dateDeNaissance, String lienPhoto,
+                                  String uid, String numeroEtudiant, String Statut){
 
+        // Vérification que l'étudiant n'existe pas dans la base
+        Utilisateur checkEtudiant = Utilisateur.find.where().eq("adresse_mail", adresseMail).findUnique();
 
-    //TODO : Quand on crée un etudiant il faut ajouter le module etudiant dans la liste de module de son utilisateur Vous pouvez utiliser la fonction droitEtudiant() de utilisateur*/
-    /*public static Etudiant create(String numeroEtudiant, String  nom, String prenom, String adresseMail, String motDePasse,
-                                  String dateDeNaissance, String lienPhoto, String Statut){
+        Etudiant etudiant = null;
 
-        Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
+        if(checkEtudiant != null)
+        {
+            System.out.println("ON PASSE PAR LAAAAAAAAAAAAAAAAAA §§§§§§§§" + checkEtudiant.nom + " " + checkEtudiant.prenom);
+            return null;
+        }else{
+            Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);
 
-        Etudiant etudiant= new Etudiant(numeroEtudiant,Statut,user);
+            etudiant= new Etudiant(uid, numeroEtudiant, Statut, user);
 
-        user.droitEtudiant(user.id);
+            user.droitEtudiant(user.id);
 
-        etudiant.save();
+            etudiant.save();
+        }
 
         return etudiant;
-    }*/
+    }
 
     public static Etudiant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
 
@@ -78,8 +101,22 @@ public class Etudiant extends Model{
         return find.ref(id);
     }
 
+    /**
+     * Retourne tous les étudiants de la base
+     * @return
+     */
     public static List<Etudiant> findAll() {
-        return find.all();
+        List<Etudiant> lesEtudiant =  find.all();
+
+        // Trie des utilisateurs par ordre croissant par rapport à leur nom de famille
+        Collections.sort(lesEtudiant, new Comparator<Etudiant>() {
+            @Override
+            public int compare(Etudiant tc1, Etudiant tc2) {
+                return tc1.sonUtilisateur.nom.compareTo(tc2.sonUtilisateur.nom);
+            }
+        });
+
+        return lesEtudiant;
     }
 
 

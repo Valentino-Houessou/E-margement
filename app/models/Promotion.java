@@ -110,6 +110,11 @@ public class Promotion extends Model{
         return find.all();
     }
 
+    /**
+     * Trouver une promotion par son identifiant
+     * @param id
+     * @return Promotion
+     */
     public static Promotion findbyId(long id){
         return find.byId(id);
     }

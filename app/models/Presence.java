@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 public class Presence extends Model {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
@@ -27,6 +28,9 @@ public class Presence extends Model {
     }
 
 
+    /**
+     * Accès à la base de données
+     */
     public static Finder<Integer,Presence> find = new Finder<Integer,Presence>(Presence.class);
 
     public static int getNombreAbsence(long idetudiant){
@@ -92,6 +96,29 @@ public class Presence extends Model {
     public static String getJustificatif(int presenceId){
         Presence pres =  find.byId(presenceId);
         return pres.justificatif;
+    }
+
+    /**
+     * Permet d'initialiser la présence d'un étudiant pour chaque cours de sa promotion (Emergement = 0 de base !)
+     * @param idpromotion
+     * @param etudiant
+     */
+    public static void initialisationPresenceCoursEtudiant(long idpromotion, Etudiant etudiant){
+        List<Cours> cours = Cours.find.where().eq("sa_promo_id",idpromotion).findList();
+
+        if(cours != null){
+            for(Cours c : cours){
+                Presence presence = new Presence();
+
+                presence.emergement = false;
+                presence.motif = "";
+                presence.justificatif = "";
+                presence.sonCours = c;
+                presence.sonEtudiant = etudiant;
+
+                presence.save();
+            }
+        }
     }
 
     @Override

@@ -1,10 +1,9 @@
 package controllers.administrateur.gestionDesParametres;
 
-import models.Batiment;
-import models.Filiere;
-import models.Promotion;
-import models.Universite;
+import models.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class parametresEtudiant {
@@ -18,11 +17,19 @@ public class parametresEtudiant {
     private int selectionUniversite;
     private int selectionBatiment;
     private String selectionFiliere;
-    private int selectionPromotion;
+    private long selectionPromotion;
 
-    private String etape;
+    private String etape; // Etape d'affichage des blocs évolutifs
 
-    private static parametresEtudiant INSTANCE = null;
+    private static parametresEtudiant INSTANCE = null; // Singleton
+
+    private Promotion laPromoAgerer; // La promotion qu'on a sélectionné
+    private List<Etudiant> lesEtudiants; // Les étudiants de la promotions sélectionné
+
+    private List<Etudiant> tousLesEtudiants; // Tout les étudiants toutes promotions confondus
+
+    private int checkEtudiant; // Lors de la création d'un profil étudiant - Test si l'étudiant n'existe pas
+
 
     public parametresEtudiant()
     {
@@ -35,6 +42,10 @@ public class parametresEtudiant {
         this.selectionBatiment=0;
         this.selectionFiliere="";
         this.selectionPromotion=0;
+        this.laPromoAgerer = null;
+        this.lesEtudiants = null;
+        this.tousLesEtudiants = null;
+        this.checkEtudiant = 0;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -109,11 +120,11 @@ public class parametresEtudiant {
         this.selectionFiliere = selectionFiliere;
     }
 
-    public int getSelectionPromotion() {
+    public long getSelectionPromotion() {
         return selectionPromotion;
     }
 
-    public void setSelectionPromotion(int selectionPromotion) {
+    public void setSelectionPromotion(long selectionPromotion) {
         this.selectionPromotion = selectionPromotion;
     }
 
@@ -123,5 +134,66 @@ public class parametresEtudiant {
 
     public void setEtape(String etape) {
         this.etape = etape;
+    }
+
+    public Promotion getLaPromoAgerer() {
+        return laPromoAgerer;
+    }
+
+    public void setLaPromoAgerer(Promotion laPromoAgerer) {
+        this.laPromoAgerer = laPromoAgerer;
+
+
+        if(laPromoAgerer != null)
+            this.setLesEtudiants(this.laPromoAgerer.sesEtudiants);
+
+    }
+
+    public List<Etudiant> getLesEtudiants() {
+        return lesEtudiants;
+    }
+
+    public void setLesEtudiants(List<Etudiant> lesEtudiants) {
+
+        this.lesEtudiants = lesEtudiants;
+
+        // Trie des utilisateurs par ordre croissant par rapport à leur nom de famille
+        Collections.sort(this.lesEtudiants, new Comparator<Etudiant>() {
+            @Override
+            public int compare(Etudiant tc1, Etudiant tc2) {
+                return tc1.sonUtilisateur.nom.compareTo(tc2.sonUtilisateur.nom);
+            }
+        });
+    }
+
+    public List<Etudiant> getTousLesEtudiants() {
+        return tousLesEtudiants;
+    }
+
+    public void setTousLesEtudiants(List<Etudiant> tousLesEtudiants) {
+        this.tousLesEtudiants = tousLesEtudiants;
+    }
+
+    public int isCheckEtudiant() {
+        return checkEtudiant;
+    }
+
+    public void setCheckEtudiant(int checkEtudiant) {
+        this.checkEtudiant = checkEtudiant;
+    }
+
+    public void remiseAzero(){
+        this.listeBatiments = null;
+        this.listeFilieres = null;
+        this.listePromotion = null;
+
+        this.selectionUniversite=0;
+        this.selectionBatiment=0;
+        this.selectionFiliere="";
+        this.selectionPromotion=0;
+        this.laPromoAgerer = null;
+        this.lesEtudiants = null;
+        this.tousLesEtudiants = null;
+        this.checkEtudiant = 0;
     }
 }
