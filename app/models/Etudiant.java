@@ -51,7 +51,6 @@ public class Etudiant extends Model{
 
         if(checkEtudiant != null)
         {
-            System.out.println("ON PASSE PAR LAAAAAAAAAAAAAAAAAA §§§§§§§§" + checkEtudiant.nom + " " + checkEtudiant.prenom);
             return null;
         }else{
             Utilisateur user =  Utilisateur.create(nom, prenom, adresseMail,motDePasse, dateDeNaissance, lienPhoto);

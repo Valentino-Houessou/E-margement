@@ -22,7 +22,7 @@ public class Promotion extends Model{
     public String groupe;
     public String type;
 
-    @ManyToMany(cascade=CascadeType.PERSIST)
+    @ManyToMany(cascade=CascadeType.ALL)
     public List<Etudiant> sesEtudiants;
 
     public String filiere;
@@ -175,6 +175,30 @@ public class Promotion extends Model{
 
         return  LesMatieres;
 
+    }
+
+    /**
+     * La fonction retire un étudiant affecté à une promotion
+     * @param id
+     */
+    public static void retirerEtudiant(long id, long idpromo) {
+
+        Promotion promotion = find.where().eq("id", idpromo).findUnique();
+
+        Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
+        while(itr.hasNext()) {
+            Etudiant etudiant = itr.next();
+
+            // On retire l'étudiant de sa promotion
+            if(etudiant.id == id){
+                itr.remove();
+            }
+        }
+
+        promotion.update();
+
+        // Suppression des nupplets dans la table presence
+        Presence.supprimerPresenceCoursEtudiant(id);
     }
 }
 

@@ -62,6 +62,8 @@ GET           /administrateur/gerer-etudiant/promotion/:id               control
 GET           /administrateur/gerer-etudiant/affiche-la-promotion/:id    controllers.administrateur.administrateurController.affichagePromotion(id : Long)
 GET           /administrateur/gerer-etudiant/nouveau-profil-etudiant/:id controllers.administrateur.administrateurController.nouveauEtudiant(id : Long)
 POST          /administrateur/nouveau-profile-etudiant/creer             controllers.administrateur.administrateurController.creerNouveauEtudiant()
+GET           /administrateur/gerer-promotion/supprimer-etudiant/:id     controllers.administrateur.administrateurController.retirerEtudiantAunePromootion(id : Long)
+
 
 GET           /administrateur/charger-liste-etudiant                  controllers.administrateur.administrateurController.chargerListeEtudiant()
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()

@@ -121,6 +121,23 @@ public class Presence extends Model {
         }
     }
 
+    /**
+     * Supprimer les nuplets qui correspond à l'étudiant sélectionné
+     * @param idetudiant
+     */
+    public static void supprimerPresenceCoursEtudiant(long idetudiant){
+
+        List<Presence> presences = find.where().eq("son_etudiant_id", idetudiant).findList();
+
+        if(presences != null)
+        {
+            for(Presence p : presences){
+                p.delete();
+            }
+        }
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

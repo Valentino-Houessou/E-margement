@@ -104,7 +104,7 @@ public class administrateurController extends Controller {
 
 
     /**
-     * Ajout des cours dans la base de donnnées à partir d'u fichier ICS
+     * Ajout des cours dans la base de donnnées à partir d'un fichier ICS
      * @return
      */
     public Result importEDT() {
@@ -1763,6 +1763,23 @@ public class administrateurController extends Controller {
         Promotion lapromotion = Promotion.findbyId(idpromo);
         paramEtudiant.setLaPromoAgerer(lapromotion);
 
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    public  Result retirerEtudiantAunePromootion(long id) {
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - On retire l'étudiant à la promotion
+        Promotion.retirerEtudiant(id, paramEtudiant.getLaPromoAgerer().id);
+
+        //  - On récupére la promotion sélectionnée pour une mise à jour lors de l'affichage
+        Promotion lapromotion = Promotion.findbyId(paramEtudiant.getLaPromoAgerer().id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
     }
 

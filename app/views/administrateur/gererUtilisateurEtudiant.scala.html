@@ -174,7 +174,7 @@
                             <hr style="margin: 1px;"/>
                             <div >
                                 <table  style="margin: 0 auto;">
-                                    <tr><td>@lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom </td></tr>
+                                    <tr><td>@lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom</td></tr>
                                     <tr><td>
                                         @{
                                             dtn = new SimpleDateFormat("dd-MM-yyyy").format(lesEtudiants.sonUtilisateur.dateDeNaissance)
@@ -183,7 +183,7 @@
                                     </td></tr>
                                     <tr><td> @lesEtudiants.sonUtilisateur.adresseMail</td></tr>
                                 </table>
-                                <p><button type="button" >Modifier</button> <button type="button" class="rouge">Supprimer</button></p>
+                                <p><button type="button" >Modifier</button> <button type="button" class="rouge" onclick="supprimerEtudiant('@lesEtudiants.id', '@lesEtudiants.sonUtilisateur.nom', '@lesEtudiants.sonUtilisateur.prenom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');">Supprimer</button></p>
                             </div>
                         </div>
                     </div>
@@ -486,4 +486,30 @@
                 });
             });
         });
+</script>
+
+<script>
+    function supprimerEtudiant(idetudiant, nom, prenom, groupe, types)
+    {
+        var r = confirm("Voulez-vous retirer l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ? \n\n " +
+                        "A noté : Son profil ne sera pas supprimer de la base. Vous pourrez le réaffecter à une promotion ultérieurement.");
+
+        if (r == true) {
+
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/gerer-promotion/supprimer-etudiant/"+idetudiant,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !")
+                }
+            });
+        }else{
+            return false;
+        }
+    }
 </script>

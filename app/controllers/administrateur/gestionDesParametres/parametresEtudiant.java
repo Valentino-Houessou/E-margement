@@ -28,8 +28,8 @@ public class parametresEtudiant {
 
     private List<Etudiant> tousLesEtudiants; // Tout les étudiants toutes promotions confondus
 
-    private int checkEtudiant; // Lors de la création d'un profil étudiant - Test si l'étudiant n'existe pas
-
+    // Lors de la création d'un profil étudiant - Test si l'étudiant n'existe pas
+    private int checkEtudiant;
 
     public parametresEtudiant()
     {
