@@ -20,9 +20,9 @@ DELETE        /utilisateur-delete                                     controller
 # Enseignant
 GET           /enseignant/                                            controllers.enseignant.EnseignantController.index()
 POST          /enseignant/cours                                       controllers.enseignant.EnseignantController.listCours()
-POST          /enseignant/anListCours                                 controllers.enseignant.EnseignantController.androidListCours()
+POST          /enseignant/anlistCours                                 controllers.enseignant.EnseignantController.androidListCours()
 POST          /enseignant/student                                     controllers.enseignant.EnseignantController.listPresence()
-POST          /enseignant/anListPresence                              controllers.enseignant.EnseignantController.androidListPresence()
+POST          /enseignant/anlistPresence                              controllers.enseignant.EnseignantController.androidListPresence()
 POST          /enseignant/update                                      controllers.enseignant.EnseignantController.majPresence()
 POST          /enseignant/signature                                   controllers.enseignant.EnseignantController.signature()
 POST          /enseignant/anSignature                                 controllers.enseignant.EnseignantController.androidSignature()
