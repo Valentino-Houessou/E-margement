@@ -61,6 +61,7 @@ public class administrateurController extends Controller {
     @Inject
     public PdfGenerator pdfGenerator;
 
+
     public  Result ajoutUniversiteCreer() {
 
         DynamicForm fac = form().bindFromRequest();
@@ -1766,6 +1767,11 @@ public class administrateurController extends Controller {
         return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
     }
 
+    /**
+     * Permet de retirer un étudiant affecté à une promotion
+     * @param id
+     * @return
+     */
     public  Result retirerEtudiantAunePromootion(long id) {
 
         // 0 - Etape
@@ -1777,6 +1783,34 @@ public class administrateurController extends Controller {
         //  - On récupére la promotion sélectionnée pour une mise à jour lors de l'affichage
         Promotion lapromotion = Promotion.findbyId(paramEtudiant.getLaPromoAgerer().id);
         paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Permet d'ajouter un étudiant présent dans la base de données à une promotion sélectionnée
+     * @param id
+     * @return
+     */
+    public Result ajouterAlaPromotion(long id) {
+
+        paramEtudiant.setTousLesEtudiants(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("nouveauEtudiant");
+
+        // 1 - Affecter l'étudiant à la promotion
+        int isCheck = Promotion.affecterEtudiantPromotion(paramEtudiant.getLaPromoAgerer().id, id);
+        paramEtudiant.setCheckEtudiant(isCheck);
+        Etudiant etu = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(etu);
+
+        // 2 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
 
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());

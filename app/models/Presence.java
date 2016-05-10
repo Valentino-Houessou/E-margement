@@ -135,7 +135,6 @@ public class Presence extends Model {
                 p.delete();
             }
         }
-
     }
 
     @Override

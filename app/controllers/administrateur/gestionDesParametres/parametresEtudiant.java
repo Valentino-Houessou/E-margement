@@ -28,8 +28,11 @@ public class parametresEtudiant {
 
     private List<Etudiant> tousLesEtudiants; // Tout les étudiants toutes promotions confondus
 
-    // Lors de la création d'un profil étudiant - Test si l'étudiant n'existe pas
+    // Lors de la création d'un profil étudiant ou l'affectation d'un étudiant - Test si l'étudiant n'existe pas
     private int checkEtudiant;
+
+    // Juste pour l'affichage d'un étudiant affecté dans une promotion
+    private Etudiant etudiantAffecter;
 
     public parametresEtudiant()
     {
@@ -46,6 +49,7 @@ public class parametresEtudiant {
         this.lesEtudiants = null;
         this.tousLesEtudiants = null;
         this.checkEtudiant = 0;
+        this.etudiantAffecter=null;
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -182,6 +186,14 @@ public class parametresEtudiant {
         this.checkEtudiant = checkEtudiant;
     }
 
+    public Etudiant getEtudiantAffecter() {
+        return etudiantAffecter;
+    }
+
+    public void setEtudiantAffecter(Etudiant etudiantAffecter) {
+        this.etudiantAffecter = etudiantAffecter;
+    }
+
     public void remiseAzero(){
         this.listeBatiments = null;
         this.listeFilieres = null;
@@ -195,5 +207,6 @@ public class parametresEtudiant {
         this.lesEtudiants = null;
         this.tousLesEtudiants = null;
         this.checkEtudiant = 0;
+        this.etudiantAffecter=null;
     }
 }

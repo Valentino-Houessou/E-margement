@@ -105,6 +105,23 @@ var gererUtilisateurEnseignant = function() {
 var gererUtilisateurEtudiant = function() {
 
     $.ajax({
+        url: "/administrateur/gerer-les-etudiant",
+        dataType : "html",
+        type: "GET",
+        success: function(data) {
+            $("#charger_fonctionnalite").empty().hide();
+            $("#charger_fonctionnalite").html(data).fadeIn(900);
+
+        },
+        error: function() {
+            alert("Error!")
+        }
+    })
+};
+
+var gererPromotions = function() {
+
+    $.ajax({
         url: "/administrateur/gerer-utilisateur-etudiant",
         dataType : "html",
         type: "GET",
@@ -178,8 +195,9 @@ $('#ft3').click(chargerListeEnseignant);
 $('#ft4').click(exportFeuillePresence);
 $('#ft5').click(gererUtilisateurAdministrateur);
 $('#ft6').click(gererUtilisateurEnseignant);
-$('#ft7').click(gererUtilisateurEtudiant);
+$('#ft7').click(gererPromotions);
 $('#ft8').click(gererAbscences);
 $('#ft9').click(exporterJustificatifsAbscences);
+$('#ft10').click(gererUtilisateurEtudiant);
 $('#ft15').click(ajouteruniversite);
 

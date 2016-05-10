@@ -11,7 +11,7 @@
         <h1> @titrepage </h1>
 
         <p>
-            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie étudiante à savoir ajouter, modifier et supprimer un/des étudiant(s) dans une promotion.</i> <br/>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer les promotions à savoir ajouter, modifier et retirer un/des étudiant(s) dans une promotion.</i> <br/>
         </p>
     </div>
 
@@ -154,7 +154,7 @@
                     <span class="label label-success">Le nouveau profil étudiant a bien été ajouté à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType()</span>
                 }
                 @if(parametres.isCheckEtudiant() == 2){
-                    <span class="label label-danger">Atention ! L'étudiant ou l'adresse mail que vous voulez enregistrer existe déjà dans la base.</span>
+                    <span class="label label-danger">Attention ! L'étudiant ou l'adresse mail que vous voulez enregistrer existe déjà dans la base.</span>
                 }
             </p>
 
@@ -167,9 +167,9 @@
                                         lien = lesEtudiants.sonUtilisateur.lienPhoto.split("/")
                                         lienp = lien(1)+"/"+lien(2);
                                     }
-                                    <img src="@routes.Assets.versioned(lienp)" alt="Photo utilisateur" height="150" width="130"  style="margin: auto;"/>
+                                    <img src="@routes.Assets.versioned(lienp)" alt="Photo utilisateur" height="153" width="130"  style="margin: auto;"/>
                                 }else{
-                                    <img src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Photo utilisateur" height="150" width="130" style="margin: auto;"/>
+                                    <img src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Photo utilisateur" height="153" width="130" style="margin: auto;"/>
                                 }
                             <hr style="margin: 1px;"/>
                             <div >
@@ -183,7 +183,7 @@
                                     </td></tr>
                                     <tr><td> @lesEtudiants.sonUtilisateur.adresseMail</td></tr>
                                 </table>
-                                <p><button type="button" >Modifier</button> <button type="button" class="rouge" onclick="supprimerEtudiant('@lesEtudiants.id', '@lesEtudiants.sonUtilisateur.nom', '@lesEtudiants.sonUtilisateur.prenom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');">Supprimer</button></p>
+                                <p><button type="button" class="rouge" onclick="supprimerEtudiant('@lesEtudiants.id', '@lesEtudiants.sonUtilisateur.nom', '@lesEtudiants.sonUtilisateur.prenom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');">Retirer de la promotion</button></p>
                             </div>
                         </div>
                     </div>
@@ -198,10 +198,31 @@
 
     @if(parametres.getEtape.equals("nouveauEtudiant")){
 
+        <i> Information : Pour revenir au trombinoscope cliquer à nouveau sur la promotion.</i><br /><br /><br />
+
         <div class="centrer_contenu">
             <button type="button" onclick="afficher('etudiantExistant'); cacher('newProfil');">Sélectionner un profil étudiant déjà existant</button> ou
             <button type="button" onclick="afficher('newProfil'); cacher('etudiantExistant');">Créer un nouveau profil étudiant</button>
         </div>
+
+            @if(parametres.isCheckEtudiant() == 3){
+                <span class="label label-success" style="font-size: 13px;">L'étudiant @parametres.getEtudiantAffecter().sonUtilisateur.prenom @parametres.getEtudiantAffecter().sonUtilisateur.nom  a été affecté à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType()</span>
+                <script>
+                        afficher('etudiantExistant');
+                        cacher('newProfil');
+                </script>
+
+                <br/><br/>
+            }
+            @if(parametres.isCheckEtudiant() == 4){
+                <span class="label label-danger" style="font-size: 13px;">Attention ! L'étudiant @parametres.getEtudiantAffecter().sonUtilisateur.prenom @parametres.getEtudiantAffecter().sonUtilisateur.nom est déjà affecté à cette promotion.</span>
+                <script>
+                        afficher('etudiantExistant');
+                        cacher('newProfil');
+                </script>
+
+                <br/><br/>
+            }
 
         <div id="etudiantExistant" style="display: none;">
             <div class="list-group">
@@ -287,7 +308,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>UID de la carte étudiante (Facultatif)</label>
-                                    <input type="text" class="form-control" id="uid" name="uid" placeholder="Respecter les espaces de la carte : Exemple 04 70 98 E2 B6 37 90" />
+                                    <input type="text" class="form-control" id="uid" name="uid" placeholder="Respecter les espaces de l'uid de la carte : Exemple 04 70 98 E2 B6 37 90" />
                                 </div>
                             </div><br/>
                         </div>
@@ -516,8 +537,7 @@
 <script>
    function ajouterAlaPromotion(idetudiant, prenom, nom, groupe, types)
    {
-       var r = confirm("Voulez-vous ajouter l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ? \n\n " +
-               "");
+       var r = confirm("Voulez-vous ajouter l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ?");
 
        if (r == true) {
 
