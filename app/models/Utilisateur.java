@@ -250,8 +250,8 @@ public class Utilisateur extends Model  {
     }
 
     public static Utilisateur authenticate(String email, String password){
-        // return find.where().eq("adresseMail",email).eq("motDePasse",Utilisateur.getEncodedPassword(password)).findUnique(); // A mettre au lancement
-        return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
+        return find.where().eq("adresseMail",email).eq("motDePasse",Utilisateur.getEncodedPassword(password)).findUnique(); // A mettre au lancement
+        // return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
     }
 
     public String status(){
