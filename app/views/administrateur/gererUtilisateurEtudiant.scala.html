@@ -231,7 +231,7 @@
                                 <td>@tousLesEtudiants.sonUtilisateur.dateDeNaissance</td>
                                 <td>@tousLesEtudiants.numeroEtudiant</td>
                                 <td>@tousLesEtudiants.uid</td>
-                                <td><button type="button" style="font-size: 11px;"> Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer.groupe @parametres.getLaPromoAgerer.getType()</button></td>
+                                <td><button type="button" style="font-size: 11px;" onclick="ajouterAlaPromotion('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');"> Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer.groupe @parametres.getLaPromoAgerer.getType()</button></td>
                             </tr>
                         }
                         </tbody>
@@ -512,4 +512,30 @@
             return false;
         }
     }
+</script>
+<script>
+   function ajouterAlaPromotion(idetudiant, prenom, nom, groupe, types)
+   {
+       var r = confirm("Voulez-vous ajouter l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ? \n\n " +
+               "");
+
+       if (r == true) {
+
+           $.ajax({
+               type: "GET",
+               url: "/administrateur/promotion/affecter-etudiant/"+idetudiant,
+               dataType : 'html',
+               success: function(data) {
+
+                   $("#charger_fonctionnalite").html(data);
+               },
+               error: function() {
+                   alert("Erreur de chargement de la page !")
+               }
+           });
+       }else{
+           return false;
+       }
+
+   }
 </script>
