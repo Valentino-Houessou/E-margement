@@ -291,7 +291,7 @@ public class administrateurController extends Controller {
             Utilisateur utilisateurTemp = new Utilisateur((String) tempHash.get("nomIntervenant"),
                     (String) tempHash.get("prenomIntervenant"),
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
-                    "1230",
+                    Utilisateur.getEncodedPassword("1230"),
                     Timestamp.from(Instant.now()),
                     "");
 
@@ -445,7 +445,7 @@ public class administrateurController extends Controller {
              */
 
             /*
-                AJOUT DES PRESENCES
+                AJOUT DES PRESENCES POUR INITIALISATION
              */
             List<Presence> presencesBD = Presence.findAll();
             List<Etudiant> etudiantsBD = Etudiant.findAll();

@@ -100,7 +100,7 @@ public class Utilisateur extends Model  {
      * @return
      */
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
-                                     String dateDeNaissance, String lienPhoto){
+                                                String dateDeNaissance, String lienPhoto){
 
         Utilisateur user = find.ref(id);
 
@@ -234,7 +234,7 @@ public class Utilisateur extends Model  {
 
         Utilisateur that = (Utilisateur) o;
 
-        return nom.contains(that.nom) && prenom.contains(that.prenom);
+        return nom.toLowerCase().contains(that.nom.toLowerCase()) && prenom.toLowerCase().contains(that.prenom.toLowerCase());
     }
 
     @Override
