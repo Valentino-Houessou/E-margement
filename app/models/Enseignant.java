@@ -4,10 +4,7 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Enseignant extends Model{
@@ -87,6 +84,15 @@ public class Enseignant extends Model{
     {
         // Suppression dans la table enseignant
         Enseignant enseignant = find.where().eq("id", id).findUnique();
+
+        Iterator<Matiere> itr = enseignant.sesMatieres.iterator();
+        while(itr.hasNext()) {
+            Matiere mat = itr.next();
+
+                itr.remove();
+        }
+
+        enseignant.update();
 
         enseignant.delete();
 

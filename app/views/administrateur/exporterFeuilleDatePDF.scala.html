@@ -242,7 +242,11 @@
                     <tr>
                         <td class="borduregray" style="background-color: lightgrey;"  width=27%> Nom du professeur </td>
                         @for(infosProfesseurs <- mesParametres.getCoursDuJourDeLaPromotion()) {
-                            <td class="bordure" width=18%> @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom </td>
+                            <td class="bordure" width=18%>
+                            @if(infosProfesseurs.sonEnseignant != null){
+                                @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom
+                            }
+                            </td>
                         }
 
                     </tr>

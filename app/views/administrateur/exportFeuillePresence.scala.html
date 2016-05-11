@@ -369,7 +369,11 @@
                     <tr>
                         <td width=26%> Nom du professeur </td>
                         @for(infosProfesseurs <- mesParametres.getCoursDuJourDeLaPromotion()) {
-                            <td width=18%> @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom </td>
+                            <td width=18%>
+                                @if(infosProfesseurs.sonEnseignant != null){
+                                    @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom
+                                }
+                            </td>
                         }
                     </tr>
                     <tr>
@@ -378,7 +382,10 @@
                             @if(infosSignature.signatureEnseignant == true){
                                 <td width=18%> <div class="vert"> Signé </div>  </td>
                             }else{
-                                <td width=18%> <div class="rouge"> Non signé </div>  </td>
+                                <td width=18% style="text-align: center ;">
+                                    <div class="rouge"> Non signé </div><br/>
+                                    <button type="button">Forcer la signature</button>
+                                </td>
                             }
                         }
                     </tr>
