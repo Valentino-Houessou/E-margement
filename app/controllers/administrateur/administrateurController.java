@@ -878,7 +878,13 @@ public class administrateurController extends Controller {
                 datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             }
 
-            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
+            Enseignant enseignantCree2 = Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
+
+            // Liaison avec ses modules
+            // Si droits = OUI L'enseignant a les droits d'administrateur
+            if(droits.equals("OUI")){
+                Utilisateur.droitAdmin(enseignantCree2.sonUtilisateur.id);
+            }
 
             // Chargement des paramettres pour affichage dans la vue
             paramPC.remiseAzero();

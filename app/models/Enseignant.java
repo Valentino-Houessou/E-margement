@@ -82,7 +82,19 @@ public class Enseignant extends Model{
      */
     public static void delete(long id)
     {
-        // Suppression dans la table enseignant
+        // On retire son id des cours
+        List<Cours> lesCoursAretirer = Cours.find.where().eq("son_enseignant_id",id).findList();
+
+        if(lesCoursAretirer != null){
+            for(Cours c : lesCoursAretirer){
+                c.sonEnseignant = null;
+
+                c.update();
+            }
+        }
+
+
+        // Suppression dans la jointure enseignant_matiere
         Enseignant enseignant = find.where().eq("id", id).findUnique();
 
         Iterator<Matiere> itr = enseignant.sesMatieres.iterator();
@@ -93,6 +105,7 @@ public class Enseignant extends Model{
         }
 
         enseignant.update();
+
 
         enseignant.delete();
 
