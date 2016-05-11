@@ -244,17 +244,24 @@
                             </tr>
                         </thead>
                         <tbody class="searchable">
-                            @for(tousLesEtudiants <- parametres.getTousLesEtudiants()){
-                            <tr>
-                                <td>@tousLesEtudiants.sonUtilisateur.nom</td>
-                                <td>@tousLesEtudiants.sonUtilisateur.prenom</td>
-                                <td>@tousLesEtudiants.sonUtilisateur.adresseMail</td>
-                                <td>@tousLesEtudiants.sonUtilisateur.dateDeNaissance</td>
-                                <td>@tousLesEtudiants.numeroEtudiant</td>
-                                <td>@tousLesEtudiants.uid</td>
-                                <td><button type="button" style="font-size: 11px;" onclick="ajouterAlaPromotion('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');"> Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer.groupe @parametres.getLaPromoAgerer.getType()</button></td>
-                            </tr>
-                        }
+                            @if(parametres.getTousLesEtudiants() != null){
+                                @for(tousLesEtudiants <- parametres.getTousLesEtudiants()){
+                                    <tr>
+                                        <td>@tousLesEtudiants.sonUtilisateur.nom</td>
+                                        <td>@tousLesEtudiants.sonUtilisateur.prenom</td>
+                                        <td>@tousLesEtudiants.sonUtilisateur.adresseMail</td>
+                                        <td>
+                                            @{
+                                                dtn = new SimpleDateFormat("dd-MM-yyyy").format(tousLesEtudiants.sonUtilisateur.dateDeNaissance)
+                                            }
+                                            @dtn
+                                        </td>
+                                        <td>@tousLesEtudiants.numeroEtudiant</td>
+                                        <td>@tousLesEtudiants.uid</td>
+                                        <td><button type="button" style="font-size: 11px;" onclick="ajouterAlaPromotion('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');"> Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer.groupe @parametres.getLaPromoAgerer.getType()</button></td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>

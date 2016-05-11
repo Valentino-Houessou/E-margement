@@ -1241,9 +1241,16 @@ public class administrateurController extends Controller {
      */
     public  Result chargerListeEtudiant()
     {
+        // 0 - Remise à zéro
+        paramEtudiant.remiseAzero();
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
-        return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
 
     /**

@@ -1,9 +1,89 @@
-@(titrepage: String)
-
-<!-- Début du block dynamique-->
-    <div>
+@*******************************************
+* Bloc pour gérer un profil etudiant*
+********************************************@
+@import controllers.administrateur.gestionDesParametres.parametresEtudiant
+@(titrepage: String)(parametres: parametresEtudiant)
+@import java.util.Date; var dtn=""; var lien = new Array[String](3); var lienp = "";
+@import java.text.SimpleDateFormat;
+    <!-- Début du block dynamique-->
+<div>
+    <div class="banner">
         <h1> @titrepage </h1>
 
-        <p> Ici la liste des étudiants sera chargé </p>
+        <p>
+            <i class="glyphicon glyphicon-info-sign" style="color: white;"></i> &nbsp; <i style="color: white;">Sur cette page vous pouvez gérer les étudiants à savoir modifier un profil et supprimer un/des étudiant(s) définitivement de la base.</i> <br/>
+        </p>
     </div>
-<!-- Fin du block dynamique -->
+
+    <div id="etudiantAgerer" >
+        <div class="list-group">
+            <div class="input-group">
+                <span class="input-group-addon">Filtrer</span>
+                <input id="filter2" type="text" class="form-control" placeholder="Rechercher ici...">
+            </div>
+            <div style="height: 350px; overflow: auto;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Date de naissance</th>
+                            <th>Numéro d'étudiant</th>
+                            <th>UID de la carte étudiante</th>
+                            <th>Modifier</th>
+                            <th>Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody class="searchable">
+                    @for(tousLesEtudiants <- parametres.getTousLesEtudiants()){
+                        <tr>
+                            <td>@tousLesEtudiants.sonUtilisateur.nom</td>
+                            <td>@tousLesEtudiants.sonUtilisateur.prenom</td>
+                            <td>@tousLesEtudiants.sonUtilisateur.adresseMail</td>
+                            <td>
+
+                                @{
+                                    dtn = new SimpleDateFormat("dd-MM-yyyy").format(tousLesEtudiants.sonUtilisateur.dateDeNaissance)
+                                }
+                                @dtn
+
+                            </td>
+                            <td>@tousLesEtudiants.numeroEtudiant</td>
+                            <td>@tousLesEtudiants.uid</td>
+                            <td><button type="button" style="font-size: 11px;" onclick=""> Modifier son profil </button></td>
+                            <td><button type="button" style="font-size: 11px; color: red;" onclick=""> Supprimer son profil </button></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+<script>
+        $(document).ready(function () {
+
+            (function ($) {
+
+                $('#filter2').keyup(function () {
+
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('.searchable tr').hide();
+                    $('.searchable tr').filter(function () {
+                        return rex.test($(this).text());
+                    }).show();
+
+                })
+
+            }(jQuery));
+
+        });
+</script>
