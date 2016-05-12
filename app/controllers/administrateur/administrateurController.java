@@ -496,14 +496,14 @@ public class administrateurController extends Controller {
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
                     Utilisateur.getEncodedPassword("password"),
                     Timestamp.from(Instant.now()),
-                    "");
+                    null);
 
 
             // Si l'utilisateur n'existe pas dans la BDD
             if(!utilisateursBD.contains(utilisateurTemp)) {
 
                 // On crée l'enseignant
-                enseignantTemp = new Enseignant("", utilisateurTemp);
+                enseignantTemp = new Enseignant(null, utilisateurTemp);
 
                 // On lui associe son module (ENSEIGNANT)
                 utilisateurTemp.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
@@ -658,8 +658,8 @@ public class administrateurController extends Controller {
             for(Etudiant e : etudiantsBD) {
                 presenceTemp = new Presence();
                 presenceTemp.emergement = false;
-                presenceTemp.justificatif = "";
-                presenceTemp.motif = "";
+                presenceTemp.justificatif = null;
+                presenceTemp.motif = null;
 
                 if (condition == 1 || condition == 2)
                     presenceTemp.sonCours = coursBD;
