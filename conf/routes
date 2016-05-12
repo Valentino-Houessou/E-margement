@@ -28,7 +28,9 @@ POST          /enseignant/signature                                   controller
 POST          /enseignant/anSignature                                 controllers.enseignant.EnseignantController.androidSignature()
 GET           /enseignant/profil/:id                                  controllers.enseignant.EnseignantController.getEnseignant(id : Long)
 GET           /enseignant/listEnseignant                              controllers.enseignant.EnseignantController.getListEnseignant()
-
+GET           /enseignant/changerMDP                                  controllers.enseignant.EnseignantController.changerMDP()
+GET           /enseignant/changerMDPerreur                            controllers.enseignant.EnseignantController.changerMDPerreur()
+POST          /enseignant/mdpchange                                   controllers.enseignant.EnseignantController.mdpchange()
 
 
 # etudiant
@@ -94,8 +96,12 @@ POST          /administrateur/importer-edt                            controller
 GET           /administrateur/ajoutUniversite                         controllers.administrateur.administrateurController.ajoutUniversite()
 GET           /administrateur/ajoutUniversiteErreur                   controllers.administrateur.administrateurController.ajoutUniversiteErreur()
 POST          /administrateur/ajoutUniversite/creer                   controllers.administrateur.administrateurController.ajoutUniversiteCreer()
-
-
+GET           /administrateur/ajoutBatiment                           controllers.administrateur.administrateurController.ajoutBatiment()
+GET           /administrateur/ajoutBatimentErreur                     controllers.administrateur.administrateurController.ajoutBatimentErreur()
+POST          /administrateur/ajoutBatiment/creer                     controllers.administrateur.administrateurController.ajoutBatimentCreer()
+GET           /administrateur/ajoutSalle                              controllers.administrateur.administrateurController.ajoutSalle()
+GET           /administrateur/ajoutSalleErreur                        controllers.administrateur.administrateurController.ajoutSalleErreur()
+POST          /administrateur/ajoutSalle/creer                        controllers.administrateur.administrateurController.ajoutSalleCreer()
 
 #matière
 GET           /matiere                                                controllers.MatiereController.index()

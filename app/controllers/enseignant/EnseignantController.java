@@ -1,20 +1,25 @@
 package controllers.enseignant;
 
-import models.Cours;
-import models.Enseignant;
-import models.Presence;
+import controllers.etudiant.*;
+import models.*;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.enseignant.ChangerMdpEnseignant;
 import views.html.enseignant.indexEnseignant;
 import views.html.enseignant.list_cours;
 import views.html.enseignant.list_etudiants;
+import views.html.etudiant.changerMDP;
+import views.html.etudiant.indexEtudiant;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
+
+import static play.data.Form.form;
 
 
 public class EnseignantController extends Controller{
@@ -186,6 +191,58 @@ public class EnseignantController extends Controller{
 
     public  Result getEnseignant(long id) {
             return ok(Json.toJson(Enseignant.findById(id)));
+    }
+
+
+
+    public  Result mdpchange() {
+
+        int idUtilisateur = Integer.parseInt(session().get("user_id"));
+
+        int erreurMdp;
+
+        DynamicForm changemdp = form().bindFromRequest();
+        String mdp = changemdp.get("mdp");
+        String mdp2 = changemdp.get("mdp2");
+
+        System.out.println(mdp + " " + mdp2);
+
+        if (mdp.equals(mdp2)) {
+            erreurMdp = 1;
+
+            Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
+
+            System.out.println(utilisateur.adresseMail);
+            System.out.println(utilisateur.motDePasse);
+            String mdpencoded = utilisateur.getEncodedPassword(mdp);
+
+            utilisateur.setMotDePasse(mdpencoded);
+            //utilisateur.adresseMail="boulit@gmail.com";
+
+            utilisateur.update();
+
+            utilisateur.save();
+
+
+            return redirect(controllers.enseignant.routes.EnseignantController.index());
+        }
+        else {
+            System.out.println("je passe par là");
+            erreurMdp = 0;
+            return redirect(controllers.enseignant.routes.EnseignantController.changerMDPerreur());
+        }
+
+    }
+
+
+    public  Result changerMDP() {
+
+        return ok(ChangerMdpEnseignant.render("Changement du mot de passe",1));
+    }
+
+
+    public Result changerMDPerreur() {
+        return ok(ChangerMdpEnseignant.render("Changement du mot de passe",0));
     }
 
 }

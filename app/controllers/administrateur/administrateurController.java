@@ -29,9 +29,11 @@ import views.html.administrateur.exporterTrombinoscopePDF;
 import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import views.html.administrateur.AjouterUniversite;
+import views.html.administrateur.*;
 import models.*;
 
 import java.io.*;
+import java.sql.Savepoint;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -73,6 +75,7 @@ public class administrateurController extends Controller {
                 .findList();
 
         int cpterreur=0;
+
         for(Universite univ: universite) {
 
             if (nom.toUpperCase().equals(univ.libelle.toUpperCase())) {
@@ -96,12 +99,142 @@ public class administrateurController extends Controller {
 
 
     public  Result ajoutUniversiteErreur() {
-        return ok(AjouterUniversite.render("Ajouter une université",0));
+
+        List<Universite> ListeNull= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+
+        return ok(AjouterUniversite.render("Ajouter une université",0,ListeNull,ListeNull2));
     }
 
 
     public Result ajoutUniversite() {
-        return ok(AjouterUniversite.render("Ajouter une université",1));
+
+        List<Universite> ListeNull= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une université",1,ListeNull,ListeNull2));
+    }
+
+
+    public  Result ajoutBatimentCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String nom = fac.get("NomBat").toUpperCase();
+        int univ= Integer.parseInt(fac.get("TheUniversite"));
+
+
+
+        System.out.println(nom);
+        System.out.println(univ);
+
+
+        Universite universite = Universite.find.where().eq("id",univ)
+                .findUnique();
+
+        List<Batiment> batiment = Batiment.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Batiment bat: batiment) {
+
+            if (nom.toUpperCase().equals(bat.libelle.toUpperCase()) && univ==bat.sonUniversite.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Batiment nouveauBat= Batiment.create(nom,universite);
+            return redirect(routes.administrateurController.ajoutBatiment());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutBatimentErreur());
+
+        }
+    }
+
+    public Result ajoutBatiment() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter un batiment",1,ListeUniv,ListeNull2));
+    }
+
+
+    public  Result ajoutBatimentErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+
+        return ok(AjouterUniversite.render("Ajouter une Batiment",2,ListeUniv,ListeNull2));
+    }
+
+
+
+    public  Result ajoutSalleCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String nom = fac.get("NomSalle").toUpperCase();
+        int bat= Integer.parseInt(fac.get("TheBatiment"));
+
+
+        System.out.println(nom);
+        System.out.println(bat);
+
+
+        Batiment batiment= Batiment.find.where().eq("id",bat)
+                .findUnique();
+
+        List<Salle> salle = Salle.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Salle sal: salle) {
+
+            if (nom.toUpperCase().equals(sal.libelle.toUpperCase()) && bat==sal.sonBatiment.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Salle nouvelleSalle= Salle.create(nom,batiment);
+            return redirect(routes.administrateurController.ajoutSalle());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutSalleErreur());
+
+        }
+    }
+
+    public Result ajoutSalle() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",1,ListeUniv,ListeBat));
+    }
+
+
+    public  Result ajoutSalleErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",4,ListeUniv,ListeBat));
     }
 
 

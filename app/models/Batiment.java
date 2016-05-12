@@ -15,9 +15,9 @@ public class Batiment extends Model {
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Universite sonUniversite;
 
-    public Batiment()
+    public Batiment(String libelle)
     {
-
+        this.libelle=libelle;
     }
 
     /**
@@ -59,4 +59,23 @@ public class Batiment extends Model {
     public static Batiment findByLibelle(String libelle){
         return find.where().eq("libelle", libelle).findUnique();
     }
+
+
+    public static Batiment create(String libelle,Universite Univ) {
+
+        Batiment bat=new Batiment(libelle);
+
+        bat.sonUniversite=Univ;
+
+        bat.save();
+
+        return bat;
+
+    }
+
+
+    public String getLibelle() {
+        return libelle;
+    }
+
 }

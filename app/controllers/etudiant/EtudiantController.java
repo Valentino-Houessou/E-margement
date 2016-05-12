@@ -5,6 +5,7 @@ import controllers.*;
 import models.*;
 import play.Play;
 import play.data.DynamicForm;
+import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -19,6 +20,7 @@ import models.Presence;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -248,7 +250,7 @@ public class EtudiantController extends Controller{
 
 
 
-        return ok(consulterAbsences.render("Export de la liste des matières", presences));
+        return ok(consulterAbsences.render("Liste d'absences", presences));
     }
 
     /**
