@@ -227,7 +227,6 @@ public class EnseignantController extends Controller{
             return redirect(controllers.enseignant.routes.EnseignantController.index());
         }
         else {
-            System.out.println("je passe par là");
             erreurMdp = 0;
             return redirect(controllers.enseignant.routes.EnseignantController.changerMDPerreur());
         }
@@ -237,6 +236,9 @@ public class EnseignantController extends Controller{
 
     public  Result changerMDP() {
 
+        if(session().get("user_id") == null){
+            return redirect(controllers.routes.Application.logout());
+        }
         return ok(ChangerMdpEnseignant.render("Changement du mot de passe",1));
     }
 

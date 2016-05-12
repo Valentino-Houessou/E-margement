@@ -12,17 +12,13 @@
                     <a href="@controllers.enseignant.routes.EnseignantController.index()" class="simple-text"> @titrepage </a>
                 </div>
 
-                <ul>
+                <ul class="nav">
                     <li>
                         <a href="/enseignant/changerMDP" id="changerMDP">
                             <i class="pe-7s-albums"></i>
-                            <p>Changer le mot de passe</p>
+                            <p><span style="font-size: 11px;">Changer le mot de passe</span></p>
                         </a>
-
                     </li>
-
-
-
                 </ul>
             </div>
         </div>
@@ -69,7 +65,8 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <form id="changemdpEnseignant" method="post" action="/enseignant/mdpchange">
-                                        <div style="margin-top:80px;" class="col-xs-6 col-sm-6 col-md-6 login-box">
+                                        <div style="margin-top:20px;" class="col-xs-10 col-sm-10 col-md-10 login-box">
+                                            <i> Veuillez saisir deux mots de passe identiques.</i>
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>

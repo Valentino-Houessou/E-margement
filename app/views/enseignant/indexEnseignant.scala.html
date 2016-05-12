@@ -72,17 +72,13 @@
                     <a href="@controllers.enseignant.routes.EnseignantController.index()" class="simple-text"> @titre </a>
                 </div>
 
-                <ul>
+                <ul class="nav">
                     <li>
                         <a href="/enseignant/changerMDP" id="changerMDP">
-                                <i class="pe-7s-albums"></i>
-                                <p>Changer le mot de passe</p>
+                            <i class="pe-7s-albums"></i>
+                            <p><span style="font-size: 11px;">Changer le mot de passe</span></p>
                         </a>
-
                     </li>
-
-
-
                 </ul>
             </div>
         </div>
@@ -114,6 +110,15 @@
 
             <div id="frame_tableau_presence">
                 <div class="row">
+                    <div>
+                        <i>
+                            Pour consulter la liste des étudiants présents à votre cours du jours vous devez:
+                            <ul>
+                                <li>Sélectionner la date du cours</li>
+                                <li>Sélectionner votre cours</li>
+                            </ul>
+                        </i>
+                    </div>
                     <div class="panel panel-primary filterable">
                         <div class="panel-heading">
                             <h3 class="panel-title">Liste des Étudiants</h3>
@@ -121,7 +126,7 @@
                         <div class="form-group">
                             <div  id="list_date" class='input-group date'>
                                 <label class="form-control" style="width: 25%">Cours du : </label>
-                                <input type='text' class="form-control" style="width: 75%" id="datepicker"/>
+                                <input type='text' class="form-control" style="width: 75%" id="datepicker" placeholder="Veuillez sélectionner une date ici ..."/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
