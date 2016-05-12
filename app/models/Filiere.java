@@ -48,4 +48,14 @@ public class Filiere extends Model{
         return filieres;
     }
 
+    public static Filiere create(String codefiliere, String libelle, String annee, Batiment sonBat){
+
+        Filiere fi = new Filiere(codefiliere,libelle,annee);
+        fi.sonBatiment=sonBat;
+
+        fi.save();
+
+        return fi;
+    }
+
 }

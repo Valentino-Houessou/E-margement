@@ -164,7 +164,7 @@ public class administrateurController extends Controller {
         List<Universite> ListeUniv= Universite.getUniversite();
         List<Batiment> ListeNull2 = Batiment.findAll();
 
-        return ok(AjouterUniversite.render("Ajouter un batiment",1,ListeUniv,ListeNull2));
+        return ok(AjouterUniversite.render("Ajouter un batiment",3,ListeUniv,ListeNull2));
     }
 
 
@@ -225,7 +225,7 @@ public class administrateurController extends Controller {
         List<Universite> ListeUniv= Universite.getUniversite();
         List<Batiment> ListeBat = Batiment.findAll();
 
-        return ok(AjouterUniversite.render("Ajouter une salle",1,ListeUniv,ListeBat));
+        return ok(AjouterUniversite.render("Ajouter une salle",5,ListeUniv,ListeBat));
     }
 
 
@@ -236,6 +236,75 @@ public class administrateurController extends Controller {
 
         return ok(AjouterUniversite.render("Ajouter une salle",4,ListeUniv,ListeBat));
     }
+
+
+    public  Result ajoutFiliereCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String code =fac.get("CodeFiliere").toUpperCase();
+        String nom = fac.get("NomFiliere").toUpperCase();
+        String annee= fac.get("AnneeFiliere").toUpperCase();
+
+        int bat= Integer.parseInt(fac.get("TheBatimentFiliere"));
+
+        Batiment batiment= Batiment.find.where().eq("id",bat)
+                .findUnique();
+
+        List<Filiere> filiere = Filiere.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Filiere fi: filiere) {
+
+            if (nom.toUpperCase().equals(fi.libelle.toUpperCase()) && code.toUpperCase().equals(fi.codefiliere.toUpperCase()) && annee.toUpperCase().equals(fi.annee.toUpperCase()) && bat==fi.sonBatiment.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Filiere nouvelleFiliere= Filiere.create(code,nom,annee,batiment);
+            return redirect(routes.administrateurController.ajoutFiliere());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutFiliereErreur());
+
+        }
+    }
+
+    public Result ajoutFiliere() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",7,ListeUniv,ListeBat));
+    }
+
+
+    public  Result ajoutFiliereErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",6,ListeUniv,ListeBat));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**

@@ -102,6 +102,9 @@ POST          /administrateur/ajoutBatiment/creer                     controller
 GET           /administrateur/ajoutSalle                              controllers.administrateur.administrateurController.ajoutSalle()
 GET           /administrateur/ajoutSalleErreur                        controllers.administrateur.administrateurController.ajoutSalleErreur()
 POST          /administrateur/ajoutSalle/creer                        controllers.administrateur.administrateurController.ajoutSalleCreer()
+GET           /administrateur/ajoutFiliere                            controllers.administrateur.administrateurController.ajoutFiliere()
+GET           /administrateur/ajoutFiliereErreur                     controllers.administrateur.administrateurController.ajoutFiliereErreur()
+POST          /administrateur/ajoutFiliere/creer                     controllers.administrateur.administrateurController.ajoutFiliereCreer()
 
 #matière
 GET           /matiere                                                controllers.MatiereController.index()
