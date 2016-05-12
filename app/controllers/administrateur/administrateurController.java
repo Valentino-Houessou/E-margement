@@ -496,14 +496,14 @@ public class administrateurController extends Controller {
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
                     Utilisateur.getEncodedPassword("password"),
                     Timestamp.from(Instant.now()),
-                    "");
+                    null);
 
 
             // Si l'utilisateur n'existe pas dans la BDD
             if(!utilisateursBD.contains(utilisateurTemp)) {
 
                 // On crée l'enseignant
-                enseignantTemp = new Enseignant("", utilisateurTemp);
+                enseignantTemp = new Enseignant(null, utilisateurTemp);
 
                 // On lui associe son module (ENSEIGNANT)
                 utilisateurTemp.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
@@ -658,8 +658,8 @@ public class administrateurController extends Controller {
             for(Etudiant e : etudiantsBD) {
                 presenceTemp = new Presence();
                 presenceTemp.emergement = false;
-                presenceTemp.justificatif = "";
-                presenceTemp.motif = "";
+                presenceTemp.justificatif = null;
+                presenceTemp.motif = null;
 
                 if (condition == 1 || condition == 2)
                     presenceTemp.sonCours = coursBD;
@@ -1905,6 +1905,8 @@ public class administrateurController extends Controller {
      */
     public Result creerNouveauEtudiant() {
 
+        paramEtudiant.setCheckEtudiant(0);
+
         // 0 - Etape
         paramEtudiant.setEtape("afficheLePromotion");
 
@@ -2068,6 +2070,30 @@ public class administrateurController extends Controller {
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return pdfGenerator.ok(exporterTrombinoscopePDF.render("By Ftgotc", paramEtudiant), Configuration.root().getString("application.host"));
+    }
+
+    /**
+     * Suppression d'un profil étudiant
+     * @param id
+     * @return
+     */
+    public Result supprimerProfilEtudiant(long id) {
+
+        // 0 - On garde qui on a supprimer
+        Etudiant letudiant = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(letudiant);
+
+        // 2 - supprimer
+        Etudiant.supprimer(id);
+
+        // 3 - Récupérer tous les étudiants de la base
+        paramEtudiant.setTousLesEtudiants(null);
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
 
 }

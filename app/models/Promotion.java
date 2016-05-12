@@ -253,6 +253,10 @@ public class Promotion extends Model{
         }
     }
 
+    /**
+     * Retirer tous les étudiants de la promotion
+     * @param idpromotion
+     */
     public static void viderPromotion(long idpromotion)
     {
         Promotion promotion = findbyId(idpromotion);

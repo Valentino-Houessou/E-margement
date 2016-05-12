@@ -184,6 +184,15 @@ public class Utilisateur extends Model  {
         user.update();
     }
 
+    public static void deleteDroitEtudiant(long id)
+    {
+        Utilisateur user =  find.ref(id);
+
+        user.sesModules.remove(Module.findByLibelle("ETUDIANTS"));
+
+        user.update();
+    }
+
     //Finder for retrieve data in database
     public static Finder<Long,Utilisateur> find = new Finder<Long,Utilisateur>(Utilisateur.class);
 

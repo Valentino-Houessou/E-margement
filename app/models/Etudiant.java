@@ -3,10 +3,7 @@ package models;
 import javax.persistence.*;
 import com.avaje.ebean.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Etudiant extends Model{
@@ -78,7 +75,8 @@ public class Etudiant extends Model{
 
     }
 
-    public static void delete(int id) {
+
+    public static void delete(long id) {
         Etudiant etudiant = find.where().eq("id", id).findUnique();
         Utilisateur utilisateur = etudiant.sonUtilisateur;
         Ebean.delete(etudiant);
@@ -116,6 +114,65 @@ public class Etudiant extends Model{
         });
 
         return lesEtudiant;
+    }
+
+    /**
+     * Suppression d'un profil étudiant
+     * @param id
+     */
+    public static void supprimer(long id)
+    {
+
+        Promotion promotion = Promotion.find.where().eq("sesEtudiants.id", id).findUnique();
+
+        // 3 - Suppression de l'étudiant
+        Etudiant letudiant = Etudiant.findById(id);
+
+        // On retire ses modules
+        Utilisateur utilisateur = letudiant.sonUtilisateur;
+
+        if(utilisateur != null)
+        {
+            if(utilisateur.sesModules != null){
+                Utilisateur.deleteDroitEtudiant(utilisateur.id);
+            }
+        }
+
+        // On supprime Etudiant et Utilisateur
+        letudiant.sonUtilisateur = null;
+        letudiant.update();
+
+
+
+        utilisateur.update();
+        utilisateur.delete();
+
+        // 1 - Retirer l'étudiant de sa promotion
+        if(promotion != null){
+
+            Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
+            while(itr.hasNext()) {
+                Etudiant e = itr.next();
+
+                // On retire l'étudiant de sa promotion
+                if(e.id == id){
+
+                    // 2- Suppression des nupplets dans la table presence
+                    Presence.supprimerPresenceCoursEtudiant(e.id);
+
+                    // On retire l'étudiant de la promotion
+                    itr.remove();
+
+                }
+            }
+            promotion.update();
+        }
+
+        Etudiant et = Etudiant.findById(id);
+        et.delete();
+
+
+        System.out.println("On PASSS PAR LAAAAAAAAAAAAAAAA  ");
     }
 
 
