@@ -252,5 +252,27 @@ public class Promotion extends Model{
             return 4;
         }
     }
+
+    public static void viderPromotion(long idpromotion)
+    {
+        Promotion promotion = findbyId(idpromotion);
+
+        if(promotion.sesEtudiants != null)
+        {
+            Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
+            while(itr.hasNext()) {
+                Etudiant etudiant = itr.next();
+
+                // Suppression des nupplets dans la table presence
+                Presence.supprimerPresenceCoursEtudiant(etudiant.id);
+
+                // On retire l'étudiant de la promotion
+                itr.remove();
+
+            }
+
+            promotion.update();
+        }
+    }
 }
 

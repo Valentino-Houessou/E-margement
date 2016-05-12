@@ -25,6 +25,7 @@ import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.exporterFeuilleDatePDF;
+import views.html.administrateur.exporterTrombinoscopePDF;
 import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import views.html.administrateur.AjouterUniversite;
@@ -291,7 +292,7 @@ public class administrateurController extends Controller {
             Utilisateur utilisateurTemp = new Utilisateur((String) tempHash.get("nomIntervenant"),
                     (String) tempHash.get("prenomIntervenant"),
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
-                    Utilisateur.getEncodedPassword("1230"),
+                    Utilisateur.getEncodedPassword("password"),
                     Timestamp.from(Instant.now()),
                     "");
 
@@ -1828,6 +1829,43 @@ public class administrateurController extends Controller {
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Permet de vider une promotion
+     * @param id
+     * @return
+     */
+    public Result viderLaPromotion(long id) {
+
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - Vider
+        Promotion.viderPromotion(id);
+
+        // 2 - remise à zero
+        //  - On récupére la promotion sélectionnée pour une mise à jour lors de l'affichage
+        Promotion lapromotion = Promotion.findbyId(id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Générer le trombinoscope d'une promotion
+     * @return
+     */
+    public Result exporterTrombinoscope() {
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return pdfGenerator.ok(exporterTrombinoscopePDF.render("By Ftgotc", paramEtudiant), Configuration.root().getString("application.host"));
     }
 
 }

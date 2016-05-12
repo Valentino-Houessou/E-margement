@@ -140,7 +140,7 @@
                     <a href="#" id=""><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid yellowgreen; color: yellowgreen;">Créer la promotion à partir d'une liste d'étudiant</button></a>
                 </div>
                 <div class="col-md-4">
-                    <a href="#" id=""><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid red; color: red;">Vider la promotion</button></a>
+                    <a href="#" onclick="viderLaPromotion('@parametres.getLaPromoAgerer().id', '@parametres.getLaPromoAgerer().groupe ', '@parametres.getLaPromoAgerer().getType()');"><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid red; color: red;">Vider la promotion</button></a>
                 </div>
             </div>
         </div>
@@ -149,7 +149,8 @@
 
         @if(parametres.getLaPromoAgerer().sesEtudiants.size() > 0) {
 
-            <p>Nombre d'étudiants : @parametres.getLaPromoAgerer().sesEtudiants.size()
+            <p>
+                Nombre d'étudiants : @parametres.getLaPromoAgerer().sesEtudiants.size()
                 @if(parametres.isCheckEtudiant() == 1){
                     <span class="label label-success">Le nouveau profil étudiant a bien été ajouté à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType()</span>
                 }
@@ -157,6 +158,8 @@
                     <span class="label label-danger">Attention ! L'étudiant ou l'adresse mail que vous voulez enregistrer existe déjà dans la base.</span>
                 }
             </p>
+
+            <p><a href="/administrateur/promotion/exporter-trombinoscope" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Exporter le trombinoscope </a></p>
 
             <div class="row">
                 @for(lesEtudiants <- parametres.getLesEtudiants) {
@@ -174,6 +177,13 @@
                             <hr style="margin: 1px;"/>
                             <div >
                                 <table  style="margin: 0 auto;">
+                                    <tr>
+                                        <td>
+                                        @if(lesEtudiants.numeroEtudiant != null){
+                                            @lesEtudiants.numeroEtudiant
+                                        }
+                                        </td>
+                                    </tr>
                                     <tr><td>@lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom</td></tr>
                                     <tr><td>
                                         @{
@@ -189,6 +199,8 @@
                     </div>
                 }
             </div>
+
+            <p><a href="/administrateur/promotion/exporter-trombinoscope" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Exporter le trombinoscope</a></p>
         }else{
             <p> Aucun étudiant enregistré dans cette promotion. </p>
         }
@@ -563,6 +575,30 @@
        }else{
            return false;
        }
-
    }
+</script>
+<script>
+    function viderLaPromotion(idpromotion, groupe, types)
+    {
+        var r = confirm("Etes-vous sûr de vouloire vider la promotion " + groupe + " " + types + " ?");
+
+        if (r == true) {
+
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/promotion/vider/"+idpromotion,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !")
+                }
+            });
+        }else{
+            return false;
+        }
+
+    }
 </script>

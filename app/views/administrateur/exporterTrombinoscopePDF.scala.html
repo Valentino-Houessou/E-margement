@@ -1,0 +1,112 @@
+@import controllers.administrateur.gestionDesParametres.parametresEtudiant
+@(titrepage: String)(parametres: parametresEtudiant)
+@import java.util.Date; var dtn=""; var lien = new Array[String](3); var lienp = "";
+@import java.text.SimpleDateFormat;
+@import java.math.BigInteger; var ligne=0; var colonne=0;
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+            <!-- If you delete this meta tag, Half Life 3 will never be released. -->
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title>E-margement - Paris X</title>
+
+        <style>
+            .card {
+                border: 1px solid #CCC;
+                border-radius: 3px;
+                text-align: center;
+                background-color: whitesmoke;
+                color: black;
+                font-size: 11px;
+                width: 30%;
+            }
+
+            table, th, td {
+            border: 1px solid black;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="divaligner">
+            <table style="width: 100%;">
+                <tr>
+                    <td width=12%><img src="/public/images/universite-paris-ouest.jpg" alt="Logo UPOND" height="55" width="75"/></td>
+
+                    <td width=88%><h4 style="text-align: center;">Paris Ouest Nanterre La Défense <br/> Trombinoscope de la @parametres.getLaPromoAgerer().filiere promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType() </h4></td>
+                </tr>
+            </table>
+        </div>
+
+        @if(parametres.getLaPromoAgerer().sesEtudiants.size() > 0) {
+
+            <p>
+                Nombre d'étudiants : @parametres.getLaPromoAgerer().sesEtudiants.size()
+            </p>
+
+
+                <table style="margin: 0 auto; text-align: center; width:100%;">
+
+                    @for(lesEtudiants <- parametres.getLesEtudiants) {
+                     @if(colonne == 0){
+                         <tr>
+                     }
+
+                                <td width="25">
+                                    @if((lesEtudiants.sonUtilisateur.lienPhoto != null) && (!lesEtudiants.sonUtilisateur.lienPhoto.equals(""))) {
+                                        @{
+                                            lien = lesEtudiants.sonUtilisateur.lienPhoto.split("/")
+                                            lienp = lien(1) + "/" + lien(2);
+                                        }
+                                        <img src="/public/@lienp" alt="Photo utilisateur" height="153" width="130" />
+                                    } else {
+                                        <img src="/public/images/recrutement.jpg" alt="Photo utilisateur" height="153" width="130" />
+                                    }
+                                    <hr style="margin: 1px ;"/>
+
+                                    @if(lesEtudiants.numeroEtudiant != null) {
+                                        @lesEtudiants.numeroEtudiant
+                                    }
+
+                                    <br/>
+
+                                    @lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom
+
+                                    <br/>
+
+                                    @{
+                                        dtn = new SimpleDateFormat("dd-MM-yyyy").format(lesEtudiants.sonUtilisateur.dateDeNaissance)
+                                    }
+                                    @dtn
+
+                                    <br/>
+
+
+
+                                </td>
+
+
+                    @{
+                        colonne = colonne + 1;
+                    }
+
+                    @if( colonne > 3){
+                        </tr>
+
+                        @{
+                            colonne = 0;
+                        }
+                    }
+                    }
+                </table>
+
+
+        }else{
+            <p> Aucun étudiant enregistré dans cette promotion. </p>
+        }
+    </body>
+</html>

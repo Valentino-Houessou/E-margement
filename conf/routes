@@ -69,6 +69,8 @@ POST          /administrateur/nouveau-profile-etudiant/creer             control
 GET           /administrateur/gerer-promotion/supprimer-etudiant/:id     controllers.administrateur.administrateurController.retirerEtudiantAunePromootion(id : Long)
 GET           /administrateur/promotion/affecter-etudiant/:id            controllers.administrateur.administrateurController.ajouterAlaPromotion(id : Long)
 GET           /administrateur/gerer-les-etudiant                         controllers.administrateur.administrateurController.chargerListeEtudiant()
+GET           /administrateur/promotion/vider/:id                        controllers.administrateur.administrateurController.viderLaPromotion(id : Long)
+GET           /administrateur/promotion/exporter-trombinoscope           controllers.administrateur.administrateurController.exporterTrombinoscope()
 
 GET           /administrateur/charger-edt                             controllers.administrateur.administrateurController.chargerEdt()
 GET           /administrateur/charger-liste-enseignant                controllers.administrateur.administrateurController.chargerListeEnseignant()

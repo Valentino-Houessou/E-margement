@@ -147,7 +147,6 @@ public class parametresEtudiant {
     public void setLaPromoAgerer(Promotion laPromoAgerer) {
         this.laPromoAgerer = laPromoAgerer;
 
-
         if(laPromoAgerer != null)
             this.setLesEtudiants(this.laPromoAgerer.sesEtudiants);
 
