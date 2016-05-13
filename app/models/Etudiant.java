@@ -62,17 +62,29 @@ public class Etudiant extends Model{
         return etudiant;
     }
 
-    public static Etudiant update(int id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String statut) {
+    /**
+     * Modifier profil étudiant
+     * @param id
+     * @param nom
+     * @param prenom
+     * @param adresseMail
+     * @param motDePasse
+     * @param dateDeNaissance
+     * @param lienPhoto
+     * @param statut
+     * @return
+     */
+    public static Etudiant update(long id, String nom,String prenom,String adresseMail,String motDePasse,String dateDeNaissance,String lienPhoto, String uid, String numeroEtudiant, String statut) {
 
         Etudiant etudiant = find.where().eq("id", id).findUnique();
 
         etudiant.statut = statut;
         Utilisateur.updateUtilisateur(etudiant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
+        etudiant.update();
         etudiant.save();
 
         return etudiant;
-
     }
 
 
@@ -117,59 +129,54 @@ public class Etudiant extends Model{
     }
 
     /**
-     * Suppression d'un profil étudiant
-     * @param id
+     * La fonction retire un étudiant affecté à une promotion
+     * @param idetudiant
      */
-    public static void supprimer(long id)
-    {
+    public static void retirerEtudiantPromotion(long idetudiant) {
 
-        Promotion promotion = Promotion.find.where().eq("sesEtudiants.id", id).findUnique();
+        Promotion promotion = Promotion.find.where().eq("sesEtudiants.id", idetudiant).findUnique();
 
-        // 3 - Suppression de l'étudiant
-        Etudiant letudiant = Etudiant.findById(id);
-
-        // On retire ses modules
-        Utilisateur utilisateur = letudiant.sonUtilisateur;
-
-        if(utilisateur != null)
-        {
-            if(utilisateur.sesModules != null){
-                Utilisateur.deleteDroitEtudiant(utilisateur.id);
-            }
-        }
-
-        // On supprime Etudiant et Utilisateur
-        letudiant.sonUtilisateur = null;
-        letudiant.update();
-
-
-
-        utilisateur.update();
-        utilisateur.delete();
-
-        // 1 - Retirer l'étudiant de sa promotion
         if(promotion != null){
-
             Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
             while(itr.hasNext()) {
-                Etudiant e = itr.next();
+                Etudiant etudiant = itr.next();
 
                 // On retire l'étudiant de sa promotion
-                if(e.id == id){
-
-                    // 2- Suppression des nupplets dans la table presence
-                    Presence.supprimerPresenceCoursEtudiant(e.id);
-
-                    // On retire l'étudiant de la promotion
+                if(etudiant.id == idetudiant){
                     itr.remove();
-
                 }
             }
+
             promotion.update();
+
+            // Suppression des nupplets dans la table presence
+            Presence.supprimerPresenceCoursEtudiant(idetudiant);
+        }
+    }
+
+    /**
+     * Suppression d'un profil étudiant
+     * @param idetudiant
+     */
+    public static void supprimer(long idetudiant)
+    {
+        // 1 - Suppression de l'étudiant
+        Etudiant letudiant = Etudiant.find.where().eq("id", idetudiant).findUnique();
+
+        Ebean.delete(letudiant);
+
+        //On retire ses modules
+        Utilisateur utilisateur = letudiant.sonUtilisateur;
+
+
+        if(utilisateur.sesModules.size() > 0){
+            utilisateur.sesModules.remove(Module.findByLibelle("ETUDIANTS"));
+
+                    utilisateur.update();
         }
 
-        Etudiant et = Etudiant.findById(id);
-        et.delete();
+
+        utilisateur.delete();
 
 
         System.out.println("On PASSS PAR LAAAAAAAAAAAAAAAA  ");

@@ -34,6 +34,9 @@ public class parametresEtudiant {
     // Juste pour l'affichage d'un étudiant affecté dans une promotion
     private Etudiant etudiantAffecter;
 
+
+    private String etapeProfilEtudiant;
+
     public parametresEtudiant()
     {
         this.listeUniversite = null;
@@ -50,6 +53,7 @@ public class parametresEtudiant {
         this.tousLesEtudiants = null;
         this.checkEtudiant = 0;
         this.etudiantAffecter=null;
+        this.etapeProfilEtudiant="";
     }
 
     /** Point d'accès pour l'instance unique du singleton **/
@@ -191,6 +195,14 @@ public class parametresEtudiant {
 
     public void setEtudiantAffecter(Etudiant etudiantAffecter) {
         this.etudiantAffecter = etudiantAffecter;
+    }
+
+    public String getEtapeProfilEtudiant() {
+        return etapeProfilEtudiant;
+    }
+
+    public void setEtapeProfilEtudiant(String etapeProfilEtudiant) {
+        this.etapeProfilEtudiant = etapeProfilEtudiant;
     }
 
     public void remiseAzero(){

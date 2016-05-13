@@ -43,15 +43,10 @@ public class EtudiantController extends Controller{
         String mdp = changemdp.get("mdp");
         String mdp2 = changemdp.get("mdp2");
 
-        System.out.println(mdp + " " + mdp2);
-
         if (mdp.equals(mdp2)) {
             erreurMdp = 1;
 
             Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
-
-            System.out.println(utilisateur.adresseMail);
-            System.out.println(utilisateur.motDePasse);
 
             utilisateur.setMotDePasse(mdp);
             //utilisateur.adresseMail="boulit@gmail.com";
@@ -329,7 +324,7 @@ public class EtudiantController extends Controller{
             else if (lienPhoto == null)
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
-                Etudiant etudiant = Etudiant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                //Etudiant etudiant = Etudiant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);  Obsolète
 
                 return ok(/*Json.toJson(etudiant)*/);
             }

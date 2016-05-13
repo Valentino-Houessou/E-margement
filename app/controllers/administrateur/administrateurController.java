@@ -1446,6 +1446,10 @@ public class administrateurController extends Controller {
     {
         // 0 - Remise à zéro
         paramEtudiant.remiseAzero();
+        paramEtudiant.setCheckEtudiant(0);
+
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
 
         // 1 - Récupérer tous les étudiants de la base
         List<Etudiant> tousLesEtudiants = Etudiant.findAll();
@@ -1455,6 +1459,26 @@ public class administrateurController extends Controller {
             return redirect(controllers.routes.Application.logout());
         return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
+
+    public Result chargerListeEtudiantSuccess(long id) {
+
+
+        // 0 - Remise à zéro
+        paramEtudiant.remiseAzero();
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        paramEtudiant.setCheckEtudiant(8);
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
 
     /**
      * chargerEdt()
@@ -2083,6 +2107,9 @@ public class administrateurController extends Controller {
         Etudiant letudiant = Etudiant.findById(id);
         paramEtudiant.setEtudiantAffecter(letudiant);
 
+        // 1 - On désaffecte ces cours
+        Etudiant.retirerEtudiantPromotion(id);
+
         // 2 - supprimer
         Etudiant.supprimer(id);
 
@@ -2091,8 +2118,102 @@ public class administrateurController extends Controller {
         List<Etudiant> tousLesEtudiants = Etudiant.findAll();
         paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
 
+        paramEtudiant.setCheckEtudiant(8);
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
+    public Result modifierProfileEtudiant(long id) {
+
+        paramEtudiant.setEtudiantAffecter(null);
+
+        paramEtudiant.setEtapeProfilEtudiant("afficheModifierProfil");
+
+        Etudiant etudiant = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(etudiant);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
+    public Result modificationProfileEtudiant() {
+
+        paramEtudiant.setEtapeProfilEtudiant("afficheModifierProfil");
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datenaissance");
+        String numero_etudiant = profil.get("numero_etudiant");
+        String uid = profil.get("uid");
+        String lienPhoto ="";
+
+        long idetudiant = Long.parseLong(profil.get("idetudiant"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        Etudiant newEtudiant = null;
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom + "_" + prenom + "_" + fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            // Création du profil étudiant avec photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+            lienPhoto = myUploadPath + fileName;
+
+            newEtudiant = Etudiant.update(idetudiant, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto,  uid, numero_etudiant, "none");
+
+
+        }else {
+
+            // Création du profil étudiant sans photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+
+            newEtudiant = Etudiant.update(idetudiant, nom, prenom, adresseMail, mdp, datenaissance, "",  uid, numero_etudiant, "none");
+        }
+
+
+        // 2 - On test si l'étudiant n'existe pas déjà dans la base
+        if(newEtudiant != null){
+            paramEtudiant.setCheckEtudiant(9);
+
+        }else{
+            paramEtudiant.setCheckEtudiant(10);
+        }
+
+
+        Etudiant modEtudiant = Etudiant.findById(idetudiant);
+        paramEtudiant.setEtudiantAffecter(modEtudiant);
+
+
         return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
 
