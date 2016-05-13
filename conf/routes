@@ -44,6 +44,8 @@ GET           /etudiant/fileDownload                                  controller
 GET           /etudiant/changerMDP                                    controllers.etudiant.EtudiantController.changerMDP()
 GET           /etudiant/changerMDPerreur                              controllers.etudiant.EtudiantController.changerMDPerreur()
 POST          /etudiant/mdpchange                                     controllers.etudiant.EtudiantController.mdpchange()
+POST          /etudiant/anEtudiant                                    controllers.etudiant.EtudiantController.androidNbAbsence()
+POST          /etudiant/anListAbsence                                 controllers.etudiant.EtudiantController.androidListAbsence()
 
 
 # admin : Toutes les fonctionnalités de l'administrateur
