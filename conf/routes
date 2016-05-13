@@ -91,6 +91,8 @@ POST          /administrateur/exporter-feuille/resultats              controller
 GET           /administrateur/exporter-feuille/export-date            controllers.administrateur.administrateurController.exporterFeuilleDatePDF()
 GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 POST          /administrateur/liste-abscences                         controllers.administrateur.administrateurController.getTheAbscences()
+GET           /administrateur/fileDownload/:presenceId                controllers.administrateur.administrateurController.fileDownload(presenceId : Int)
+
 POST          /administrateur/affecter-cours/batiment                 controllers.administrateur.administrateurController.selectionUniversite()
 POST          /administrateur/affecter-cours/filiere                  controllers.administrateur.administrateurController.selectionBatiment()
 POST          /administrateur/affecter-cours/promotion                controllers.administrateur.administrateurController.selectionPromotion()
