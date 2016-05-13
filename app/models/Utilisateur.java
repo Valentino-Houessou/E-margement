@@ -111,8 +111,9 @@ public class Utilisateur extends Model  {
         if (adresseMail != null)
             user.adresseMail = adresseMail;
         if ((motDePasse != null) && (!motDePasse.equals(""))){
-            user.motDePasse = Utilisateur.getEncodedPassword(motDePasse);
+            user.setMotDePasse(getEncodedPassword(motDePasse));
 
+            System.out.println(getEncodedPassword(motDePasse) + " LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
         if (dateDeNaissance != null) {
             Timestamp ddn = null;
@@ -129,6 +130,7 @@ public class Utilisateur extends Model  {
             user.lienPhoto = lienPhoto;
 
         user.update();
+        user.save();
 
         return user;
     }

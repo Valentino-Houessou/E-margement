@@ -79,6 +79,9 @@ public class Etudiant extends Model{
         Etudiant etudiant = find.where().eq("id", id).findUnique();
 
         etudiant.statut = statut;
+        etudiant.numeroEtudiant = numeroEtudiant;
+        etudiant.uid = uid;
+
         Utilisateur.updateUtilisateur(etudiant.sonUtilisateur.id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto);
 
         etudiant.update();
