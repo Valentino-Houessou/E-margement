@@ -113,7 +113,6 @@ public class Utilisateur extends Model  {
         if ((motDePasse != null) && (!motDePasse.equals(""))){
             user.setMotDePasse(getEncodedPassword(motDePasse));
 
-            System.out.println(getEncodedPassword(motDePasse) + " LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         }
         if (dateDeNaissance != null) {
             Timestamp ddn = null;

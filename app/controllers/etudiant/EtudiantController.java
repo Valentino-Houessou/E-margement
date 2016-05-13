@@ -48,7 +48,7 @@ public class EtudiantController extends Controller{
 
             Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
 
-            utilisateur.setMotDePasse(mdp);
+            utilisateur.setMotDePasse(Utilisateur.getEncodedPassword(mdp));
             //utilisateur.adresseMail="boulit@gmail.com";
 
             utilisateur.update();
@@ -59,7 +59,7 @@ public class EtudiantController extends Controller{
             return redirect(routes.EtudiantController.index());
         }
         else {
-            System.out.println("je passe par là");
+
             erreurMdp = 0;
             return redirect(routes.EtudiantController.changerMDPerreur());
         }
