@@ -100,7 +100,7 @@
                     <option value = "0">Choisir un bâtiment</option>
                     @for(batiment<-batiments){
 
-                        <option value="@batiment.id">@batiment.getLibelle()</option>
+                        <option value="@batiment.id">@batiment.getLibelle() - @batiment.sonUniversite.getLibelle</option>
                     }
                 </select>
             </div>
