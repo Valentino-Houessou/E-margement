@@ -109,7 +109,7 @@ public class Cours extends Model{
 
 
     public static List<Cours> findByEnseignant(long id, String date){
-        return find.where().eq("son_enseignant_id",id).like("heureDebut",date + " %").findList();
+        return find.where().eq("son_enseignant_id", id).like("heureDebut", date + " %").findList();
     }
 
     public static Cours findByDebutEtFin(Timestamp debut, Timestamp fin){
@@ -151,11 +151,6 @@ public class Cours extends Model{
         return cours;
     }
 
-    /**
-     * Retourne tous les cours par jours
-     * @param idmatiere
-     * @return
-     */
     public static List<Cours> findListCoursByListMatiereEtIdEnseignant(List<Matiere> matieres, int id_enseignant)
     {
         List<Cours> cours = new ArrayList<Cours>();
@@ -204,15 +199,37 @@ public class Cours extends Model{
      */
     public static void affecterTousLesCours(int idmatiere, int idpromo ,Enseignant idprofesseur)
     {
-        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id",idmatiere).eq("sa_promo_id",idpromo).findList();
+        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id", idmatiere).eq("sa_promo_id", idpromo).findList();
 
         if(lesCoursAaffecter != null){
             for(Cours c : lesCoursAaffecter){
                 c.sonEnseignant = idprofesseur;
-
                 c.update();
             }
         }
+    }
+
+    /**
+     * Vérifier si un cours n'existe pas sur le créneau précisé
+     * @param idPromotion : l'identifiant d'une promotion
+     * @param heureDebutJ : l'heure de début d'un cours
+     * @param heureFinJ : l'heure de fin d'un cours
+     */
+    public static boolean checkCreneau(int idPromotion, Date heureDebutJ ,Date heureFinJ)
+    {   //5h que ça ma pris de réaliser cette requête @Val
+        int nbRow = Cours.find.where().eq("sa_promo_id", idPromotion)
+                          .or(
+                                  com.avaje.ebean.Expr.or(com.avaje.ebean.Expr.between("UNIX_TIMESTAMP(heureDebut)*1000",
+                                "UNIX_TIMESTAMP(heureFin)*1000", heureDebutJ.getTime()),
+                               com.avaje.ebean.Expr.between("UNIX_TIMESTAMP(heureDebut)*1000",
+                                "UNIX_TIMESTAMP(heureFin)*1000", heureFinJ.getTime())),
+                                  com.avaje.ebean.Expr.or(com.avaje.ebean.Expr.eq("UNIX_TIMESTAMP(heureDebut)*1000", heureDebutJ.getTime()),
+                                com.avaje.ebean.Expr.eq("UNIX_TIMESTAMP(heureFin)*1000", heureFinJ.getTime()))
+                            )
+                .findRowCount();
+        if(nbRow == 0)
+            return true;
+        return false;
     }
 
     /**
@@ -223,7 +240,7 @@ public class Cours extends Model{
      */
     public static void retirerTousLesCours(int idmatiere, int idpromo ,Enseignant idprofesseur)
     {
-        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id",idmatiere).eq("sa_promo_id",idpromo).eq("son_enseignant_id",idprofesseur.id).findList();
+        List<Cours> lesCoursAaffecter = Cours.find.where().eq("sa_matiere_id",idmatiere).eq("sa_promo_id", idpromo).eq("son_enseignant_id", idprofesseur.id).findList();
 
         if(lesCoursAaffecter != null){
             for(Cours c : lesCoursAaffecter){

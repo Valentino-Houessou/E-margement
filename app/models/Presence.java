@@ -26,6 +26,20 @@ public class Presence extends Model {
 
     }
 
+    public Presence(boolean emergement, String motif, String justificatif, Cours sonCours, Etudiant sonEtudiant) {
+        this.emergement = emergement;
+        this.motif = motif;
+        this.justificatif = justificatif;
+        this.sonCours = sonCours;
+        this.sonEtudiant = sonEtudiant;
+    }
+
+    public static Presence create( boolean emergement, String motif, String justificatif, Cours sonCours, Etudiant sonEtudiant) {
+        Presence presence = new Presence(emergement, motif, justificatif, sonCours, sonEtudiant);
+        presence.save();
+        return presence;
+    }
+
 
     public static Finder<Integer,Presence> find = new Finder<Integer,Presence>(Presence.class);
 

@@ -1,7 +1,7 @@
 @*******************************************
 * Bloc pour charger l'emplois du temps     *
 ********************************************@
-@(titrepage: String)(promotions: java.util.List[Promotion])
+@(titrepage: String)(promotions: java.util.List[Promotion])(salles: java.util.List[Salle])
 
 <!-- Début du block dynamique-->
 <style>
@@ -22,7 +22,7 @@
     <div class="container">
         <div class="tabbable">
             <ul class="nav nav-tabs">
-                <li><a href="#one_" data-toggle="tab"> Import </a></li>
+                <li class="active" ><a href="#one_" data-toggle="tab"> Import </a></li>
                 <li><a href="#two_" data-toggle="tab"> Créer un cours </a></li>
             </ul>
             <div class="tab-content">
@@ -68,21 +68,70 @@
                     <div class="col-md-5">
                         <div class="form-area">
                             <form role="form">
-                                <br style="clear:both">
-                                <h3 style="margin-bottom: 25px; text-align: center;"> Ajout d'un nouveau Cours </h3>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
-                                </div>
-                                <button type="button" id="submit" name="submit" class="btn btn-primary pull-right">Submit Form</button>
+                                <fieldset>
+                                    <div id="info" ></div>
+                                    <br style="clear:both">
+                                    <h3 style="margin-bottom: 25px; text-align: center;"> Ajout d'un nouveau Cours </h3>
+                                    <div class="form-group">
+                                        <label for="typeCours"><strong>Type de cours *: </strong></label>
+                                            <!-- selection du type de Cours -->
+                                        <select class="form-control" id="typeCours">
+                                            <option value = "CM"> Cours Magistraux </option>
+                                            <option value = "TD"> Travaux Dirigés </option>
+                                            <option value = "EXAMEN"> Examen </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="typeDetaille"><strong>Type détaillé cours : </strong></label>
+                                        <input type="text" class="form-control" id="typeDetaille"  placeholder="Exemple : CM1/8">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="theDate"><strong>Date *: </strong></label>
+                                        <input type="text" class="form-control" id="theDate" placeholder="Date" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="heureDebut"><strong>Heure de début *: </strong></label>
+                                        <input type="text" class="form-control" id="heureDebut" placeholder="heure de début" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="heureFin"><strong>Heure de fin *: </strong></label>
+                                        <input type="text" class="form-control" id="heureFin" placeholder="heure de fin" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="theRoom"><strong>Salle *: </strong></label>
+                                            <!-- selection des différentes promotions -->
+                                        <select class="form-control" id="theRoom">
+                                            <option value = "0">choisir une salle</option>
+                                            @for(salle <- salles){
+                                                <option value="@salle.id">@salle.libelle - @salle.sonBatiment.libelle - @salle.getSonUniversite().libelle</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="thePromotion"><strong>Promotion *: </strong></label>
+                                            <!-- selection des différentes promotions -->
+                                        <select class="form-control" id="thePromotion">
+                                            <option value = "0">choisir une promotion</option>
+                                            @for(promotion <- promotions){
+                                                <option value="@promotion.id">@promotion.filiere - @promotion.groupe - @promotion.getType()</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="theMatter"><strong>Matière *: </strong></label>
+                                            <!-- selection des différentes promotions -->
+                                        <select class="form-control" id="theMatter">
+                                                <!--<option value = "0">choisir une matière</option>-->
+                                        </select>
+                                    </div>
+
+                                    <a href="#" class="btn btn-default active" id="newCourse" role="button">Créer</a>
+                                </fieldset>
                             </form>
                         </div>
                     </div>
@@ -93,7 +142,29 @@
 
 </div>
 <script type="text/javascript">
+
         $(document).ready(function(){
+
+            /*
+            * Retourne true si l'heure de début est avant l'heure de fin ou que
+            * la minute de début est avant la minute de fin en cas d'égalité au niveau des heures
+            * Retourne false sinon
+            * */
+            function checkTime(from, to){
+                var fromTable = from.split(":");
+                var toTable = to.split(":");
+                var fromHour, toHour, fromMinutes, toMinutes;
+
+                if((+ fromTable[0]) < (+ toTable[0]))
+                    return true;
+                else
+                    if(((+ fromTable[0]) === (+ toTable[0])) && ((+ fromTable[1]) < (+ toTable[1]))){
+                       return true;
+                    }
+                return false;
+            }
+
+
             $('#formImportICS').on('submit', function (e) {
                 e.preventDefault();
 
@@ -117,5 +188,142 @@
                     }
                 });
             });
+
+            $('#theDate').pickadate(
+                {
+                    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    today: 'aujourd\'hui',
+                    clear: 'Effacer',
+                    format: 'dd/mm/yyyy',
+                    selectYears: true,
+                    selectMonths: true,
+                    editable: true,
+                    close: 'fermer',
+                    min : true,
+                    disable: [1]
+                }
+            );
+            $('#heureDebut').pickatime(
+                {
+                    clear: 'Effacer',
+                    format: 'H:i',
+                    editable: true,
+                    interval: 15,
+                    min: [7,0],
+                    max: [20,0]
+                }
+            );
+            $('#heureFin').pickatime(
+                {
+                    clear: 'Effacer',
+                    format: 'H:i',
+                    editable: true,
+                    interval: 15,
+                    min: [7,0],
+                    max: [20,0]
+                }
+            );
+
+            $("#newCourse").button().on( "click", function() {
+                $("#info div").each(function(){
+                                $(this).remove();
+                        });
+
+                if((!$('#theDate').val()) || (!$('#heureDebut').val()) ||
+                (!$('#heureFin').val()) || (!$('#theMatter').val())){
+                    $("#info").append("<div style='color:red; font-size:medium;'>Veuillez remplir le formulaire s'il vous plait !</div> ");
+                }
+                else{
+                    if(!checkTime($('#heureDebut').val(), $('#heureFin').val())){
+                        $("#info").append("<div style='color:red; font-size:medium;'>L'heure de début doit précéder l'heure de fin !</div> ");
+                    }
+                    else{
+                        if($('#theRoom').val() == 0){
+                            $("#info").append("<div style='color:red; font-size:medium;'>Veuillez choisir une salle s'il vous plait !</div> ");
+                        }
+                        else{
+                            if($('#thePromotion').val() == 0){
+                                $("#info").append("<div style='color:red; font-size:medium;'>Veuillez choisir une promotion s'il vous plait !</div> ");
+                            }
+                            else{
+                                if($('#theMatter').val() == 0){
+                                    $("#info").append("<div style='color:red; font-size:medium;'>Veuillez choisir une matière s'il vous plait !</div> ");
+                                }
+                                else{
+                                    var typeDetaille = (!$('#typeDetaille').val()) ? null : $('#typeDetaille').val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        contentType:'application/json',
+                                        url: '/administrateur/enregistrer-un-cours',
+                                        data: '{' +
+                                                    '"typeCours": "' + $('#typeCours').val() + '",' +
+                                                    '"typeDetaille": "' + typeDetaille + '",' +
+                                                    '"theDate": "' + $('#theDate').val() + '",' +
+                                                    '"heureDebut": "' + $('#heureDebut').val() + '",' +
+                                                    '"heureFin": "' + $('#heureFin').val() + '",' +
+                                                    '"theRoom": ' + $('#theRoom').val() + ',' +
+                                                    '"thePromotion": ' + $('#thePromotion').val() + ',' +
+                                                    '"theMatter": "' + $('#theMatter').val() + '"' +
+                                              '}',
+                                        dataType: 'JSON',
+                                        timeout: 3000,
+                                        success: function(results) {
+                                            $.each(results, function(key, val){
+                                                console.log("resulats : " + val.resultat);
+                                                if(val.resultat == 0)
+                                                    $("#info").append("<div style='color:red; font-size:medium;'> Le cours n'a pas été créé. " +
+                                                     "<br/> Un cours est prévu sur le créneau que vous avez choisi !</div> ");
+                                                else{
+                                                    $("#info").append("<div style='color:forestgreen; font-size:medium; font-weight: bolder'>" +
+                                                     "Votre cours a bien été Créé !</div> ");
+                                                }
+                                            });
+                                        },
+                                        error: function(xhr, ajaxOptions, thrownError) {
+                                            console.log('La requête n\'a pas abouti');
+                                            console.log('erreur status: ' + xhr.status + ' erreur : ' + thrownError);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            $("#thePromotion").change(function(){
+                var laPromo = + $("#thePromotion").val();
+                /*Fonction ajax permettant de récupérer les informations relatives aux matières*/
+                $.ajax({
+                    type: 'POST',
+                    contentType:'application/json',
+                    url: '/administrateur/liste-matieres-enseignants',
+                    data: '{"promotion": '+laPromo+'}',
+                    dataType: 'JSON',
+                    timeout: 3000,
+                    success: function(results) {
+                        //Supprimer les options du select
+                        $("#theMatter option").each(function(){
+                                $(this).remove();
+                        });
+                        //Ajouter des nouvelles options
+                        $("#theMatter").append('<option value = "0">choisir une matière</option>');
+                        $.each(results, function(key, val){
+                            $.each(val.Enseignant, function(key1, val1){
+                                $("#theMatter").append('<option value = ' + val.idMatter + '-' +
+                                val1.idEnseignant + '>' + val.libelleMatter + ' - ' +
+                                val1.nomEnseignant + ' ' + val1.prenomEnseignant + '</option>');
+                            });
+                        });
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        console.log('La requête n\'a pas abouti');
+                        console.log('erreur status: ' + xhr.status + ' erreur : ' + thrownError);
+                    }
+                });
+
+            });
+
         });
 </script>

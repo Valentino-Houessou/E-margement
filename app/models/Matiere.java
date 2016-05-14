@@ -7,6 +7,7 @@ import com.avaje.ebean.annotation.EntityConcurrencyMode;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class Matiere extends Model {
     public String libelleAbregee;
     public String semestre;
     public long nombreHeures;
+    @ManyToMany(cascade=CascadeType.PERSIST, mappedBy="sesMatieres")
+    public List<Enseignant> sesEnseignants;
 
 
     public Matiere(String libelle, String libelleAbregee, String semestre, long nombreHeures) {
@@ -26,6 +29,7 @@ public class Matiere extends Model {
         this.libelleAbregee = libelleAbregee;
         this.semestre = semestre;
         this.nombreHeures = nombreHeures;
+        this.sesEnseignants = new ArrayList<Enseignant>();
     }
     public static Finder<Long,Matiere> find = new Finder<Long, Matiere>(Matiere.class);
 
@@ -49,6 +53,9 @@ public class Matiere extends Model {
         Ebean.update(this);
     }
 
+    public static Matiere findbyId(long id) {
+        return find.byId(id);
+    }
 
     public void delete(){
         Ebean.delete(this);

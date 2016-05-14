@@ -27,7 +27,7 @@ create table cours (
   heure_fin                 datetime,
   son_enseignant_id         integer,
   sa_matiere_id             integer,
-  sa_salle_id               integer,
+  sa_salle_id               bigint,
   sa_periode_id             integer,
   sa_promo_id               bigint,
   signature_enseignant      tinyint(1) default 0,
@@ -104,7 +104,7 @@ create table promotion (
 ;
 
 create table salle (
-  id                        integer auto_increment not null,
+  id                        bigint auto_increment not null,
   libelle                   varchar(255),
   son_batiment_id           integer,
   constraint pk_salle primary key (id))

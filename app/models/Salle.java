@@ -10,7 +10,7 @@ public class Salle extends Model{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    public long id;
     public String libelle;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Batiment sonBatiment;
@@ -26,7 +26,7 @@ public class Salle extends Model{
         return find.all();
     }
 
-    public static Salle findById(int id){
+    public static Salle findById(long id){
         return find.byId(Long.parseLong(String.valueOf(id)));
     }
 
@@ -34,8 +34,12 @@ public class Salle extends Model{
         return find.where().eq("libelle", libelle).findUnique();
     }
 
-    public static List<Salle> findByBatiment(int id){
+    public static List<Salle> findByBatiment(long id){
         return find.where().eq("son_batiment_id", id).findList();
+    }
+
+    public  Universite getSonUniversite(){
+        return sonBatiment.sonUniversite;
     }
 
     @Override

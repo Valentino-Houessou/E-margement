@@ -26,7 +26,7 @@
                 <!-- tabs bottom -->
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
+                    <li class="active"><a href="#one_" data-toggle="tab">Abscence d'Aujourd'hui</a></li>
                     <li><a href="#two_" data-toggle="tab">Rechercher par date</a></li>
                 </ul>
                 <div class="tab-content">
@@ -157,12 +157,29 @@
             }
 
             /* instanciation du champs date */
-            $( "#yearlyPromoDate" ).datepicker({
+
+            /*$( "#yearlyPromoDate" ).datepicker({
                 changeMonth: true,
                 changeYear: true,
                 yearRange:'-90:+0',
                 maxDate: '0'
-            });
+            });*/
+
+            $('#yearlyPromoDate').pickadate(
+                {
+                    monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    today: 'aujourd\'hui',
+                    clear: 'Effacer',
+                    format: 'dd/mm/yyyy',
+                    selectYears: true,
+                    selectMonths: true,
+                    editable: true,
+                    close: 'fermer',
+                    max : true,
+                    disable: [1]
+                }
+            );
 
             /*Fonction qui permet de récupérer les absences du jour courant*/
             function getDaylyAbsences(){
@@ -174,7 +191,6 @@
                     type: 'POST',
                     contentType:'application/json',
                     url: '/administrateur/liste-abscences',
-                    //data : sendInfo,
                     data: '{"promotion": '+$laPromo+', "laDate": "'+$laDate+'"}',
                     dataType: 'JSON',
                     timeout: 3000,

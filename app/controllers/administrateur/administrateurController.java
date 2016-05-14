@@ -509,7 +509,8 @@ public class administrateurController extends Controller {
         }
 
         List<Promotion> promotions = Promotion.findAll();
-        return ok(chargerEdt.render("Charger les emplois du temps", promotions));
+        List<Salle> salles = Salle.findAll();
+        return ok(chargerEdt.render("Charger les emplois du temps", promotions, salles));
     }
 
 
@@ -907,7 +908,7 @@ public class administrateurController extends Controller {
         paramPC.setLenseignant(enseignant);
         paramPC.setEtapeListes("ChoixUniversite");
 
-        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id",enseignant.id).findList();
+        List<Cours> lesCoursDuprof = Cours.find.where().eq("son_enseignant_id", enseignant.id).findList();
         paramPC.setLesCoursDuProf(lesCoursDuprof);
 
         List<Universite> listeUniversite = Universite.getUniversite();
@@ -1118,7 +1119,7 @@ public class administrateurController extends Controller {
         int idpromotion = Integer.parseInt(idmatiere.get("idpromotion"));
 
         // 3 - Récupération des cours par jours de la matière
-        List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmat,idpromotion);
+        List<Cours> lesCours = Cours.findListCoursByIdMatiereIdPromotion(idmat, idpromotion);
         paramPC.setLesCoursDelaMatiereDeLaPromotion(lesCours);
         paramPC.setSelectionMatiere(idmat);
 
@@ -1249,7 +1250,8 @@ public class administrateurController extends Controller {
     public Result chargerEdt()
     {
         List<Promotion> promotions = Promotion.findAll();
-        return ok(chargerEdt.render("Charger les emplois du temps", promotions));
+        List<Salle> salles = Salle.findAll();
+        return ok(chargerEdt.render("Charger les emplois du temps", promotions, salles));
     }
 
     /**
@@ -1484,7 +1486,7 @@ public class administrateurController extends Controller {
         //Variable permettant les formatages des différentes dates
         SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat slotFormat = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat slotFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String resultatParse =  null;
         //Variable permettant de formatter la date en résultat json
@@ -1514,6 +1516,123 @@ public class administrateurController extends Controller {
                     child = null;
                 }
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        return ok(result);
+    }
+
+    /**
+     * getPromotionMatters()
+     * Permet de recupérer les matieres et leurs professeurs
+     * @return : Une liste de matieres et de professeurs
+     */
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result getPromotionMatters() {
+        //Récupère les paramètres de la requête au format Json
+        JsonNode json = request().body().asJson();
+        //recupère le paramètre laPromo qui contient id de la promotion
+        int laPromo = json.findPath("promotion").intValue();
+        //Variable permettant de formatter la date en résultat json
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+        ArrayNode result1 = new ArrayNode(JsonNodeFactory.instance);
+        ObjectNode child, child1;
+        //test sur les variables de la requête
+        if(laPromo != 0){
+            Promotion promo = Promotion.findbyId(laPromo);
+            //Formation du resultat Json
+            for(Matiere m : promo.sesMatieres){
+                child =  Json.newObject();
+                child .put("idMatter", m.id);
+                child.put("libelleMatter", m.libelle != null ? m.libelle : "");
+                for(Enseignant e : m.sesEnseignants){
+                    child1 =  Json.newObject();
+                    child1.put("idEnseignant", e.id);
+                    child1.put("nomEnseignant", e.sonUtilisateur.nom);
+                    child1.put("prenomEnseignant", e.sonUtilisateur.prenom);
+                    result1.add(child1);
+                }
+                child.put("Enseignant", result1);
+                result1 = new ArrayNode(JsonNodeFactory.instance);
+                result.add(child);
+            }
+        }
+        return ok(result);
+    }
+
+    /**
+     * addCourse()
+     * Permet d'ajouter un nouveau cours
+     * @return : un objet qui contient le résultat
+     */
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result addCourse() {
+        //Récupère les paramètres de la requête au format Json
+        JsonNode json = request().body().asJson();
+        //recupère le paramètre typeCours
+        String typeCours = json.findPath("typeCours").textValue();
+        //recupère le paramètre typeDetaille
+        String typeDetaille = json.findPath("typeDetaille").textValue();
+        //recupère le paramètre theDate
+        String theDate = json.findPath("theDate").textValue();
+        //recupère le paramètre heureDebut
+        String heureDebut = json.findPath("heureDebut").textValue();
+        //recupère le paramètre heureFin
+        String heureFin = json.findPath("heureFin").textValue();
+        //recupère le paramètre theRoom
+        int theRoom = json.findPath("theRoom").intValue();
+        //recupère le paramètre thePromotion
+        int thePromotion = json.findPath("thePromotion").intValue();
+        //recupère le paramètre theMatter
+        String theMatter = json.findPath("theMatter").textValue();
+
+        String[] matTab = theMatter.split("-");
+        int mat = Integer.parseInt(matTab[0]);
+        int ens = Integer.parseInt(matTab[1]);
+
+        String[] dateTab = theDate.split("/");
+        String jour = dateTab[0];
+        String mois = dateTab[1];
+        String annee = dateTab[2];
+
+        String[] heureDebutTab = heureDebut.split(":");
+        String heureD = (Integer.parseInt(heureDebutTab[0]) < 10) ? "0" + heureDebutTab[0] : heureDebutTab[0];
+        String minuteD = heureDebutTab[1];
+
+        String[] heureFinTab = heureFin.split(":");
+        String heureF = (Integer.parseInt(heureFinTab[0]) < 10) ? "0" + heureFinTab[0] : heureFinTab[0];
+        String minuteF = heureFinTab[1];
+
+        String debutDateString = annee + "-" + mois + "-" + jour + " " + heureD + ":" + minuteD + ":00";
+        String finDateString = annee + "-" + mois + "-" + jour + " " + heureF + ":" + minuteF + ":00";
+
+        //Variable permettant les formatages des différentes dates
+        SimpleDateFormat theFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date dateDeb = new Date();
+        Date dateFin = new Date();
+
+        //Variable permettant de formatter la date en résultat json
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+        ObjectNode child = Json.newObject();
+            try {
+                dateDeb = theFormat.parse(debutDateString);
+                dateFin = theFormat.parse(finDateString);
+                Promotion prom = Promotion.findbyId(thePromotion);
+                if(!Cours.checkCreneau(thePromotion, dateDeb, dateFin)){
+                    child.put("resultat", 0);
+                }
+                else{
+                    //Création du cours
+                    Cours cours = Cours.create(Enseignant.findById(ens), typeCours, typeDetaille,
+                            debutDateString, finDateString, Matiere.findbyId(mat), Salle.findById(theRoom),
+                            null, prom);
+                    //Association du cours aux Etudiants par la présence
+                    for(Etudiant e : prom.sesEtudiants){
+                        Presence.create(false, null, null, cours, e);
+                    }
+                    child.put("resultat", 1);
+                }
+                result.add(child);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

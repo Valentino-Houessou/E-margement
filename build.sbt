@@ -18,9 +18,12 @@ libraryDependencies ++= Seq(
   "org.docx4j" % "xhtmlrenderer" % "1.0.0",
   "org.apache.commons" % "commons-email" % "1.1",
   "com.sun.mail" % "smtp" % "1.5.5",
-  "junit" % "junit" % "4.11"
+  "junit" % "junit" % "4.11",
+  "org.mockito" % "mockito-all" % "1.10.19"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
+
+fork in run := true
