@@ -108,7 +108,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Mot de passe </label>
+                                    <label>Mot de passe (Défaut = password) </label>
                                     <input type="password" class="form-control" id="mdp" name="mdp" required />
                                 </div>
                             </div>
@@ -324,7 +324,7 @@
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label>A t'il des droits administrateur ?</label>
-                                                    @if(paramProfil.getDroits == "OUI"){
+                                                    @if(paramProfil.getDroits() == "OUI"){
                                                         <label class="radio-inline"><input type="radio" name="droits" value="OUI" checked/>Oui</label>
                                                         <label class="radio-inline"><input type="radio" name="droits" value="NON"  />Non</label>
                                                     }else{

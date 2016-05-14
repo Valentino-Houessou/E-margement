@@ -11,14 +11,27 @@ import java.util.List;
 @Entity
 public class Universite extends Model{
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
+
+
     public String libelle;
 
     public Universite(String libelle) {
         this.libelle = libelle;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
 
 
     public static Universite create(String libelle) {
@@ -53,7 +66,6 @@ public class Universite extends Model{
 
         return universite;
     }
-
 
 
 }

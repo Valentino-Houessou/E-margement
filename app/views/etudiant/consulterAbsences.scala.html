@@ -71,6 +71,12 @@
                 </div>
             </nav>
 
+            @if(presences.size() == 0){
+               <p style="margin-top: 30px;  margin-bottom: 30px;"> <i style="font-size: 18px;">Vous n'avez aucune absence. Bravo !</i> </p>
+            }else{
+                <p style="margin-top: 30px;  margin-bottom: 30px;"> <i style="font-size: 18px;">Vous avez été absent @presences.size() fois !</i> </p>
+            }
+
             <div class="input-group"> <span class="input-group-addon">Filtre</span>
                 <input id="filter" type="text" class="form-control" placeholder="Saisir ici...">
             </div>

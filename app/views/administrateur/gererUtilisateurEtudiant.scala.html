@@ -3,28 +3,42 @@
 ********************************************@
 @import controllers.administrateur.gestionDesParametres.parametresEtudiant
 @(titrepage: String)(parametres: parametresEtudiant)
-
+@import java.util.Date; var dtn=""; var lien = new Array[String](3); var lienp = "";
+@import java.text.SimpleDateFormat;
 <!-- Début du block dynamique-->
 <div>
     <div class="banner">
         <h1> @titrepage </h1>
 
         <p>
-            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer la partie étudiante à savoir ajouter, modifier et supprimer un/des étudiant(s) dans une promotion.</i> <br/>
+            <i class="glyphicon glyphicon-info-sign"></i> &nbsp; <i>Sur cette page vous pouvez gérer les promotions à savoir ajouter, modifier et retirer un/des étudiant(s) dans une promotion.</i> <br/>
         </p>
     </div>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                @if(parametres.getListeBatiments == null){
+                @if((parametres.getEtape != null) && (parametres.getEtape.equals("ChoixUniversite"))){
                     <th style="color:red;" width="20%">1 - sélectionner une université</th>
                 }else{
-                    <th width="20%">1 - sélectionner une université</th>
+                    <th>1 - sélectionner une université</th>
                 }
-                <th width="20%">2 - Sélectionner un batiment</th>
-                <th width="20%">3 - Sélectionner une filière</th>
-                <th width="20%">4 - Sélectionner une promotion</th>
+                @if((parametres.getEtape != null) && (parametres.getEtape.equals("ChoixBatiments"))){
+                    <th style="color:red;" width="20%">2 - Sélectionner un batiment</th>
+                }else{
+                    <th width="20%">2 - Sélectionner un batiment</th>
+                }
+                @if((parametres.getEtape != null) && (parametres.getEtape.equals("ChoixFiliere"))){
+                    <th style="color:red;" width="20%">3 - Sélectionner une filière</th>
+                }else{
+                    <th width="20%">3 - Sélectionner une filière</th>
+                }
+
+                @if((parametres.getEtape != null) && (parametres.getEtape.equals("ChoixPromotion"))){
+                    <th style="color:red;" width="20%">4 - Sélectionner une promotion</th>
+                }else{
+                    <th width="20%">4 - Sélectionner une promotion</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -33,34 +47,556 @@
                         <!-- List group -->
                     <ul class="list-group">
                         <div style="height: 120px;overflow: auto;">
-                            @for(universites <- parametres.getListeUniversite()){
+                            @if(parametres.getListeUniversite() != null){
+                                @for(universites <- parametres.getListeUniversite()){
+                                    @if(parametres.getSelectionUniversite() == universites.id){
+                                        <a href="#" onclick="selectFac('@universites.id'); return false;"> <li class="list-group-item active">@universites.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                                @for(universites <- parametres.getListeUniversite()){
+                                    @if(parametres.getSelectionUniversite() != universites.id){
+                                        <a href="#" onclick="selectFac('@universites.id'); return false;"> <li class="list-group-item">@universites.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                            }else{
+                                <i>Aucune liste d'université disponible</i>
+                            }
+                        </div>
 
-                                <a href="#"> <li class="list-group-item">@universites.libelle</li> </a>
-
+                    </ul>
+                </td>
+                <td width="20%">
+                    <ul class="list-group">
+                        <div style="height: 120px;overflow: auto;">
+                            @if((parametres.getListeBatiments() == null) || (parametres.getListeBatiments().size() == 0)){
+                                <i>Aucune liste disponible</i>
+                            }else{
+                                @for(batiments <- parametres.getListeBatiments()){
+                                    @if(parametres.getSelectionBatiment() == batiments.id){
+                                        <a href="#" onclick="selectBat('@batiments.id');"> <li class="list-group-item active">@batiments.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                                @for(batiments <- parametres.getListeBatiments()){
+                                    @if(parametres.getSelectionBatiment() != batiments.id){
+                                        <a href="#" onclick="selectBat('@batiments.id');"> <li class="list-group-item">@batiments.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
                             }
                         </div>
                     </ul>
                 </td>
                 <td width="20%">
-                    @if(parametres.getListeBatiments() == null){
-                        <i>Aucune liste disponible</i>
-                    }else{
-                        @for(universites <- parametres.getListeBatiments()){
-
-                            <a href="#"> <li class="list-group-item">@universites.libelle</li> </a>
-
-                        }
-                    }
-                    John
+                    <ul class="list-group">
+                        <div style="height: 120px;overflow: auto;">
+                            @if((parametres.getListeFilieres() == null) || (parametres.getListeFilieres().size() == 0)){
+                                <i>Aucune liste de filière disponible</i>
+                            }else{
+                                @for(filieres <- parametres.getListeFilieres()){
+                                    @if(parametres.getSelectionFiliere == filieres.libelle){
+                                        <a href="#" onclick="selectFiliere('@filieres.libelle');"> <li class="list-group-item active">@filieres.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                                @for(filieres <- parametres.getListeFilieres()){
+                                    @if(parametres.getSelectionFiliere != filieres.libelle){
+                                        <a href="#" onclick="selectFiliere('@filieres.libelle');"> <li class="list-group-item">@filieres.libelle <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                            }
+                        </div>
+                    </ul>
                 </td>
                 <td width="20%">
-                    John
-                </td>
-                <td width="20%">
-                    John
+                    <ul class="list-group">
+                        <div style="height: 120px;overflow: auto;">
+                            @if((parametres.getListePromotion() == null) || (parametres.getListePromotion().size() == 0)){
+                                <i>Aucune liste de filière disponible</i>
+                            }else{
+                                @for(promotions <- parametres.getListePromotion()){
+                                    @if(promotions.id == parametres.getSelectionPromotion()){
+                                        <a href="#" onclick="selectPromotion('@promotions.id');"> <li class="list-group-item active">@promotions.groupe @promotions.getType() <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                                @for(promotions <- parametres.getListePromotion()){
+                                    @if(promotions.id != parametres.getSelectionPromotion()){
+                                        <a href="#" onclick="selectPromotion('@promotions.id');"> <li class="list-group-item">@promotions.groupe @promotions.getType() <i class="glyphicon glyphicon-chevron-right pull-right"></i></li></a>
+                                    }
+                                }
+                            }
+                        </div>
+                    </ul>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    @if(parametres.getEtape.equals("afficheLePromotion")){
+
+        <div class="centrer_contenu3">
+            <div class="row">
+                <div class="col-md-4" style="margin-left: 10%;">
+                    <a href="#" onclick="nouveauEtu('@parametres.getLaPromoAgerer().id');"><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid dodgerblue; color: dodgerblue;">Ajouter un étudiant à la promotion</button></a>
+                </div>
+               <!-- <div class="col-md-4">
+                    <a href="#" id=""><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid yellowgreen; color: yellowgreen;">Créer la promotion à partir d'une liste d'étudiant</button></a>
+                </div> -->
+                <div class="col-md-4">
+                    <a href="#" onclick="viderLaPromotion('@parametres.getLaPromoAgerer().id', '@parametres.getLaPromoAgerer().groupe ', '@parametres.getLaPromoAgerer().getType()');"><button type="button" class="btn btn-info-outline btn-sm btn-block" style="border: 1px solid red; color: red;">Vider la promotion</button></a>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        @if(parametres.getLaPromoAgerer().sesEtudiants.size() > 0) {
+
+            <p>
+                Nombre d'étudiants : @parametres.getLaPromoAgerer().sesEtudiants.size()
+                @if(parametres.isCheckEtudiant() == 1){
+                    <span class="label label-success">Le nouveau profil étudiant a bien été ajouté à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType()</span>
+                }
+                @if(parametres.isCheckEtudiant() == 2){
+                    <span class="label label-danger">Attention ! L'étudiant ou l'adresse mail que vous voulez enregistrer existe déjà dans la base.</span>
+                }
+            </p>
+
+            <p><a href="/administrateur/promotion/exporter-trombinoscope" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Exporter le trombinoscope </a></p>
+
+            <div class="row">
+                @for(lesEtudiants <- parametres.getLesEtudiants) {
+                    <div class="col-xs-3">
+                        <div class="card">
+                                @if((lesEtudiants.sonUtilisateur.lienPhoto != null) && (!lesEtudiants.sonUtilisateur.lienPhoto.equals(""))){
+                                    @{
+                                        lien = lesEtudiants.sonUtilisateur.lienPhoto.split("/")
+                                        lienp = lien(1)+"/"+lien(2);
+                                    }
+                                    <img src="@routes.Assets.versioned(lienp)" alt="Photo utilisateur" height="153" width="130"  style="margin: auto;"/>
+                                }else{
+                                    <img src="@routes.Assets.versioned("images/recrutement.jpg")" alt="Photo utilisateur" height="153" width="130" style="margin: auto;"/>
+                                }
+                            <hr style="margin: 1px;"/>
+                            <div >
+                                <table  style="margin: 0 auto;">
+                                    <tr>
+                                        <td>
+                                        @if(lesEtudiants.numeroEtudiant != null){
+                                            @lesEtudiants.numeroEtudiant
+                                        }
+                                        </td>
+                                    </tr>
+                                    <tr><td>@lesEtudiants.sonUtilisateur.nom @lesEtudiants.sonUtilisateur.prenom</td></tr>
+                                    <tr><td>
+                                        @{
+                                            dtn = new SimpleDateFormat("dd-MM-yyyy").format(lesEtudiants.sonUtilisateur.dateDeNaissance)
+                                        }
+                                        @dtn
+                                    </td></tr>
+                                    <tr><td> @lesEtudiants.sonUtilisateur.adresseMail</td></tr>
+                                </table>
+                                <p><button type="button" class="rouge" onclick="supprimerEtudiant('@lesEtudiants.id', '@lesEtudiants.sonUtilisateur.nom', '@lesEtudiants.sonUtilisateur.prenom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');">Retirer de la promotion</button></p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <p><a href="/administrateur/promotion/exporter-trombinoscope" class="btn btn-primary btn-sm" target="_blank" style="color: white;"><i class="glyphicon glyphicon-download-alt"></i> &nbsp; Exporter le trombinoscope</a></p>
+        }else{
+            <p> Aucun étudiant enregistré dans cette promotion. </p>
+        }
+    }
+
+    <hr />
+
+    @if(parametres.getEtape.equals("nouveauEtudiant")){
+
+        <i> Information : Pour revenir au trombinoscope cliquer à nouveau sur la promotion.</i><br /><br /><br />
+
+        <div class="centrer_contenu">
+            <button type="button" onclick="afficher('etudiantExistant'); cacher('newProfil');">Sélectionner un profil étudiant déjà existant</button> ou
+            <button type="button" onclick="afficher('newProfil'); cacher('etudiantExistant');">Créer un nouveau profil étudiant</button>
+        </div>
+
+            @if(parametres.isCheckEtudiant() == 3){
+                <span class="label label-success" style="font-size: 13px;">L'étudiant @parametres.getEtudiantAffecter().sonUtilisateur.prenom @parametres.getEtudiantAffecter().sonUtilisateur.nom  a été affecté à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType()</span>
+                <script>
+                        afficher('etudiantExistant');
+                        cacher('newProfil');
+                </script>
+
+                <br/><br/>
+            }
+            @if(parametres.isCheckEtudiant() == 4){
+                <span class="label label-danger" style="font-size: 13px;">Attention ! L'étudiant @parametres.getEtudiantAffecter().sonUtilisateur.prenom @parametres.getEtudiantAffecter().sonUtilisateur.nom est déjà affecté à cette promotion.</span>
+                <script>
+                        afficher('etudiantExistant');
+                        cacher('newProfil');
+                </script>
+
+                <br/><br/>
+            }
+
+        <div id="etudiantExistant" style="display: none;">
+            <div class="list-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Filtrer</span>
+                    <input id="filter2" type="text" class="form-control" placeholder="Filtrer ici...">
+                </div>
+                <div style="height: 350px; overflow: auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Date de naissance</th>
+                                <th>Numéro d'étudiant</th>
+                                <th>UID de la carte étudiante</th>
+                                <th>Ajouter</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                            @if(parametres.getTousLesEtudiants() != null){
+                                @for(tousLesEtudiants <- parametres.getTousLesEtudiants()){
+                                    <tr>
+                                        <td>@tousLesEtudiants.sonUtilisateur.nom</td>
+                                        <td>@tousLesEtudiants.sonUtilisateur.prenom</td>
+                                        <td>@tousLesEtudiants.sonUtilisateur.adresseMail</td>
+                                        <td>
+                                            @{
+                                                dtn = new SimpleDateFormat("dd-MM-yyyy").format(tousLesEtudiants.sonUtilisateur.dateDeNaissance)
+                                            }
+                                            @dtn
+                                        </td>
+                                        <td>@tousLesEtudiants.numeroEtudiant</td>
+                                        <td>@tousLesEtudiants.uid</td>
+                                        <td><button type="button" style="font-size: 11px;" onclick="ajouterAlaPromotion('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom', '@parametres.getLaPromoAgerer().groupe', '@parametres.getLaPromoAgerer().getType()');"> Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer.groupe @parametres.getLaPromoAgerer.getType()</button></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="newProfil" style="display: none;">
+            <div class="card card-user">
+                <div class="image">
+                    <img src="@routes.Assets.versioned("images/etudiant.jpg")"  alt="Image etudiant"/>
+                </div>
+                <div class="content">
+
+                    <form id="nouveauProfilEtudiant" method="post" action="/administrateur/nouveau-profile-etudiant/creer" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input type="text" id="nom" name="nom" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Prenom</label>
+                                    <input type="text" id="prenom" name="prenom" class="form-control" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Adresse mail</label>
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="datepicker10">Date de naissance</label>
+                                    <input type="text" class="form-control" name="datepicker10" placeholder="Cliquer ici" id="datepicker10" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Numéro étudiant</label>
+                                    <input type="text" class="form-control" id="numero_etudiant" name="numero_etudiant" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>UID de la carte étudiante (Facultatif)</label>
+                                    <input type="text" class="form-control" id="uid" name="uid" placeholder="Respecter les espaces de l'uid de la carte : Exemple 04 70 98 E2 B6 37 90" />
+                                </div>
+                            </div><br/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ajouter une photo (Facultatif)</label>
+                                    <input type="file" class="form-control" id="photo" name="photo" />
+                                </div>
+                            </div><br/>
+                        </div>
+
+                        <input type="hidden" id="idpromo" name="idpromo" value="@parametres.getLaPromoAgerer.id" />
+
+                        <button type="submit" class="btn btn-info btn-fill">Ajouter l'étudiant à la promotion @parametres.getLaPromoAgerer().groupe @parametres.getLaPromoAgerer().getType() </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    }
 </div>
 <!-- Fin du block dynamique-->
+
+<script>
+        $(document).ready(function () {
+
+            (function ($) {
+
+                $('#filter2').keyup(function () {
+
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('.searchable tr').hide();
+                    $('.searchable tr').filter(function () {
+                        return rex.test($(this).text());
+                    }).show();
+
+                })
+
+            }(jQuery));
+
+        });
+</script>
+
+<script>
+        $(function() {
+            $( "#datepicker10" ).datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange:'-90:+0'
+            });
+        });
+</script>
+
+<script>
+       function selectFac(identifiantUniversite)
+       {
+           $.ajax({
+               type: "GET",
+               url: "/administrateur/gerer-etudiant/batiment/"+identifiantUniversite,
+               dataType : 'html',
+               success: function(data) {
+
+                   $("#charger_fonctionnalite").html(data);
+               },
+               error: function() {
+                   alert("Erreur de chargement de la page !")
+               }
+           });
+       }
+</script>
+<script>
+        function selectBat(identifiantBatiment)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/gerer-etudiant/filiere/"+identifiantBatiment,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !")
+                }
+            });
+        }
+</script>
+<script>
+    function selectFiliere(identifiantfiliere)
+    {
+        $.ajax({
+            type: "GET",
+            url: "/administrateur/gerer-etudiant/promotion/"+identifiantfiliere,
+            dataType : 'html',
+            success: function(data) {
+
+                $("#charger_fonctionnalite").html(data);
+            },
+            error: function() {
+                alert("Erreur de chargement de la page !")
+            }
+        });
+    }
+</script>
+<script>
+    function selectPromotion(idpromotion)
+    {
+        $.ajax({
+            type: "GET",
+            url: "/administrateur/gerer-etudiant/affiche-la-promotion/"+idpromotion,
+            dataType : 'html',
+            success: function(data) {
+
+                $("#charger_fonctionnalite").html(data);
+            },
+            error: function() {
+                alert("Erreur de chargement de la page !")
+            }
+        });
+    }
+</script>
+<script>
+       function nouveauEtu(idpromotion)
+       {
+           $.ajax({
+               type: "GET",
+               url: "/administrateur/gerer-etudiant/nouveau-profil-etudiant/"+idpromotion,
+               dataType : 'html',
+               success: function(data) {
+
+                   $("#charger_fonctionnalite").html(data);
+               },
+               error: function() {
+                   alert("Erreur de chargement de la page !")
+               }
+           });
+       }
+</script>
+<script>
+    function afficher(leblock)
+    {
+        var div = document.getElementById(leblock);
+
+        if(div.style.display=="none") {
+
+            div.style.display = "block";
+
+        }
+    }
+
+    function cacher(leblock)
+    {
+        var div = document.getElementById(leblock);
+
+        if(div.style.display=="block") {
+
+            div.style.display = "none";
+
+        }
+    }
+</script>
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#nouveauProfilEtudiant').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var formdata = (window.FormData) ? new FormData($form[0]) : null;
+                    var data = (formdata !== null) ? formdata : $form.serialize();
+
+
+                    if(($("#nom").val() != '') && ($("#prenom").val() != '') && ($("#email").val() != ''))
+                    {
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            contentType: false, // obligatoire pour de l'upload
+                            processData: false, // obligatoire pour de l'upload
+                            data: data,
+                            dataType: 'html', // selon le retour attendu
+                            success: function (data) {
+
+                                $("#charger_fonctionnalite").html(data);
+
+                            },
+                            error: function() {
+                                alert("Erreur d'ajout de l'étudiant !")
+                            }
+                        });
+                    }else{
+                        alert("Les champs doivent être remplis !")
+                    }
+                });
+            });
+        });
+</script>
+
+<script>
+    function supprimerEtudiant(idetudiant, nom, prenom, groupe, types)
+    {
+        var r = confirm("Voulez-vous retirer l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ? \n\n " +
+                        "A noté : Son profil ne sera pas supprimer de la base. Vous pourrez le réaffecter à une promotion ultérieurement.");
+
+        if (r == true) {
+
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/gerer-promotion/supprimer-etudiant/"+idetudiant,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !")
+                }
+            });
+        }else{
+            return false;
+        }
+    }
+</script>
+<script>
+   function ajouterAlaPromotion(idetudiant, prenom, nom, groupe, types)
+   {
+       var r = confirm("Voulez-vous ajouter l'etudiant " + prenom + " " + nom +" à la promotion " + groupe + " " + types + " ?");
+
+       if (r == true) {
+
+           $.ajax({
+               type: "GET",
+               url: "/administrateur/promotion/affecter-etudiant/"+idetudiant,
+               dataType : 'html',
+               success: function(data) {
+
+                   $("#charger_fonctionnalite").html(data);
+               },
+               error: function() {
+                   alert("Erreur de chargement de la page !")
+               }
+           });
+       }else{
+           return false;
+       }
+   }
+</script>
+<script>
+    function viderLaPromotion(idpromotion, groupe, types)
+    {
+        var r = confirm("Etes-vous sûr de vouloire vider la promotion " + groupe + " " + types + " ?");
+
+        if (r == true) {
+
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/promotion/vider/"+idpromotion,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !")
+                }
+            });
+        }else{
+            return false;
+        }
+    }
+</script>

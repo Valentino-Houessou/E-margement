@@ -2,6 +2,8 @@ package models;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import play.api.mvc.Codec;
 
 import javax.persistence.*;
@@ -36,6 +38,7 @@ public class Cours extends Model{
     public Periode saPeriode;
     @ManyToOne(cascade=CascadeType.PERSIST)
     public Promotion saPromo;
+    @JsonIgnore
     @OneToMany(mappedBy = "sonCours")
     public List<Presence> sesPresences;
     public boolean signatureEnseignant;

@@ -22,7 +22,7 @@ public class Promotion extends Model{
     public String groupe;
     public String type;
 
-    @ManyToMany(cascade=CascadeType.PERSIST)
+    @ManyToMany(cascade=CascadeType.ALL)
     public List<Etudiant> sesEtudiants;
 
     public String filiere;
@@ -94,6 +94,11 @@ public class Promotion extends Model{
     }
 
 
+    /**
+     * Affecter l'étudiant à une promotion
+     * @param id
+     * @param idEtudiant
+     */
     public static void AddEtudiantPromotion (long id, long idEtudiant){
         Promotion promotion=find.ref(id);
         promotion.sesEtudiants.add(Etudiant.findById(idEtudiant));
@@ -110,6 +115,11 @@ public class Promotion extends Model{
         return find.all();
     }
 
+    /**
+     * Trouver une promotion par son identifiant
+     * @param id
+     * @return Promotion
+     */
     public static Promotion findbyId(long id){
         return find.byId(id);
     }
@@ -170,6 +180,103 @@ public class Promotion extends Model{
 
         return  LesMatieres;
 
+    }
+
+    /**
+     * La fonction retire un étudiant affecté à une promotion
+     * @param id
+     */
+    public static void retirerEtudiant(long id, long idpromo) {
+
+        Promotion promotion = find.where().eq("id", idpromo).findUnique();
+
+        Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
+        while(itr.hasNext()) {
+            Etudiant etudiant = itr.next();
+
+            // On retire l'étudiant de sa promotion
+            if(etudiant.id == id){
+                itr.remove();
+            }
+        }
+
+        promotion.update();
+
+        // Suppression des nupplets dans la table presence
+        Presence.supprimerPresenceCoursEtudiant(id);
+    }
+
+    /**
+     * Affecter l'étudiant à une promotion
+     * @param idpromotion
+     * @param idetudiant
+     */
+    public static int affecterEtudiantPromotion(long idpromotion ,long idetudiant)
+    {
+        // Vérification que l'étudiant n'est pas déjà dans la promotion
+        Promotion promotion = find.where().eq("id", idpromotion).eq("sesEtudiants.id", idetudiant).findUnique();
+
+        // Si l'étudiant n'est pas affecté
+        if(promotion == null)
+        {
+            // 1 - Nétoyage
+            Promotion autre = find.where().eq("sesEtudiants.id", idetudiant).findUnique();
+
+            // L'étudiant se trouve dans une promotion
+            if(autre != null){
+                Iterator<Etudiant> itr = autre.sesEtudiants.iterator();
+                while(itr.hasNext()) {
+                    Etudiant etudiant = itr.next();
+
+                    // On retire l'étudiant de la promotion
+                    if(etudiant.id == idetudiant){
+                        itr.remove();
+                    }
+                }
+
+                autre.update();
+
+                // Suppression des nupplets dans la table presence
+                Presence.supprimerPresenceCoursEtudiant(idetudiant);
+            }
+
+            // 2 - Affectation
+            Promotion.AddEtudiantPromotion(idpromotion, idetudiant);
+
+            // 3 - Génération des présences
+            Etudiant etudiant = Etudiant.findById(idetudiant);
+            Presence.initialisationPresenceCoursEtudiant(idpromotion, etudiant);
+
+            return 3;
+        }else{
+            return 4;
+        }
+    }
+
+    /**
+     * Retirer tous les étudiants de la promotion
+     * @param idpromotion
+     */
+    public static void viderPromotion(long idpromotion)
+    {
+        Promotion promotion = findbyId(idpromotion);
+
+        if(promotion.sesEtudiants != null)
+        {
+            Iterator<Etudiant> itr = promotion.sesEtudiants.iterator();
+            while(itr.hasNext()) {
+                Etudiant etudiant = itr.next();
+
+                // Suppression des nupplets dans la table presence
+                Presence.supprimerPresenceCoursEtudiant(etudiant.id);
+
+                // On retire l'étudiant de la promotion
+                itr.remove();
+
+            }
+
+            promotion.update();
+        }
     }
 }
 

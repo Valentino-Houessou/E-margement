@@ -66,4 +66,14 @@ public class Salle extends Model{
                 ", sonBatiment=" + sonBatiment +
                 '}';
     }
+
+    public static Salle create(String nom, Batiment batiment) {
+
+        Salle sal=new Salle(nom,batiment);
+
+        sal.save();
+
+        return sal;
+
+    }
 }

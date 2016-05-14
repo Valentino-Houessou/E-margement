@@ -100,7 +100,7 @@ public class Utilisateur extends Model  {
      * @return
      */
     public static Utilisateur updateUtilisateur(long id, String nom, String prenom, String adresseMail, String motDePasse,
-                                     String dateDeNaissance, String lienPhoto){
+                                                String dateDeNaissance, String lienPhoto){
 
         Utilisateur user = find.ref(id);
 
@@ -111,7 +111,7 @@ public class Utilisateur extends Model  {
         if (adresseMail != null)
             user.adresseMail = adresseMail;
         if ((motDePasse != null) && (!motDePasse.equals(""))){
-            user.motDePasse = Utilisateur.getEncodedPassword(motDePasse);
+            user.setMotDePasse(getEncodedPassword(motDePasse));
 
         }
         if (dateDeNaissance != null) {
@@ -129,6 +129,7 @@ public class Utilisateur extends Model  {
             user.lienPhoto = lienPhoto;
 
         user.update();
+        user.save();
 
         return user;
     }
@@ -184,6 +185,15 @@ public class Utilisateur extends Model  {
         user.update();
     }
 
+    public static void deleteDroitEtudiant(long id)
+    {
+        Utilisateur user =  find.ref(id);
+
+        user.sesModules.remove(Module.findByLibelle("ETUDIANTS"));
+
+        user.update();
+    }
+
     //Finder for retrieve data in database
     public static Finder<Long,Utilisateur> find = new Finder<Long,Utilisateur>(Utilisateur.class);
 
@@ -234,7 +244,7 @@ public class Utilisateur extends Model  {
 
         Utilisateur that = (Utilisateur) o;
 
-        return nom.contains(that.nom) && prenom.contains(that.prenom);
+        return nom.toLowerCase().contains(that.nom.toLowerCase()) && prenom.toLowerCase().contains(that.prenom.toLowerCase());
     }
 
     @Override
@@ -250,8 +260,8 @@ public class Utilisateur extends Model  {
     }
 
     public static Utilisateur authenticate(String email, String password){
-        // return find.where().eq("adresseMail",email).eq("motDePasse",Utilisateur.getEncodedPassword(password)).findUnique(); // A mettre au lancement
-        return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
+        return find.where().eq("adresseMail",email).eq("motDePasse",Utilisateur.getEncodedPassword(password)).findUnique(); // A mettre au lancement
+        // return find.where().eq("adresseMail",email).eq("motDePasse",password).findUnique();
     }
 
     public String status(){

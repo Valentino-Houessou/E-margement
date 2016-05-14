@@ -1,9 +1,293 @@
-@(titrepage: String)
-
-<!-- Début du block dynamique-->
-    <div>
+@*******************************************
+* Bloc pour gérer un profil etudiant*
+********************************************@
+@import controllers.administrateur.gestionDesParametres.parametresEtudiant
+@(titrepage: String)(parametres: parametresEtudiant)
+@import java.util.Date; var dtn=""; var lien = new Array[String](3); var lienp = "";
+@import java.text.SimpleDateFormat;
+    <!-- Début du block dynamique-->
+<div>
+    <div class="banner">
         <h1> @titrepage </h1>
 
-        <p> Ici la liste des étudiants sera chargé </p>
+        <p>
+            <i class="glyphicon glyphicon-info-sign" style="color: white;"></i> &nbsp; <i style="color: white;">Sur cette page vous pouvez gérer les étudiants à savoir modifier un profil et supprimer un/des étudiant(s) définitivement de la base.</i> <br/>
+        </p>
     </div>
-<!-- Fin du block dynamique -->
+
+    @if(parametres.getEtapeProfilEtudiant().equals("afficherLaliste")){
+        <div id="etudiantAgerer" >
+            <div class="list-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Filtrer</span>
+                    <input id="filter2" type="text" class="form-control" placeholder="Rechercher ici...">
+                </div>
+
+                <p>
+                @if(parametres.isCheckEtudiant().equals(8)){
+                    <span class="label label-success">L'étudiant a bien été supprimer de la base.</span>
+                }
+                </p>
+
+                <div style="height: 350px; overflow: auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Date de naissance</th>
+                                <th>Numéro d'étudiant</th>
+                                <th>UID de la carte étudiante</th>
+                                <th>Modifier</th>
+                                <th>Supprimer</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+                        @for(tousLesEtudiants <- parametres.getTousLesEtudiants()){
+                            <tr>
+                                <td>@tousLesEtudiants.sonUtilisateur.nom</td>
+                                <td>@tousLesEtudiants.sonUtilisateur.prenom</td>
+                                <td>@tousLesEtudiants.sonUtilisateur.adresseMail</td>
+                                <td>
+
+                                    @{
+                                        dtn = new SimpleDateFormat("dd-MM-yyyy").format(tousLesEtudiants.sonUtilisateur.dateDeNaissance)
+                                    }
+                                    @dtn
+
+                                </td>
+                                <td>@tousLesEtudiants.numeroEtudiant</td>
+                                <td>@tousLesEtudiants.uid</td>
+                                <td><button type="button" style="font-size: 11px;" onclick="modifierProfilEtudiant('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom');"> Modifier son profil </button></td>
+                                <td><button type="button" style="font-size: 11px; color: red;" onclick="supprimerProfilEtudiant('@tousLesEtudiants.id', '@tousLesEtudiants.sonUtilisateur.prenom', '@tousLesEtudiants.sonUtilisateur.nom');"> Supprimer son profil </button></td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @if(parametres.getEtapeProfilEtudiant().equals("afficheModifierProfil")){
+
+        <p>
+            @if(parametres.isCheckEtudiant().equals(9)){
+                <span class="label label-success">L'étudiant a bien été modifier.</span>
+            }
+
+            @if(parametres.isCheckEtudiant().equals(10)){
+                <span class="label label-success">Attention ! problème lors de la modification du profil étudiant.</span>
+            }
+        </p>
+
+        <div>
+            <div class="card card-user">
+                <div class="image">
+                    <img src="@routes.Assets.versioned("images/etudiant.jpg")"  alt="Image etudiant"/>
+                </div>
+                <div class="content">
+
+                    <form id="modifierProfilEtudiant" method="post" action="/administrateur/modifier-profil-etudiant/modifier" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input type="text" id="nom" name="nom" class="form-control" value="@parametres.getEtudiantAffecter().sonUtilisateur.nom" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Prenom</label>
+                                    <input type="text" id="prenom" name="prenom" class="form-control" value="@parametres.getEtudiantAffecter().sonUtilisateur.prenom" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Adresse mail</label>
+                                    <input type="text" class="form-control" id="email" name="email"  value="@parametres.getEtudiantAffecter().sonUtilisateur.adresseMail" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="datepicker10">Date de naissance</label>
+                                    @{
+                                        dtn = new SimpleDateFormat("dd/MM/yyyy").format(parametres.getEtudiantAffecter().sonUtilisateur.dateDeNaissance)
+                                    }
+
+                                    <input type="text" class="form-control" id="datenaissance" name="datenaissance" value="@dtn" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Numéro étudiant</label>
+                                    <input type="text" class="form-control" id="numero_etudiant" name="numero_etudiant" value="@if(parametres.getEtudiantAffecter().numeroEtudiant != null){ @parametres.getEtudiantAffecter().numeroEtudiant }"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>UID de la carte étudiante (Facultatif)</label>
+                                    <input type="text" class="form-control" id="uid" name="uid" value="@if(parametres.getEtudiantAffecter().uid != null){ @parametres.getEtudiantAffecter().uid }" />
+                                </div>
+                            </div><br/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Modifier le mot de passe</label>
+                                    <input type="text" class="form-control" id="mdp" name="mdp" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ajouter une photo (Facultatif)</label>
+                                    <input type="file" class="form-control" id="photo" name="photo" />
+                                </div>
+                            </div><br/>
+                        </div>
+
+                        <input type="hidden" id="idetudiant" name="idetudiant" value="@parametres.getEtudiantAffecter().id" />
+
+                        <button type="submit" class="btn btn-info btn-fill">Modifier le profil de l'étudiant @parametres.getEtudiantAffecter().sonUtilisateur.prenom @parametres.getEtudiantAffecter().sonUtilisateur.nom </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+
+
+
+
+
+
+</div>
+
+<script>
+        $(document).ready(function () {
+
+            (function ($) {
+
+                $('#filter2').keyup(function () {
+
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('.searchable tr').hide();
+                    $('.searchable tr').filter(function () {
+                        return rex.test($(this).text());
+                    }).show();
+
+                })
+
+            }(jQuery));
+
+        });
+</script>
+<script>
+       function supprimerProfilEtudiant(idetudiant, prenom, nom)
+       {
+           var r = confirm("Etes-vous sûr de vouloir supprimer définitivement l'étudiant " + prenom + " " + nom + " de la base ?");
+
+           if (r == true) {
+
+               $.ajax({
+                   type: "GET",
+                   url: "/administrateur/etudiant/supprimerprofil/"+idetudiant,
+                   dataType : 'html',
+                   success: function(data) {
+
+                       $("#charger_fonctionnalite").html(data);
+                   },
+                   error: function() {
+                       /*alert("Erreur de chargement de la page !")*/
+                      $.ajax({
+                           type: "GET",
+                           url: "/administrateur/gerer-les-etudiant/success/"+idetudiant,
+                           dataType : 'html',
+                           success: function(data) {
+
+                               $("#charger_fonctionnalite").html(data);
+                           },
+                           error: function() {
+
+                           }
+                       });
+                   }
+               });
+           }else{
+               return false;
+           }
+       }
+</script>
+
+<script>
+    function modifierProfilEtudiant(idetudiant, prenom, nom)
+    {
+        var r = confirm("Etes-vous sûr de vouloir modifier le profil étudiant " + prenom + " " + nom + " ?");
+
+        if (r == true) {
+
+            $.ajax({
+                type: "GET",
+                url: "/administrateur/etudiant/modifierprofil/"+idetudiant,
+                dataType : 'html',
+                success: function(data) {
+
+                    $("#charger_fonctionnalite").html(data);
+                },
+                error: function() {
+                    alert("Erreur de chargement de la page !");
+                }
+            });
+        }else{
+            return false;
+        }
+
+    }
+</script>
+
+<script>
+        $(document).ready(function(){
+            $(function () {
+                $('#modifierProfilEtudiant').on('submit', function (e) {
+                    // On empêche le navigateur de soumettre le formulaire
+                    e.preventDefault();
+
+                    var $form = $(this);
+                    var formdata = (window.FormData) ? new FormData($form[0]) : null;
+                    var data = (formdata !== null) ? formdata : $form.serialize();
+
+
+                    if(($("#nom").val() != '') && ($("#prenom").val() != '') && ($("#email").val() != ''))
+                    {
+                        $.ajax({
+                            url: $form.attr('action'),
+                            type: $form.attr('method'),
+                            contentType: false, // obligatoire pour de l'upload
+                            processData: false, // obligatoire pour de l'upload
+                            data: data,
+                            dataType: 'html', // selon le retour attendu
+                            success: function (data) {
+
+                                $("#charger_fonctionnalite").html(data);
+
+                            },
+                            error: function() {
+                                alert("Erreur de modification du profil étudiant !")
+                            }
+                        });
+                    }else{
+                        alert("Les champs doivent être remplis !")
+                    }
+                });
+            });
+        });
+</script>

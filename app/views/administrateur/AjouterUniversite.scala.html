@@ -1,4 +1,4 @@
-@(titrepage: String)(erreur:Int)
+@(titrepage: String)(erreur:Int)(universites: java.util.List[Universite])(batiments: java.util.List[Batiment])
 <div>
     <div class="row">
         <div class="col-lg-10 col-md-9">
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            @if(erreur==0){
+            @if(erreur==0) {
                 <a style="color:red">Université déja existante</a>
             }
 
@@ -45,13 +45,146 @@
         </div>
 
         <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Université</label>
+            <div class="col-sm-5">
+                <select class=form-control id="TheUniversite" name="TheUniversite" required>
+                    <option value = "0">Choisir une université</option>
+                    @for(universite<-universites){
+
+                        <option value="@universite.id">@universite.getLibelle()</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-sm-10 col-sm-offset-2">
                 <input id="AjoutBatbtn" name="AjoutBat" type="submit" value="Ajouter" class="btn btn-primary">
+
             </div>
         </div>
 
 
+        @if(erreur==3){
+            <a style="color: #28ff1f">Bâtiment créé</a>
+        }
+            @if(erreur==2){
+                <a style="color:red">Bâtiment déja existant</a>
+            }
+
     </form>
+
+
+
+
+
+    <div class="row">
+        <div class="col-lg-10 col-md-9">
+                <!--                        <div class="col-lg-1"><img src="img/ajout_contact.png" alt=""></div>-->
+            <h2 class="titre-contact">Ajout d'une salle</h2>
+        </div>
+    </div>
+
+    <form class="form-horizontal" id="ajoutSalle">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Nom de la salle</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="NomSalle" name="NomSalle" placeholder="Nom de la nouvelle salle"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Batiment</label>
+            <div class="col-sm-5">
+                <select class=form-control id="TheBatiment" name="TheBatiment" required>
+                    <option value = "0">Choisir un bâtiment</option>
+                    @for(batiment<-batiments){
+
+                        <option value="@batiment.id">@batiment.getLibelle() - @batiment.sonUniversite.getLibelle</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input id="AjoutBatbtn" name="AjoutSalle" type="submit" value="Ajouter" class="btn btn-primary">
+
+            </div>
+        </div>
+
+
+        @if(erreur==5){
+            <a style="color: #28ff1f">Salle créée</a>
+        }
+
+        @if(erreur==4){
+            <a style="color:red">Salle déja existante</a>
+        }
+
+    </form>
+
+
+
+    <div class="row">
+        <div class="col-lg-10 col-md-9">
+                <!--                        <div class="col-lg-1"><img src="img/ajout_contact.png" alt=""></div>-->
+            <h2 class="titre-contact">Ajout d'une filière</h2>
+        </div>
+    </div>
+
+    <form class="form-horizontal" id="ajoutFiliere">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Code la filière</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="CodeFiliere" name="CodeFiliere" placeholder="Code de la nouvelle filière"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Libellé la filière</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="NomFiliere" name="NomFiliere" placeholder="Libellé de la nouvelle filière"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Année</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="AnneeFiliere" name="AnneeFiliere" placeholder="Année de la nouvelle filière Ex:2016/2017"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Batiment</label>
+            <div class="col-sm-5">
+                <select class=form-control id="TheBatimentFiliere" name="TheBatimentFiliere" required>
+                    <option value = "0">Choisir un bâtiment</option>
+                    @for(batiment<-batiments){
+
+                        <option value="@batiment.id">@batiment.getLibelle() - @batiment.sonUniversite.getLibelle </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input id="AjoutBatbtn" name="AjoutSalle" type="submit" value="Ajouter" class="btn btn-primary">
+
+            </div>
+        </div>
+
+        @if(erreur==7){
+            <a style="color:28ff1f">Filière déja existante</a>
+        }
+
+        @if(erreur==6){
+            <a style="color:red">Filière déja existante</a>
+        }
+
+    </form>
+
    </div>
 
 <script>
@@ -71,6 +204,85 @@
                     },
                     error: function() {
                         alert("Erreur de chargement de la page ajouter une université !")
+                    }
+                });
+
+            });
+        });
+</script>
+
+
+<script>
+        $(document).ready(function(){
+            $('#ajoutBat').on('submit',function(e){
+                e.preventDefault()
+
+                $.ajax({
+                    url: '/administrateur/ajoutBatiment/creer',
+                    type: "POST",
+                    data: "NomBat="+$("#NomBat").val()+ "&TheUniversite="+$("#TheUniversite").val(),
+
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page ajouter un batiment!")
+                    }
+                });
+
+            });
+        });
+</script>
+
+
+<script>
+        $(document).ready(function(){
+            $('#ajoutSalle').on('submit',function(e){
+                e.preventDefault()
+
+                $.ajax({
+                    url: '/administrateur/ajoutSalle/creer' ,
+                    type: "POST",
+                    data: "NomSalle="+$("#NomSalle").val()+ "&TheBatiment="+$("#TheBatiment").val(),
+
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page ajouter une salle!")
+                    }
+                });
+
+            });
+        });
+</script>
+
+
+
+<script>
+        $(document).ready(function(){
+            $('#ajoutFiliere').on('submit',function(e){
+                e.preventDefault()
+
+                $.ajax({
+                    url: '/administrateur/ajoutFiliere/creer' ,
+                    type: "POST",
+                    data: "CodeFiliere="+$("#CodeFiliere").val()+"&NomFiliere="+$("#NomFiliere").val()+"&AnneeFiliere="+$("#AnneeFiliere").val()+ "&TheBatimentFiliere="+$("#TheBatimentFiliere").val(),
+
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page ajouter une filière!")
                     }
                 });
 

@@ -5,6 +5,7 @@ import controllers.*;
 import models.*;
 import play.Play;
 import play.data.DynamicForm;
+import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -19,6 +20,7 @@ import models.Presence;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -41,17 +43,12 @@ public class EtudiantController extends Controller{
         String mdp = changemdp.get("mdp");
         String mdp2 = changemdp.get("mdp2");
 
-        System.out.println(mdp + " " + mdp2);
-
         if (mdp.equals(mdp2)) {
             erreurMdp = 1;
 
             Utilisateur utilisateur = Utilisateur.find.where().eq("id",session().get("user_id")).findUnique();
 
-            System.out.println(utilisateur.adresseMail);
-            System.out.println(utilisateur.motDePasse);
-
-            utilisateur.setMotDePasse(mdp);
+            utilisateur.setMotDePasse(Utilisateur.getEncodedPassword(mdp));
             //utilisateur.adresseMail="boulit@gmail.com";
 
             utilisateur.update();
@@ -62,7 +59,7 @@ public class EtudiantController extends Controller{
             return redirect(routes.EtudiantController.index());
         }
         else {
-            System.out.println("je passe par là");
+
             erreurMdp = 0;
             return redirect(routes.EtudiantController.changerMDPerreur());
         }
@@ -248,7 +245,7 @@ public class EtudiantController extends Controller{
 
 
 
-        return ok(consulterAbsences.render("Export de la liste des matières", presences));
+        return ok(consulterAbsences.render("Liste d'absences", presences));
     }
 
     /**
@@ -327,7 +324,7 @@ public class EtudiantController extends Controller{
             else if (lienPhoto == null)
                 return badRequest("paramètre [lienPhoto] attendu");
             else {
-                Etudiant etudiant = Etudiant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);
+                //Etudiant etudiant = Etudiant.update(id, nom, prenom, adresseMail, motDePasse, dateDeNaissance, lienPhoto, statut);  Obsolète
 
                 return ok(/*Json.toJson(etudiant)*/);
             }
@@ -389,6 +386,43 @@ public class EtudiantController extends Controller{
         int nbabsc=Presence.getNombreAbsence(idEtudiant.id);
 
         return ok(indexEtudiant.render("Partie Etudiant", nbabsc, session()));
+    }
+
+    public Result androidNbAbsence() {
+        HashMap<String,String> map = new HashMap<>();
+        Etudiant etudiant = null;
+        try{
+            Form<EtudiantForm> etudiantform = Form.form(EtudiantForm.class).bindFromRequest();
+            etudiant = Etudiant.find.where().eq("son_utilisateur_id", Long.parseLong(etudiantform.get().user_id)).findUnique();
+            int nbabsc = Presence.getNombreAbsence(etudiant.id);
+            return ok(Json.toJson(String.valueOf(nbabsc)));
+        }catch (Exception e){
+            map.put("error","Une erreur s'est produite");
+            return badRequest(Json.toJson(map));
+        }
+    }
+
+    public Result androidListAbsence() {
+        List<Presence> presenceList = null;
+        HashMap<String,String> map = new HashMap<>();
+        Etudiant etudiant = null;
+        try{
+            Form<EtudiantForm> etudiantform = Form.form(EtudiantForm.class).bindFromRequest();
+            etudiant = Etudiant.find.where().eq("son_utilisateur_id", Long.parseLong(etudiantform.get().user_id)).findUnique();
+            presenceList = Presence.getCreaneauxAbsences(etudiant.numeroEtudiant);
+            return ok(Json.toJson(presenceList));
+        }catch (Exception e){
+            map.put("error","Une erreur s'est produite");
+            return badRequest(Json.toJson(map));
+        }
+    }
+
+    public static class EtudiantForm{
+        public String user_id;
+
+        public String validate(){
+            return null;
+        }
     }
 
 }

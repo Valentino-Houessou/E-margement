@@ -25,12 +25,15 @@ import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.exporterFeuilleDatePDF;
+import views.html.administrateur.exporterTrombinoscopePDF;
 import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
 import views.html.administrateur.AjouterUniversite;
+import views.html.administrateur.*;
 import models.*;
 
 import java.io.*;
+import java.sql.Savepoint;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -62,7 +65,6 @@ public class administrateurController extends Controller {
     public PdfGenerator pdfGenerator;
 
 
-
     public  Result ajoutUniversiteCreer() {
 
         DynamicForm fac = form().bindFromRequest();
@@ -73,6 +75,7 @@ public class administrateurController extends Controller {
                 .findList();
 
         int cpterreur=0;
+
         for(Universite univ: universite) {
 
             if (nom.toUpperCase().equals(univ.libelle.toUpperCase())) {
@@ -96,17 +99,216 @@ public class administrateurController extends Controller {
 
 
     public  Result ajoutUniversiteErreur() {
-        return ok(AjouterUniversite.render("Ajouter une université",0));
+
+        List<Universite> ListeNull= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+
+        return ok(AjouterUniversite.render("Ajouter une université",0,ListeNull,ListeNull2));
     }
 
 
     public Result ajoutUniversite() {
-        return ok(AjouterUniversite.render("Ajouter une université",1));
+
+        List<Universite> ListeNull= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une université",1,ListeNull,ListeNull2));
     }
 
 
+    public  Result ajoutBatimentCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String nom = fac.get("NomBat").toUpperCase();
+        int univ= Integer.parseInt(fac.get("TheUniversite"));
+
+
+
+        System.out.println(nom);
+        System.out.println(univ);
+
+
+        Universite universite = Universite.find.where().eq("id",univ)
+                .findUnique();
+
+        List<Batiment> batiment = Batiment.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Batiment bat: batiment) {
+
+            if (nom.toUpperCase().equals(bat.libelle.toUpperCase()) && univ==bat.sonUniversite.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Batiment nouveauBat= Batiment.create(nom,universite);
+            return redirect(routes.administrateurController.ajoutBatiment());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutBatimentErreur());
+
+        }
+    }
+
+    public Result ajoutBatiment() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter un batiment",3,ListeUniv,ListeNull2));
+    }
+
+
+    public  Result ajoutBatimentErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeNull2 = Batiment.findAll();
+
+
+        return ok(AjouterUniversite.render("Ajouter une Batiment",2,ListeUniv,ListeNull2));
+    }
+
+
+
+    public  Result ajoutSalleCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String nom = fac.get("NomSalle").toUpperCase();
+        int bat= Integer.parseInt(fac.get("TheBatiment"));
+
+
+        System.out.println(nom);
+        System.out.println(bat);
+
+
+        Batiment batiment= Batiment.find.where().eq("id",bat)
+                .findUnique();
+
+        List<Salle> salle = Salle.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Salle sal: salle) {
+
+            if (nom.toUpperCase().equals(sal.libelle.toUpperCase()) && bat==sal.sonBatiment.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Salle nouvelleSalle= Salle.create(nom,batiment);
+            return redirect(routes.administrateurController.ajoutSalle());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutSalleErreur());
+
+        }
+    }
+
+    public Result ajoutSalle() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",5,ListeUniv,ListeBat));
+    }
+
+
+    public  Result ajoutSalleErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",4,ListeUniv,ListeBat));
+    }
+
+
+    public  Result ajoutFiliereCreer() {
+
+        DynamicForm fac = form().bindFromRequest();
+
+        String code =fac.get("CodeFiliere").toUpperCase();
+        String nom = fac.get("NomFiliere").toUpperCase();
+        String annee= fac.get("AnneeFiliere").toUpperCase();
+
+        int bat= Integer.parseInt(fac.get("TheBatimentFiliere"));
+
+        Batiment batiment= Batiment.find.where().eq("id",bat)
+                .findUnique();
+
+        List<Filiere> filiere = Filiere.find.where().eq("libelle",nom)
+                .findList();
+
+        int cpterreur2=0;
+
+        for(Filiere fi: filiere) {
+
+            if (nom.toUpperCase().equals(fi.libelle.toUpperCase()) && code.toUpperCase().equals(fi.codefiliere.toUpperCase()) && annee.toUpperCase().equals(fi.annee.toUpperCase()) && bat==fi.sonBatiment.id) { //rajouter
+                System.out.println("égale");
+                cpterreur2++;
+            }
+        }
+        if(cpterreur2==0){
+
+            System.out.println("Passe par là");
+            Filiere nouvelleFiliere= Filiere.create(code,nom,annee,batiment);
+            return redirect(routes.administrateurController.ajoutFiliere());
+        }
+
+        else{
+
+            return redirect(routes.administrateurController.ajoutFiliereErreur());
+
+        }
+    }
+
+    public Result ajoutFiliere() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",7,ListeUniv,ListeBat));
+    }
+
+
+    public  Result ajoutFiliereErreur() {
+
+        List<Universite> ListeUniv= Universite.getUniversite();
+        List<Batiment> ListeBat = Batiment.findAll();
+
+        return ok(AjouterUniversite.render("Ajouter une salle",6,ListeUniv,ListeBat));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
-     * Ajout des cours dans la base de donnnées à partir d'u fichier ICS
+     * Ajout des cours dans la base de donnnées à partir d'un fichier ICS
      * @return
      */
     public Result importEDT() {
@@ -292,16 +494,16 @@ public class administrateurController extends Controller {
             Utilisateur utilisateurTemp = new Utilisateur((String) tempHash.get("nomIntervenant"),
                     (String) tempHash.get("prenomIntervenant"),
                     ((String) tempHash.get("prenomIntervenant")).toLowerCase() + "." + ((String) tempHash.get("nomIntervenant")).replaceAll(" ", "").toLowerCase() + "@u-paris10.fr",
-                    "1230",
+                    Utilisateur.getEncodedPassword("password"),
                     Timestamp.from(Instant.now()),
-                    "");
+                    null);
 
 
             // Si l'utilisateur n'existe pas dans la BDD
             if(!utilisateursBD.contains(utilisateurTemp)) {
 
                 // On crée l'enseignant
-                enseignantTemp = new Enseignant("", utilisateurTemp);
+                enseignantTemp = new Enseignant(null, utilisateurTemp);
 
                 // On lui associe son module (ENSEIGNANT)
                 utilisateurTemp.sesModules.add(Module.findByLibelle("ENSEIGNANTS"));
@@ -446,7 +648,7 @@ public class administrateurController extends Controller {
              */
 
             /*
-                AJOUT DES PRESENCES
+                AJOUT DES PRESENCES POUR INITIALISATION
              */
             List<Presence> presencesBD = Presence.findAll();
             List<Etudiant> etudiantsBD = Etudiant.findAll();
@@ -456,8 +658,8 @@ public class administrateurController extends Controller {
             for(Etudiant e : etudiantsBD) {
                 presenceTemp = new Presence();
                 presenceTemp.emergement = false;
-                presenceTemp.justificatif = "";
-                presenceTemp.motif = "";
+                presenceTemp.justificatif = null;
+                presenceTemp.motif = null;
 
                 if (condition == 1 || condition == 2)
                     presenceTemp.sonCours = coursBD;
@@ -880,7 +1082,13 @@ public class administrateurController extends Controller {
                 datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
             }
 
-            Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
+            Enseignant enseignantCree2 = Enseignant.create(nom, prenom ,adresseMail, mdp, datenaissance, "", status);
+
+            // Liaison avec ses modules
+            // Si droits = OUI L'enseignant a les droits d'administrateur
+            if(droits.equals("OUI")){
+                Utilisateur.droitAdmin(enseignantCree2.sonUtilisateur.id);
+            }
 
             // Chargement des paramettres pour affichage dans la vue
             paramPC.remiseAzero();
@@ -1237,10 +1445,41 @@ public class administrateurController extends Controller {
      */
     public  Result chargerListeEtudiant()
     {
+        // 0 - Remise à zéro
+        paramEtudiant.remiseAzero();
+        paramEtudiant.setCheckEtudiant(0);
+
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
-        return ok(chargerListeEtudiant.render("Charger la liste des étudiants"));
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
+
+    public Result chargerListeEtudiantSuccess(long id) {
+
+
+        // 0 - Remise à zéro
+        paramEtudiant.remiseAzero();
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        paramEtudiant.setCheckEtudiant(8);
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
 
     /**
      * chargerEdt()
@@ -1409,7 +1648,7 @@ public class administrateurController extends Controller {
         int promotion = Integer.parseInt(selectionpromotion.get("selectionpromotion"));
         paramEFP.setSelectionPromotion(promotion);
 
-        // La filière, le batiment et l'université non pas bouger du singleton !!!
+        // La filière, le batiment et l'université n'ont pas bouger du singleton !!!
 
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
@@ -1654,13 +1893,15 @@ public class administrateurController extends Controller {
 
     /**
      * gererUtilisateurEtudiant()
-     * Affichage du bloc dynamique JQuery pour gérer un profil etudiant
+     * Affichage du bloc dynamique JQuery pour gérer les promotions
      * @return gererUtilisateurEtudiant.scala.html
      */
     public Result gererUtilisateurEtudiant() {
 
+        paramEtudiant.remiseAzero();
+
         // 0 - Etape
-        paramEtudiant.setEtape("SELECTIONS");
+        paramEtudiant.setEtape("ChoixUniversite");
 
         // 1 - Récupération des université
         List<Universite> universites = Universite.getUniversite();
@@ -1668,7 +1909,431 @@ public class administrateurController extends Controller {
 
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
-        return ok(gererUtilisateurEtudiant.render("Gérer les étudiants", paramEtudiant));
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des batiments d'une université
+     * @param id
+     * @return
+     */
+    public Result listeDesBatiments(int id) {
+
+        // Remise à zéro des filières et promotion
+        paramEtudiant.setListeFilieres(null);
+        paramEtudiant.setSelectionFiliere("");
+        paramEtudiant.setListePromotion(null);
+        paramEtudiant.setSelectionPromotion(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixBatiments");
+
+        // 1 - on garde l'université sélectionné
+        paramEtudiant.setSelectionUniversite(id);
+
+        // 2 - Récupération des batiments
+        List<Batiment> lesBatiments = Batiment.getBatimentByUniversite(id);
+        paramEtudiant.setListeBatiments(lesBatiments);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des filiére présent dans le batiment de l'université
+     * @param id
+     * @return
+     */
+    public Result listeDesFilieres(int id) {
+
+        // Remise à zéro des promotion
+        paramEtudiant.setListePromotion(null);
+        paramEtudiant.setSelectionPromotion(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixFiliere");
+
+        // 1 - on garde le batiment sélectionné
+        paramEtudiant.setSelectionBatiment(id);
+
+        // 2 - On récupérer la liste des filières du batiment
+        List<Filiere> lesfilieres = Filiere.getFilieresByBatiment(id);
+        paramEtudiant.setListeFilieres(lesfilieres);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Obtenir la liste des promotions de la filière sélectionné
+     * @param id
+     * @return
+     */
+    public Result listeDesPromotions(String id) {
+
+        // Remise à zéro de la promotion sélectionné
+        paramEtudiant.setLaPromoAgerer(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("ChoixPromotion");
+
+        // 1 - on garde la filière sélectionné
+        paramEtudiant.setSelectionFiliere(id);
+
+        // 2 - On récupére la liste des promotions
+        List<Promotion> lespromotion = Promotion.getPromotionByFiliere(id);
+        paramEtudiant.setListePromotion(lespromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * [Gérer les promotions] Affichage de la promotion à gérer
+     * Liste des étudiants
+     * @param id
+     * @return
+     */
+    public Result affichagePromotion(long id) {
+
+        // Remise à zéro de la promotion sélectionné
+        paramEtudiant.setLaPromoAgerer(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - On garde la promotion
+        paramEtudiant.setSelectionPromotion(id);
+
+        // 2 - On récupére la promotion sélectionné
+        Promotion lapromotion = Promotion.findbyId(id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Accès à la création d'un nouveau profil étudiant dans une promotion sélectionnée
+     * @param id
+     * @return
+     */
+    public Result nouveauEtudiant(long id) {
+
+        paramEtudiant.setTousLesEtudiants(null);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("nouveauEtudiant");
+
+        // 1 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Créer un nouveau profil étudiant
+     * @return
+     */
+    public Result creerNouveauEtudiant() {
+
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = "password";
+        String datenaissance = profil.get("datepicker10");
+        String numero_etudiant = profil.get("numero_etudiant");
+        String uid = profil.get("uid");
+        String lienPhoto ="";
+
+        long idpromo = Long.parseLong(profil.get("idpromo"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        Etudiant newEtudiant = null;
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom + "_" + prenom + "_" + fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            // Création du profil étudiant avec photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+            lienPhoto = myUploadPath + fileName;
+
+            newEtudiant = Etudiant.create(nom, prenom, adresseMail, mdp, datenaissance, lienPhoto, uid, numero_etudiant, "none");
+
+        }else {
+
+            // Création du profil étudiant sans photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+
+            newEtudiant = Etudiant.create(nom, prenom, adresseMail, mdp, datenaissance, "", uid, numero_etudiant, "none");
+        }
+
+        // 2 - On test si l'étudiant n'existe pas déjà dans la base
+        if(newEtudiant != null){
+            paramEtudiant.setCheckEtudiant(1);
+
+            // 3 - Affectation de l'étudiant à la promotion sélectionnée
+            Promotion.AddEtudiantPromotion(idpromo, newEtudiant.id);
+
+            // 4 - Initialisation de ses présences (Utile si l'Edt a déjà été généré !)
+            Presence.initialisationPresenceCoursEtudiant(idpromo, newEtudiant);
+
+        }else{
+            paramEtudiant.setCheckEtudiant(2);
+        }
+
+        // 5 - On récupére la promotion sélectionnée
+        Promotion lapromotion = Promotion.findbyId(idpromo);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Permet de retirer un étudiant affecté à une promotion
+     * @param id
+     * @return
+     */
+    public  Result retirerEtudiantAunePromootion(long id) {
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - On retire l'étudiant à la promotion
+        Promotion.retirerEtudiant(id, paramEtudiant.getLaPromoAgerer().id);
+
+        //  - On récupére la promotion sélectionnée pour une mise à jour lors de l'affichage
+        Promotion lapromotion = Promotion.findbyId(paramEtudiant.getLaPromoAgerer().id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Permet d'ajouter un étudiant présent dans la base de données à une promotion sélectionnée
+     * @param id
+     * @return
+     */
+    public Result ajouterAlaPromotion(long id) {
+
+        paramEtudiant.setTousLesEtudiants(null);
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("nouveauEtudiant");
+
+        // 1 - Affecter l'étudiant à la promotion
+        int isCheck = Promotion.affecterEtudiantPromotion(paramEtudiant.getLaPromoAgerer().id, id);
+        paramEtudiant.setCheckEtudiant(isCheck);
+        Etudiant etu = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(etu);
+
+        // 2 - Récupérer tous les étudiants de la base
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Permet de vider une promotion
+     * @param id
+     * @return
+     */
+    public Result viderLaPromotion(long id) {
+
+        paramEtudiant.setCheckEtudiant(0);
+
+        // 0 - Etape
+        paramEtudiant.setEtape("afficheLePromotion");
+
+        // 1 - Vider
+        Promotion.viderPromotion(id);
+
+        // 2 - remise à zero
+        //  - On récupére la promotion sélectionnée pour une mise à jour lors de l'affichage
+        Promotion lapromotion = Promotion.findbyId(id);
+        paramEtudiant.setLaPromoAgerer(lapromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(gererUtilisateurEtudiant.render("Gérer les promotions", paramEtudiant));
+    }
+
+    /**
+     * Générer le trombinoscope d'une promotion
+     * @return
+     */
+    public Result exporterTrombinoscope() {
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return pdfGenerator.ok(exporterTrombinoscopePDF.render("By Ftgotc", paramEtudiant), Configuration.root().getString("application.host"));
+    }
+
+    /**
+     * Suppression d'un profil étudiant
+     * @param id
+     * @return
+     */
+    public Result supprimerProfilEtudiant(long id) {
+
+        // 0 - On garde qui on a supprimer
+        Etudiant letudiant = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(letudiant);
+
+        // 1 - On désaffecte ces cours
+        Etudiant.retirerEtudiantPromotion(id);
+
+        // 2 - supprimer
+        Etudiant.supprimer(id);
+
+        // 3 - Récupérer tous les étudiants de la base
+        paramEtudiant.setTousLesEtudiants(null);
+        List<Etudiant> tousLesEtudiants = Etudiant.findAll();
+        paramEtudiant.setTousLesEtudiants(tousLesEtudiants);
+
+        paramEtudiant.setCheckEtudiant(8);
+        paramEtudiant.setEtapeProfilEtudiant("afficherLaliste");
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
+    public Result modifierProfileEtudiant(long id) {
+
+        paramEtudiant.setEtudiantAffecter(null);
+
+        paramEtudiant.setEtapeProfilEtudiant("afficheModifierProfil");
+
+        Etudiant etudiant = Etudiant.findById(id);
+        paramEtudiant.setEtudiantAffecter(etudiant);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
+    }
+
+    public Result modificationProfileEtudiant() {
+
+        paramEtudiant.setEtapeProfilEtudiant("afficheModifierProfil");
+
+        // 1 - Récupération du formulaire
+        DynamicForm profil = form().bindFromRequest();
+        String nom = profil.get("nom");
+        String prenom = profil.get("prenom");
+        String adresseMail = profil.get("email");
+        String mdp = profil.get("mdp");
+        String datenaissance = profil.get("datenaissance");
+        String numero_etudiant = profil.get("numero_etudiant");
+        String uid = profil.get("uid");
+        String lienPhoto ="";
+
+        long idetudiant = Long.parseLong(profil.get("idetudiant"));
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart photo = body.getFile("photo");
+
+        Etudiant newEtudiant = null;
+
+        if (photo != null) {
+            String fileName = photo.getFilename();
+            String contentType = photo.getContentType();
+            java.io.File file = photo.getFile();
+
+            // Ajout dans le dossier : /public/photos-utilisateurs
+            String myUploadPath = Play.application().configuration().getString("myUploadPath");
+
+            fileName = nom + "_" + prenom + "_" + fileName;
+
+            file.renameTo(new File(myUploadPath, fileName)); // Enregistrement de la photo dans le dossier
+
+            // Création du profil étudiant avec photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+            lienPhoto = myUploadPath + fileName;
+
+            newEtudiant = Etudiant.update(idetudiant, nom, prenom, adresseMail, mdp, datenaissance, lienPhoto,  uid, numero_etudiant, "none");
+
+
+        }else {
+
+            // Création du profil étudiant sans photo
+            if((datenaissance !=null) && (!datenaissance.equals("")))
+            {
+                datenaissance= datenaissance.replace("/", "-");
+                String[] parts = datenaissance.split("-");
+                datenaissance = parts[2]+"-"+parts[1]+"-"+parts[0] + " 00:00:00"; // Formatage de la date de naissance pour enregistrement
+            }
+
+            newEtudiant = Etudiant.update(idetudiant, nom, prenom, adresseMail, mdp, datenaissance, "",  uid, numero_etudiant, "none");
+        }
+
+
+        // 2 - On test si l'étudiant n'existe pas déjà dans la base
+        if(newEtudiant != null){
+            paramEtudiant.setCheckEtudiant(9);
+
+        }else{
+            paramEtudiant.setCheckEtudiant(10);
+        }
+
+
+        Etudiant modEtudiant = Etudiant.findById(idetudiant);
+        paramEtudiant.setEtudiantAffecter(modEtudiant);
+
+
+        return ok(chargerListeEtudiant.render("Gérer les étudiants", paramEtudiant));
     }
 
 }
