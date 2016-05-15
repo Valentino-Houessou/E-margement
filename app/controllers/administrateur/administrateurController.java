@@ -65,6 +65,7 @@ public class administrateurController extends Controller {
     public PdfGenerator pdfGenerator;
 
 
+
     public  Result ajoutUniversiteCreer() {
 
         DynamicForm fac = form().bindFromRequest();
@@ -1650,6 +1651,28 @@ public class administrateurController extends Controller {
 
         // La filière, le batiment et l'université n'ont pas bouger du singleton !!!
 
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
+    }
+
+    public Result forcerSignature(int id) {
+
+        // 1 - Etape
+        paramEFP.setEtape("selectionDate");
+
+        // 2 - Forcer la signature
+        Cours.forcerLaSignature(id);
+
+        // 3 - Mise à jours
+        List<Cours> coursDuJourDeLaPromotion= null;
+        try {
+            coursDuJourDeLaPromotion = parametresExportationFeuillesPresence.getCoursDuJourDeLaPromotion(paramEFP.getSelectionPromotion() , paramEFP.getSelectionDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        paramEFP.setCoursDuJourDeLaPromotion(coursDuJourDeLaPromotion);
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 

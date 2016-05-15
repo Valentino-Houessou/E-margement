@@ -89,6 +89,7 @@ POST          /administrateur/exporter-feuille/promotion              controller
 POST          /administrateur/exporter-feuille/date                   controllers.administrateur.administrateurController.exporterFeuilleselectionDate()
 POST          /administrateur/exporter-feuille/resultats              controllers.administrateur.administrateurController.exporterFeuilleResultatsParDate()
 GET           /administrateur/exporter-feuille/export-date            controllers.administrateur.administrateurController.exporterFeuilleDatePDF()
+GET           /administrateur/exporter-feuille/forcer-signature/:id   controllers.administrateur.administrateurController.forcerSignature(id : Int)
 GET           /administrateur/gestion-abscences                       controllers.administrateur.administrateurController.gestionAbscences()
 POST          /administrateur/liste-abscences                         controllers.administrateur.administrateurController.getTheAbscences()
 POST          /administrateur/liste-matieres-enseignants              controllers.administrateur.administrateurController.getPromotionMatters()

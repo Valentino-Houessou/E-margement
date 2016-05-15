@@ -1,6 +1,6 @@
 @import controllers.administrateur.gestionDesParametres.parametresExportationFeuillesPresence
 @(titrepage: String)(mesParametres: parametresExportationFeuillesPresence)
-@import java.math.BigInteger; var i=0; var cpt=0; var numeroCreneau = 0; var cptcreneau1 = 0; var cptcreneau2 = 0; var cptcreneau3 = 0; var cptcreneau4 = 0;
+@import java.math.BigInteger; var i=0; var cpt=0; var numeroCreneau = 0; var cptcreneau1 = 0; var cptcreneau2 = 0; var cptcreneau3 = 0; var cptcreneau4 = 0; var cellules = 0; var cellules2 = 0; var cellules3 = 0;
 @import java.util.Date; var hdebut=""; var hfin="";
 @import java.text.SimpleDateFormat;
 
@@ -320,8 +320,28 @@
                                             @{cpt = 0;} <!-- Remise du compteur à zéro pour le prochain cours -->
                                         }
                                     </td>
+
+                                    @{ cellules += 1}
                                 }
                                 @{ numeroCreneau =0; } <!-- Remise à zéro pour un prochain éléve -->
+
+                                @if(cellules < 4){
+                                    <td width=18%></td>
+                                    @{ cellules += 1}
+                                }
+                                @if(cellules < 4){
+                                    <td width=18%></td>
+                                    @{ cellules += 1}
+                                }
+                                @if(cellules < 4){
+                                    <td width=18%></td>
+                                    @{ cellules += 1}
+                                }
+                                @if(cellules < 4){
+                                    <td width=18%></td>
+                                    @{ cellules += 1}
+                                }
+                                @{cellules = 0}
                             </tr>
                         }
                     </tbody>
@@ -347,7 +367,32 @@
                         <td width=26%> Matière(s) </td>
                         @for(infosMatieres <- mesParametres.getCoursDuJourDeLaPromotion()) {
                             <td width=18%> @infosMatieres.saMatiere.getLibelle() </td>
+
+                            @{
+                                cellules3 +=1
+                            }
                         }
+
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @{
+                            cellules3 =0
+                        }
+
                     </tr>
                     <tr>
                         <td width=26%> Horaires </td>
@@ -364,6 +409,29 @@
                             }
 
                             <td width=18%> @hdebut - @hfin </td>
+                            @{
+                                cellules3 +=1
+                            }
+                        }
+
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @{
+                            cellules3 =0
                         }
                     </tr>
                     <tr>
@@ -374,6 +442,29 @@
                                     @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom
                                 }
                             </td>
+                            @{
+                                cellules3 +=1
+                            }
+                        }
+
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @{
+                            cellules3 =0
                         }
                     </tr>
                     <tr>
@@ -384,9 +475,32 @@
                             }else{
                                 <td width=18% style="text-align: center ;">
                                     <div class="rouge"> Non signé </div><br/>
-                                    <button type="button">Forcer la signature</button>
+                                    <button type="button" onclick="forcerLaSignature('@infosSignature.id');">Forcer la signature</button>
                                 </td>
                             }
+                            @{
+                                cellules3 +=1
+                            }
+                        }
+
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @if(cellules3 < 4){
+                            <td width=18%></td>
+                            @{ cellules3 += 1}
+                        }
+                        @{
+                            cellules3 =0
                         }
                     </tr>
                 </table>
@@ -658,6 +772,31 @@
             });
     </script>
         <!-- Fin Scripts -->
+    <script>
+        function forcerLaSignature(idcourss)
+        {
+            var r = confirm("Etes-vous sûr de vouloir forcer la signature pour ce cours ?");
+
+            if (r == true) {
+
+                $.ajax({
+                    url: "/administrateur/exporter-feuille/forcer-signature/"+idcourss,
+                    type: "GET",
+                    dataType : 'html',
+                    success: function(data) {
+
+                        $("#charger_fonctionnalite").html(data);
+                        $('#selection_filiere_promo').css("visibility", "visible");
+                        $('#mode_extraction').css("visibility", "visible");
+                        $('#infoFeuilleDePresence').css("visibility", "visible");
+                    },
+                    error: function() {
+                        alert("Erreur de chargement de la page !")
+                    }
+                });
+            }
+        }
+    </script>
 
 </div>
     <!-- Fin du block dynamique -->

@@ -254,6 +254,18 @@ public class Cours extends Model{
         }
     }
 
+    /**
+     * Forcer la signature du prof
+     * @param idcours
+     */
+    public static void forcerLaSignature(int idcours) {
+        Cours lecours = find.where().eq("id", idcours).findUnique();
+
+        lecours.signatureEnseignant = true;
+
+        lecours.update();
+    }
+
     public static Cours findCoursByDebutAndFin(Date debut, Date fin){
         return find.where().eq("heure_debut", debut).eq("heure_fin", fin).findUnique();
     }
