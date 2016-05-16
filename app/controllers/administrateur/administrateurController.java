@@ -25,6 +25,7 @@ import views.html.administrateur.chargerEdt;
 import views.html.administrateur.chargerListeEnseignant;
 import views.html.administrateur.exportFeuillePresence;
 import views.html.administrateur.exporterFeuilleDatePDF;
+import views.html.administrateur.exporterUneFeuilleSemainePDF;
 import views.html.administrateur.exporterTrombinoscopePDF;
 import views.html.administrateur.gererAbscences;
 import views.html.administrateur.exporterJustificatifsAbscences;
@@ -63,7 +64,6 @@ public class administrateurController extends Controller {
     // Gestion de la génération de pdf
     @Inject
     public PdfGenerator pdfGenerator;
-
 
 
     public  Result ajoutUniversiteCreer() {
@@ -1654,6 +1654,11 @@ public class administrateurController extends Controller {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
     }
 
+    /**
+     * Feuille de présence par Date - Force la signature
+     * @param id
+     * @return
+     */
     public Result forcerSignature(int id) {
 
         // 1 - Etape
@@ -1677,6 +1682,13 @@ public class administrateurController extends Controller {
     }
 
     /**
+     * Feuille de présence par semaine - Force la signature
+     * @param id
+     * @return
+     */
+
+
+    /**
      * exporterFeuilleResultatsParDate()
      * Affichage des récapitulatifs de saisie et de la feuille de présence
      * @return exporterFeuilleselectionDate()
@@ -1685,6 +1697,8 @@ public class administrateurController extends Controller {
         // 0 remise à zéro
         paramEFP.setCoursDuJourDeLaPromotion(null);
         paramEFP.setLesEtudiants(null);
+        paramEFP.setSelectionSemaineDateDebut("vide");
+        paramEFP.setSelectionSemaineDateFin("vide");
 
         // 1 - Etape
         paramEFP.setEtape("selectionDate");
@@ -1707,6 +1721,130 @@ public class administrateurController extends Controller {
         return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
     }
 
+    public Result forcerSignatureSemaine(int id) throws ParseException {
+        // 1 - Etape
+        paramEFP.setEtape("fdpParSemaines");
+
+        // 2 - Forcer la signature
+        Cours.forcerLaSignature(id);
+
+        // 3 - Mise à jours
+        List<FeuillePresenceParSemaine> lesFeuilles = new ArrayList<FeuillePresenceParSemaine>();
+
+        SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+        Date datedebut = sm.parse(paramEFP.getSelectionSemaineDateDebut());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datedebut);
+        int jours1 = calendar.get(Calendar.DAY_OF_YEAR);
+
+        SimpleDateFormat sm2 = new SimpleDateFormat("dd/MM/yyyy");
+        Date datefin = sm2.parse(paramEFP.getSelectionSemaineDateFin());
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(datefin);
+        int jours2 = calendar2.get(Calendar.DAY_OF_YEAR);
+
+        int nbjours = jours2 - jours1;
+        int cpt = 0;
+
+        // Le 1er
+
+        while (cpt <nbjours +1){
+
+            FeuillePresenceParSemaine feuilles = new FeuillePresenceParSemaine();
+
+            Date date = calendar.getTime();
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+            String date1 = format1.format(date);
+
+            feuilles.setSelectionDate(date1);
+
+            List<Cours> coursDuJourDeLaPromotion= parametresExportationFeuillesPresence.getCoursDuJourDeLaPromotion(paramEFP.getSelectionPromotion(), date1);
+            feuilles.setCoursDuJourDeLaPromotion(coursDuJourDeLaPromotion);
+            List<Utilisateur> lesEtudiants = parametresExportationFeuillesPresence.getEtudiantsParPromotion(paramEFP.getSelectionPromotion());
+            feuilles.setLesEtudiants(lesEtudiants);
+
+            lesFeuilles.add(feuilles); // Ajout d'une feuille
+
+            calendar.add(Calendar.DATE, 1);
+            cpt++;
+        }
+
+        paramEFP.setFeuillePresenceParSemaineList(lesFeuilles);
+
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", paramEFP));
+    }
+
+    public Result exporterFeuilleResultatsParSemaine() throws ParseException {
+
+        // 0 remise à zéro
+        paramEFP.setCoursDuJourDeLaPromotion(null);
+        paramEFP.setLesEtudiants(null);
+        paramEFP.setSelectionDate("vide");
+
+        // 1 - Etape
+        paramEFP.setEtape("fdpParSemaines");
+
+        // 2 - Récupération de la semaine choisie et des autres paramètres des listes déroulantes
+        DynamicForm selectionDate = form().bindFromRequest();
+        int selectionpromotion = Integer.parseInt(selectionDate.get("selectionpromotion"));
+        String datechoisieDebut = selectionDate.get("datechoisie");
+        paramEFP.setSelectionSemaineDateDebut(datechoisieDebut);
+        String datechoisieFin = selectionDate.get("datechoisie2");
+        paramEFP.setSelectionSemaineDateFin(datechoisieFin);
+
+        // 3 - On garde la promotion
+        paramEFP.setSelectionPromotion(selectionpromotion);
+
+        // 4 - Construction des feuilles de présence
+        List<FeuillePresenceParSemaine> lesFeuilles = new ArrayList<FeuillePresenceParSemaine>();
+
+        SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+        Date datedebut = sm.parse(datechoisieDebut);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datedebut);
+        int jours1 = calendar.get(Calendar.DAY_OF_YEAR);
+
+        SimpleDateFormat sm2 = new SimpleDateFormat("dd/MM/yyyy");
+        Date datefin = sm2.parse(datechoisieFin);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(datefin);
+        int jours2 = calendar2.get(Calendar.DAY_OF_YEAR);
+
+        int nbjours = jours2 - jours1;
+        int cpt = 0;
+
+        // Le 1er
+
+        while (cpt <nbjours +1){
+
+            FeuillePresenceParSemaine feuilles = new FeuillePresenceParSemaine();
+
+            Date date = calendar.getTime();
+            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+            String date1 = format1.format(date);
+
+            feuilles.setSelectionDate(date1);
+
+            List<Cours> coursDuJourDeLaPromotion= parametresExportationFeuillesPresence.getCoursDuJourDeLaPromotion(selectionpromotion, date1);
+            feuilles.setCoursDuJourDeLaPromotion(coursDuJourDeLaPromotion);
+            List<Utilisateur> lesEtudiants = parametresExportationFeuillesPresence.getEtudiantsParPromotion(selectionpromotion);
+            feuilles.setLesEtudiants(lesEtudiants);
+
+            lesFeuilles.add(feuilles); // Ajout d'une feuille
+
+            calendar.add(Calendar.DATE, 1);
+            cpt++;
+        }
+
+        paramEFP.setFeuillePresenceParSemaineList(lesFeuilles);
+
+
+        return ok(exportFeuillePresence.render("Exporter des feuilles de présences", parametresExportationFeuillesPresence.getInstance()));
+    }
+
     /**
      * Exporte la feuille de présence au format PDF
      * @return
@@ -1716,6 +1854,42 @@ public class administrateurController extends Controller {
         if(session().get("user_id") == null)
             return redirect(controllers.routes.Application.logout());
         return pdfGenerator.ok(exporterFeuilleDatePDF.render("By Ftgotc", paramEFP), Configuration.root().getString("application.host"));
+    }
+
+    /**
+     * Exporter again par semaine
+     * @param day
+     * @return
+     * @throws ParseException
+     */
+    public  Result exporterUneFeuilleDatePDF(String day) throws ParseException {
+
+        paramEFP.setFeuillePresenceParSemaineList(null);
+
+        String ldate = day.replace("-", "/");
+
+        List<FeuillePresenceParSemaine> lesFeuilles = new ArrayList<FeuillePresenceParSemaine>();
+
+        FeuillePresenceParSemaine feuilles = new FeuillePresenceParSemaine();
+
+        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+        Date datedebut = format1.parse(ldate);
+        String date1 = format1.format(datedebut);
+
+        feuilles.setSelectionDate(date1);
+
+        List<Cours> coursDuJourDeLaPromotion= parametresExportationFeuillesPresence.getCoursDuJourDeLaPromotion(paramEFP.getSelectionPromotion(), date1);
+        feuilles.setCoursDuJourDeLaPromotion(coursDuJourDeLaPromotion);
+        List<Utilisateur> lesEtudiants = parametresExportationFeuillesPresence.getEtudiantsParPromotion(paramEFP.getSelectionPromotion());
+        feuilles.setLesEtudiants(lesEtudiants);
+
+        lesFeuilles.add(feuilles); // Ajout d'une feuille
+
+        paramEFP.setFeuillePresenceParSemaineList(lesFeuilles); // la feuille en PDF
+
+        if(session().get("user_id") == null)
+            return redirect(controllers.routes.Application.logout());
+        return pdfGenerator.ok(exporterUneFeuilleSemainePDF.render("By Ftgotc", paramEFP), Configuration.root().getString("application.host"));
     }
 
     /**

@@ -1,0 +1,397 @@
+@import controllers.administrateur.gestionDesParametres.parametresExportationFeuillesPresence
+@(titrepage: String)(mesParametres: parametresExportationFeuillesPresence)
+@import java.math.BigInteger; var i=0; var cpt=0; var numeroCreneau = 0; var cptcreneau1 = 0; var cptcreneau2 = 0; var cptcreneau3 = 0; var cptcreneau4 = 0;  var cellules = 0; var cellules2 = 0; var cellules3 = 0;
+@import java.util.Date; var hdebut=""; var hfin="";
+@import java.text.SimpleDateFormat;
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+            <!-- If you delete this meta tag, Half Life 3 will never be released. -->
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title>E-margement - Paris X</title>
+
+
+        <style>
+        .rouge{
+        background-color: red;
+        }
+        .vert{
+        background-color: greenyellow;
+        }
+
+        .entete{
+        border-bottom: 1px solid #ddd;
+        }
+
+        .bordure {
+        border: 1px solid #ddd;
+        }
+        .bordureth{
+        border: 1px solid #ddd;
+        height: 30px;
+        }
+
+        .borduregray{
+        border: 1px solid #ddd;
+        }
+
+        .divaligner {
+        border: 1px solid #ddd;
+        margin-bottom: 30px;
+        }
+
+
+
+        </style>
+    </head>
+    <body>
+
+        <div class="divaligner">
+            <table style="width: 100%;">
+                <tr>
+                    <td width=12%><img src="/public/images/universite-paris-ouest.jpg" alt="Logo UPOND" height="55" width="75"/></td>
+
+                    <td width=88%><h4 style="text-align: center;">Paris Ouest Nanterre La Défense</h4></td>
+                </tr>
+            </table>
+        </div>
+
+        @if(mesParametres.getFeuillePresenceParSemaineList() != null){
+            @for(lesFeuillesParJours <- mesParametres.getFeuillePresenceParSemaineList()){
+                <div id="infoFeuilleDePresence">
+                    <div style="width: auto; margin-bottom: 20px;">
+                        <h3>Récapitulatif</h3>
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th class="entete">Université</th>
+                                    <th class="entete">Batiment</th>
+                                    <th class="entete">Filière</th>
+                                    <th class="entete">Promotion</th>
+                                    <th class="entete">Date choisie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    @for(listeUniversite <- mesParametres.getListeUniversites()){
+                                        @if(listeUniversite.id == mesParametres.getSelectionUniversite()){
+                                            @listeUniversite.libelle
+                                        }
+                                    }
+                                    </td>
+                                    <td>
+                                    @if(mesParametres.getListeBatiments() != null){
+                                        @for(listeBatiments <- mesParametres.getListeBatiments()){
+                                            @if(listeBatiments.id == mesParametres.getSelectionBatiment()){
+                                                @listeBatiments.libelle
+                                            }
+                                        }
+                                    }
+                                    </td>
+                                    <td>
+                                    @if(mesParametres.getListeFilieres() != null){
+                                        @for(listeFilieres <- mesParametres.getListeFilieres()){
+                                            @if(listeFilieres.libelle == mesParametres.getSelectionFiliere()){
+                                                @listeFilieres.libelle
+                                            }
+                                        }
+                                    }
+                                    </td>
+                                    <td>
+                                    @if(mesParametres.getListePromotion() != null){
+                                        @for(listePromotion <- mesParametres.getListePromotion()){
+                                            @if(listePromotion.id == mesParametres.getSelectionPromotion()){
+                                                @listePromotion.groupe - @listePromotion.getType()
+                                            }
+                                        }
+                                    }
+                                    </td>
+                                    <td>
+                                    @lesFeuillesParJours.getSelectionDate()
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div  style="width: auto">
+                        <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse; margin-bottom: 20px;">
+                            <thead>
+                                <tr class="bordure">
+                                    <th class="bordureth">N°</th>
+                                    <th class="bordureth">Nom</th>
+                                    <th class="bordureth">Prénom</th>
+                                    <th class="bordureth">Créneau 1</th>
+                                    <th class="bordureth">Créneau 2</th>
+                                    <th class="bordureth">Créneau 3</th>
+                                    <th class="bordureth">Créneau 4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <!-- Pour chaque étudiants -->
+                                @for(lesEtudiants <- lesFeuillesParJours.getLesEtudiants()){
+                                    <tr>
+                                        <td class="bordure" width=5%> @(i += 1) @i </td>
+                                        <td class="bordure" width=11%> @lesEtudiants.nom </td>
+                                        <td class="bordure" width=11%> @lesEtudiants.prenom </td>
+
+                                            <!-- Vérifier si l'étudiant à participé au cours -->
+                                        @for(verificationPresence <- lesFeuillesParJours.getCoursDuJourDeLaPromotion()){
+
+                                            @{ numeroCreneau +=1 }
+
+                                            <td class="bordure" width=18%>
+                                                    <!-- Si pour le cours la table des présences est vide = Personne n'a participé -->
+                                                @if(verificationPresence.sesPresences.size() == 0){
+                                                    <div class="rouge"> Absent </div>
+                                                        <!-- Compteurs d'absences -->
+                                                    @if(numeroCreneau == 1){
+                                                        @{ cptcreneau1 += 1; }
+                                                    }
+                                                    @if(numeroCreneau == 2){
+                                                        @{ cptcreneau2 += 1; }
+                                                    }
+                                                    @if(numeroCreneau == 3){
+                                                        @{ cptcreneau3 += 1; }
+                                                    }
+                                                    @if(numeroCreneau == 4){
+                                                        @{ cptcreneau4 += 1; }
+                                                    }
+                                                    }else{
+                                                    <!-- Pour les personnes qui ont participés, on vérifie si c'est l'étudiant qu'on cherche et que son émargement pour ce cours est égal à 1 -->
+                                                    @for(present <- verificationPresence.sesPresences){
+
+                                                        @if((present.sonEtudiant.sonUtilisateur.id == lesEtudiants.id) && (present.emergement == true)){
+                                                            @{cpt += 1}
+                                                        }
+                                                    }
+                                                    <!-- Vérifie si l'étudiant a badget, donc a une insertion dans la table présence et que son émargement pour ce cours est égal à 1 -->
+                                                    @if(cpt == 0){
+                                                        <div class="rouge"> Absent </div>
+                                                            <!-- Compteurs d'absences -->
+                                                        @if(numeroCreneau == 1){
+                                                            @{ cptcreneau1 += 1; }
+                                                        }
+                                                        @if(numeroCreneau == 2){
+                                                            @{ cptcreneau2 += 1; }
+                                                        }
+                                                        @if(numeroCreneau == 3){
+                                                            @{ cptcreneau3 += 1; }
+                                                        }
+                                                        @if(numeroCreneau == 4){
+                                                            @{ cptcreneau4 += 1; }
+                                                        }
+                                                    }else{
+                                                        @if(cpt > 0){
+                                                            <div class="vert"> Présent </div>
+                                                        }
+                                                    }
+
+                                                    @{cpt = 0;} <!-- Remise du compteur à zéro pour le prochain cours -->
+                                                }
+                                            </td>
+
+                                            @{ cellules += 1}
+                                        }
+                                        @{ numeroCreneau =0; } <!-- Remise à zéro pour un prochain éléve -->
+
+
+                                        @if(cellules < 4){
+                                            <td class="bordure" width=18%></td>
+                                            @{ cellules += 1}
+                                        }
+                                        @if(cellules < 4){
+                                            <td class="bordure" width=18%></td>
+                                            @{ cellules += 1}
+                                        }
+                                        @if(cellules < 4){
+                                            <td class="bordure" width=18%></td>
+                                            @{ cellules += 1}
+                                        }
+                                        @if(cellules < 4){
+                                            <td class="bordure" width=18%></td>
+                                            @{ cellules += 1}
+                                        }
+                                        @{cellules = 0}
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="borduregray" style="background-color: lightgrey;"  width=27%> Nombre d'absents </td>
+
+                                <td class="bordure" width=18%> @cptcreneau1 </td>
+                                <td class="bordure" width=18%> @cptcreneau2 </td>
+                                <td class="bordure" width=18%> @cptcreneau3 </td>
+                                <td class="bordure" width=18%> @cptcreneau4 </td>
+
+                                @{
+                                    numeroCreneau = 0;
+                                    cptcreneau1 = 0;
+                                    cptcreneau2 = 0;
+                                    cptcreneau3 = 0;
+                                    cptcreneau4 = 0;
+                                }
+                            </tr>
+                            <tr>
+                                <td class="borduregray" style="background-color: lightgrey;"  width=27%> Matière(s) </td>
+                                @for(infosMatieres <- lesFeuillesParJours.getCoursDuJourDeLaPromotion()) {
+                                    <td class="bordure" width=18%> @infosMatieres.saMatiere.getLibelle() </td>
+
+                                    @{
+                                        cellules3 +=1
+                                    }
+                                }
+
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @{
+                                    cellules3 =0
+                                }
+
+                            </tr>
+                            <tr>
+                                <td class="borduregray" style="background-color: lightgrey;"  width=27%> Horaires </td>
+
+                                @for(infosHoraires <- lesFeuillesParJours.getCoursDuJourDeLaPromotion()) {
+
+                                    @{
+                                        hdebut = new SimpleDateFormat("HH:mm").format(infosHoraires.heureDebut)
+
+                                        hfin = new SimpleDateFormat("HH:mm").format(infosHoraires.heureFin)
+
+                                        hdebut = hdebut.replace(":","H");
+                                        hfin = hfin.replace(":","H");
+                                    }
+
+                                    <td class="bordure" width=18%> @hdebut - @hfin </td>
+                                    @{
+                                        cellules3 +=1
+                                    }
+                                }
+
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @{
+                                    cellules3 =0
+                                }
+                            </tr>
+                            <tr>
+                                <td class="borduregray" style="background-color: lightgrey;"  width=27%> Nom du professeur </td>
+                                @for(infosProfesseurs <- lesFeuillesParJours.getCoursDuJourDeLaPromotion()) {
+                                    <td class="bordure" width=18%>
+                                    @if(infosProfesseurs.sonEnseignant != null){
+                                        @infosProfesseurs.sonEnseignant.sonUtilisateur.nom @infosProfesseurs.sonEnseignant.sonUtilisateur.prenom
+                                    }
+                                    </td>
+                                    @{
+                                        cellules3 +=1
+                                    }
+                                }
+
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @{
+                                    cellules3 =0
+                                }
+                            </tr>
+                            <tr>
+                                <td class="borduregray" style="background-color: lightgrey;" width=27%> Signature numérique du professeur </td>
+                                @for(infosSignature <- lesFeuillesParJours.getCoursDuJourDeLaPromotion()) {
+                                    @if(infosSignature.signatureEnseignant == true){
+                                        <td class="bordure" width=18%> <div class="vert"> Signé </div>  </td>
+                                    }else{
+                                        <td class="bordure" width=18%>
+                                            <div class="rouge"> Non signé </div><br/>
+                                        </td>
+                                    }
+                                    @{
+                                        cellules3 +=1
+                                    }
+                                }
+
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @if(cellules3 < 4){
+                                    <td class="bordure" width=18%></td>
+                                    @{ cellules3 += 1}
+                                }
+                                @{
+                                    cellules3 =0
+                                }
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <br/>
+                <hr/>
+                <br/>
+            }
+        }
+
+
+
+
+
+
+
+    </body>
+</html>

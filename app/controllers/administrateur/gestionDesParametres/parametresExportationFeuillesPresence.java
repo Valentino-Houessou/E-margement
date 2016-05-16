@@ -18,6 +18,8 @@ public class parametresExportationFeuillesPresence
     private String selectionFiliere;
     private int selectionPromotion;
     private String selectionDate;
+    private String selectionSemaineDateDebut;
+    private String selectionSemaineDateFin;
 
     private List<Universite> listeUniversites; // Affiche la liste de tout les universités enregistré dans la base
     private List<Batiment> listeBatiments;     // Affiche la liste des batiments d'une université sélectionné
@@ -28,6 +30,8 @@ public class parametresExportationFeuillesPresence
     private List<Utilisateur> lesProfesseurs;
     private List<Utilisateur> lesEtudiants;
     private List<Cours> coursDuJourDeLaPromotion;
+
+    private List<FeuillePresenceParSemaine> feuillePresenceParSemaineList; // Construction de plusieurs feuilles de présence
 
 
     private static parametresExportationFeuillesPresence INSTANCE = null;
@@ -51,7 +55,9 @@ public class parametresExportationFeuillesPresence
         this.lesEtudiants = null;
         this.coursDuJourDeLaPromotion = null;
 
-
+        this.selectionSemaineDateDebut = "vide";
+        this.selectionSemaineDateFin="vide";
+        this.feuillePresenceParSemaineList=null;
 
     }
 
@@ -177,7 +183,7 @@ public class parametresExportationFeuillesPresence
 
     /**
      * Récupérer :
-     * 1 - La liste des cours d'une promotion par rapportà un jour donnée (Libellé / heure début - heure fin
+     * 1 - La liste des cours d'une promotion par rapport à un jour donnée (Libellé / heure début - heure fin
      * 2 - La liste des professeurs qui enseigne ses cours
      * 3 - Les étudiants qui ont badget pour se cours
      * @param idpromotionselectionnee
@@ -232,7 +238,29 @@ public class parametresExportationFeuillesPresence
     }
 
 
+    public String getSelectionSemaineDateDebut() {
+        return selectionSemaineDateDebut;
+    }
 
+    public void setSelectionSemaineDateDebut(String selectionSemaineDateDebut) {
+        this.selectionSemaineDateDebut = selectionSemaineDateDebut;
+    }
+
+    public String getSelectionSemaineDateFin() {
+        return selectionSemaineDateFin;
+    }
+
+    public void setSelectionSemaineDateFin(String selectionSemaineDateFin) {
+        this.selectionSemaineDateFin = selectionSemaineDateFin;
+    }
+
+    public List<FeuillePresenceParSemaine> getFeuillePresenceParSemaineList() {
+        return feuillePresenceParSemaineList;
+    }
+
+    public void setFeuillePresenceParSemaineList(List<FeuillePresenceParSemaine> feuillePresenceParSemaineList) {
+        this.feuillePresenceParSemaineList = feuillePresenceParSemaineList;
+    }
 }
 
 
