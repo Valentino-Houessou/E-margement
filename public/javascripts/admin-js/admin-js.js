@@ -4,6 +4,8 @@
 
 var chargerListeEtudiant = function() {
 
+    montreAttente();
+
     $.ajax({
         url: "/administrateur/charger-liste-etudiant",
         dataType : "html",
@@ -11,6 +13,7 @@ var chargerListeEtudiant = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -20,6 +23,7 @@ var chargerListeEtudiant = function() {
 
 var chargerEdt = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/charger-edt",
         dataType : "html",
@@ -27,6 +31,7 @@ var chargerEdt = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -36,6 +41,7 @@ var chargerEdt = function() {
 
 var chargerListeEnseignant = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/charger-liste-enseignant",
         dataType : "html",
@@ -43,7 +49,7 @@ var chargerListeEnseignant = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -53,6 +59,8 @@ var chargerListeEnseignant = function() {
 
 var exportFeuillePresence = function() {
 
+    montreAttente();
+
     $.ajax({
         url: "/administrateur/exporter-feuille",
         dataType : "html",
@@ -60,6 +68,7 @@ var exportFeuillePresence = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
+            cacheAttente();
 
         },
         error: function() {
@@ -70,6 +79,7 @@ var exportFeuillePresence = function() {
 
 var gererUtilisateurAdministrateur = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/gerer-utilisateur-administrateur",
         dataType : "html",
@@ -77,7 +87,7 @@ var gererUtilisateurAdministrateur = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -87,6 +97,7 @@ var gererUtilisateurAdministrateur = function() {
 
 var gererUtilisateurEnseignant = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/gerer-utilisateur-enseignant",
         dataType : "html",
@@ -94,7 +105,7 @@ var gererUtilisateurEnseignant = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -104,6 +115,7 @@ var gererUtilisateurEnseignant = function() {
 
 var gererUtilisateurEtudiant = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/gerer-les-etudiant",
         dataType : "html",
@@ -111,7 +123,7 @@ var gererUtilisateurEtudiant = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -121,6 +133,7 @@ var gererUtilisateurEtudiant = function() {
 
 var gererPromotions = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/gerer-utilisateur-etudiant",
         dataType : "html",
@@ -128,7 +141,7 @@ var gererPromotions = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -138,6 +151,7 @@ var gererPromotions = function() {
 
 var gererAbscences = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/gestion-abscences",
         dataType : "html",
@@ -145,7 +159,7 @@ var gererAbscences = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -155,6 +169,7 @@ var gererAbscences = function() {
 
 var exporterJustificatifsAbscences = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/exporter-justificatifs-abscences",
         dataType : "html",
@@ -162,7 +177,7 @@ var exporterJustificatifsAbscences = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
@@ -172,6 +187,7 @@ var exporterJustificatifsAbscences = function() {
 
 var ajouteruniversite = function() {
 
+    montreAttente();
     $.ajax({
         url: "/administrateur/ajoutUniversite",
         dataType : "html",
@@ -179,13 +195,23 @@ var ajouteruniversite = function() {
         success: function(data) {
             $("#charger_fonctionnalite").empty().hide();
             $("#charger_fonctionnalite").html(data).fadeIn(900);
-
+            cacheAttente();
         },
         error: function() {
             alert("Error!")
         }
     })
 };
+
+function montreAttente(){
+    var element = document.getElementById('attente');
+    element.style.display="block";
+}
+
+function cacheAttente(){
+    var element = document.getElementById('attente');
+    element.style.display="none";
+}
 
 
 
