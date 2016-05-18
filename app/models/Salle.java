@@ -1,8 +1,8 @@
 package models;
 
-import javax.persistence.*;
-import com.avaje.ebean.*;
+import com.avaje.ebean.Model;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -38,7 +38,7 @@ public class Salle extends Model{
         return find.where().eq("son_batiment_id", id).findList();
     }
 
-    public  Universite getSonUniversite(){
+    public  Universite sonUniversite(){
         return sonBatiment.sonUniversite;
     }
 

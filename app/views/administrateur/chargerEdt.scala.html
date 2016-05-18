@@ -106,7 +106,7 @@
                                         <select class="form-control" id="theRoom">
                                             <option value = "0">choisir une salle</option>
                                             @for(salle <- salles){
-                                                <option value="@salle.id">@salle.libelle - @salle.sonBatiment.libelle - @salle.getSonUniversite().libelle</option>
+                                                <option value="@salle.id">@salle.libelle - @salle.sonBatiment.libelle - @salle.sonUniversite().libelle</option>
                                             }
                                         </select>
                                     </div>
