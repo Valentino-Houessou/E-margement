@@ -125,8 +125,8 @@ public class Presence extends Model {
                 Presence presence = new Presence();
 
                 presence.emergement = false;
-                presence.motif = "";
-                presence.justificatif = "";
+                presence.motif = null;
+                presence.justificatif = null;
                 presence.sonCours = c;
                 presence.sonEtudiant = etudiant;
 
