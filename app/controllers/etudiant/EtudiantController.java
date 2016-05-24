@@ -403,15 +403,17 @@ public class EtudiantController extends Controller{
     }
 
     public Result androidListAbsence() {
-        List<Presence> presenceList = null;
+        List<Presence> presenceList;
         HashMap<String,String> map = new HashMap<>();
         Etudiant etudiant = null;
         try{
             Form<EtudiantForm> etudiantform = Form.form(EtudiantForm.class).bindFromRequest();
             etudiant = Etudiant.find.where().eq("son_utilisateur_id", Long.parseLong(etudiantform.get().user_id)).findUnique();
             presenceList = Presence.getCreaneauxAbsences(etudiant.numeroEtudiant);
+
             return ok(Json.toJson(presenceList));
         }catch (Exception e){
+            e.printStackTrace();
             map.put("error","Une erreur s'est produite");
             return badRequest(Json.toJson(map));
         }

@@ -19,7 +19,11 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-email" % "1.1",
   "com.sun.mail" % "smtp" % "1.5.5",
   "junit" % "junit" % "4.11",
-  "org.mockito" % "mockito-all" % "1.10.19"
+  "org.mockito" % "mockito-all" % "1.10.19",
+  "org.avaje.ebeanorm" % "avaje-ebeanorm-mocker" % "6.15.1"/*,
+  "org.slf4j" % "slf4j-api" % "1.7.12",
+  "ch.qos.logback" % "logback-classic" % "[1,2)",
+  "org.avaje.composite" % "avaje-composite-testing-ebean" % "4.1"*/
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
